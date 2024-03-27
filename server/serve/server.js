@@ -28,14 +28,15 @@ const articleSchema = new Schema(
     position: String,
     see: String, // 浏览量
     state: String, // 审核状态
+    rejectReason: String, // 拒绝理由
     tags: [String], // 标签
     time: String,
     video: [String],
     title: String,
     likes: String, // 点赞量
   },
-  { _id: false }// 设置 _id 为 false，不生成默认的 _id
-); 
+  { _id: false } // 设置 _id 为 false，不生成默认的 _id
+);
 
 // 定义用户信息的Schema
 const userInfoSchema = new Schema(
@@ -196,6 +197,7 @@ function updateArticle(infoObj) {
   let see = "0";
   const state = "待审核";
   const time = Date.now();
+  const rejectReason = "";
   return new Promise((resolve, reject) => {
     // 获取之前游记里面的数据
     UserInfo.findOne(
@@ -224,6 +226,7 @@ function updateArticle(infoObj) {
             comment,
             see,
             state,
+            rejectReason,
             time,
           },
         },
@@ -255,14 +258,13 @@ function searchArticle(search) {
           }
         });
         return approved;
-      }, []
-      );
+      }, []);
 
       // 从已通过的文章中筛选出符合搜索条件的文章
       const searchResult = approvedArticles.filter((article) => {
         if (
           article.title.includes(search) ||
-          article.content.includes(search) 
+          article.content.includes(search)
           // article.nickName.includes(search) // 昵称这个暂时先不搞，他不在article里面
         ) {
           return true;
@@ -285,26 +287,42 @@ function getArticleByState(state) {
         return;
       }
 
+      let approvedArticles = [];
       // 从所有文章中筛选出已通过的文章
-      const approvedArticles = docs.reduce((approved, user) => {
-        user.article.forEach((article) => {
-          if (article.state === state) {
+      if (state === "全部") {
+        approvedArticles = docs.reduce((approved, user) => {
+          user.article.forEach((article) => {
             approved.push(article);
-          }
-        });
-        return approved;
-      }, []);
+          });
+          return approved;
+        }, []);
+      } else {
+        approvedArticles = docs.reduce((approved, user) => {
+          user.article.forEach((article) => {
+            if (article.state === state) {
+              approved.push(article);
+            }
+          });
+          return approved;
+        }, []);
+      }
+
 
       resolve(approvedArticles);
     });
   });
 }
 // 更新游记状态
-function updateArticleState(articleId, state) {
+function updateArticleState(articleId, state, rejectReason) {
   return new Promise((resolve, reject) => {
     UserInfo.updateOne(
       { "article.articleId": articleId }, // 查询条件：查找指定游记
-      { $set: { "article.$.state": state } }, // 使用 $set 操作符更新匹配的第一个元素
+      {
+        $set: {
+          "article.$.state": state,
+          "article.$.rejectReason": rejectReason,
+        },
+      }, // 使用 $set 操作符更新匹配的第一个元素
       function (err, doc) {
         if (!err) {
           resolve(doc);

@@ -154,8 +154,9 @@ router.post("/addTravelNote", function (req, res, next) {
   const comment = [];
   const likes = '0'
   const see = "0";
-  console.log({ ...req.body, time, state, comment,likes,see }, "要新增的游记信息");
-  createArticle({ ...req.body, time, state, comment,likes,see })
+  const rejectReason = "";
+  console.log({ ...req.body, time, state, comment,likes,see,rejectReason }, "要新增的游记信息");
+  createArticle({ ...req.body, time, state, comment,likes,see,rejectReason })
     .then((result) => {
       res.json({
         code: 200,

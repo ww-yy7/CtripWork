@@ -71,9 +71,9 @@ router.post("/login", function (req, res, next) {
 });
 // 更新游记状态
 router.put("/updateTravelStatus", function (req, res, next) {
-  const { articleId, state } = req.body;
-  console.log(articleId, state, "articleId, state");
-  updateArticleState(articleId, state).then(
+  const { articleId, state, rejectReason } = req.body;
+  console.log(articleId, state,rejectReason, "articleId, state,rejectReason");
+  updateArticleState(articleId, state, rejectReason).then(
     (result) => {
       res.json({
         code: 200,
