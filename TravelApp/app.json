@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "shoppingCart",
-    "slug": "shoppingCart",
+    "name": "ctripapp",
+    "slug": "ctripapp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

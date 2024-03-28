@@ -4,6 +4,7 @@ import Home from '../pages/Home'
 import Cart from '../pages/Cart'
 import MyTravels from '../pages/MyTravels';
 import TravelsDetails from '../pages/TravelsDetails';
+import { travelsData } from '../constants';
 
 const Stack = createNativeStackNavigator();
 
@@ -38,7 +39,8 @@ export default function Routes() {
                 name="TravelsDetails"
                 component={TravelsDetails}
                 options={{
-                    headerTitle: '游记详情'
+                    headerTitle: '游记详情',
+                    headerShown: false,
                 }}
             />
         </Stack.Navigator>

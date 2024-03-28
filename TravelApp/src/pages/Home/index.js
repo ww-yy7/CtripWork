@@ -1,29 +1,29 @@
-import { useState, useContext } from 'react'
-import { View, Text, StyleSheet, SafeAreaView, FlatList, TouchableOpacity, Button, ScrollView, Image } from 'react-native'
-
-import { Feather } from '@expo/vector-icons'
+import React from 'react'
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, ScrollView, Image, TextInput } from 'react-native'
+import { MagnifyingGlassIcon, BookOpenIcon, PlusCircleIcon, HomeIcon, HeartIcon,UserIcon} from 'react-native-heroicons/outline'
+// import { } from 'react-native-heroicons/solid'
 import { useNavigation } from '@react-navigation/native'
-import { CartContext } from '../../contexts/CartContext'
+
 import Categories from '../../components/Categories'
-import Travels from '../../components/Travels/index.js'
+import Travels from '../../components/Travels'
+import { AlignRight } from 'react-native-feather'
 
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import MyTravels from '../MyTravels'
 
+const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 
 
 export default function Home() {
-    const { cart, addItemCart } = useContext(CartContext)
-
+    
     const navigation = useNavigation();
-    const [products, setProducts] = useState([    
-        
-    ])
-
-    function handleAddCart(item) {
-        addItemCart(item)
-    }
-
+    
     return (
+        
+
         <SafeAreaView style={stlyes.container}>
             <ScrollView >
                  
@@ -37,6 +37,18 @@ export default function Home() {
             </View>
 
             <View>
+                <View style={stlyes.serchandinput}>
+                    <MagnifyingGlassIcon size={20} strokeWidth={3} color="gray" />
+                    
+                    <TextInput
+                      placeholder='搜索游记、用户...'
+                      placeholderTextColor={'gray'}
+                      style={stlyes.input}
+                      />
+                </View>
+            </View>
+
+            <View>
                 <Categories />
             </View>
 
@@ -46,53 +58,71 @@ export default function Home() {
 
             </ScrollView>
 
-            
 
             
 
             <View style={stlyes.buttoncontainer}>
-                <TouchableOpacity onPress={() => navigation.navigate("Home")}>
-                    <View>
-                        <Text style={stlyes.dotText}>
-                                首页
+
+
+                <TouchableOpacity 
+                    name = "home"
+                    onPress={() => navigation.navigate("Home")}
+                    style={{top:8,}}>
+                    
+                    <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+                        <HomeIcon color={"black"}></HomeIcon>
+                            <Text style={stlyes.dottext}>
+                                    首页
+                            </Text>
+                    </View>    
+                </TouchableOpacity>    
+
+                <TouchableOpacity 
+                    onPress={() => navigation.navigate("Cart")}
+                    style={{top:8,}}>
+                    <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+                    {/* <HandThumbUpIcon></HandThumbUpIcon> */}
+                    <HeartIcon color={"black"}></HeartIcon>
+                        <Text style={stlyes.dottext}>
+                                赞过
                         </Text>
                     </View>
+                    
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => navigation.navigate("MyTravels")}>
-                    <View>
-                        <Text style={stlyes.dotText}>
+                {/* 发布游记按钮 */}
+                <TouchableOpacity  >
+                    <PlusCircleIcon size={55} style={{top:8}} color={"black"} strokeWidth={1} ></PlusCircleIcon>
+                </TouchableOpacity>
+
+                <TouchableOpacity 
+                    onPress={() => navigation.navigate("MyTravels")}
+                    style={{top:8,}}>
+                    <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+                        <BookOpenIcon color={"black"}></BookOpenIcon>
+                        <Text style={stlyes.dottext}>
                                 我的游记
                         </Text>
                     </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={stlyes.buttonAdd} >
-                    <Text style={stlyes.buttonText}>+</Text>
-                </TouchableOpacity>
-
-                
-
-                <TouchableOpacity onPress={() => navigation.navigate("TravelsDetails")}>
-                    <View>
-                        <Text style={stlyes.dotText}>
-                                游记详情
-                        </Text>
-                    </View>
-                </TouchableOpacity>
-
-                <TouchableOpacity onPress={() => navigation.navigate("Cart")}>
-                    <View>
-                        <Text style={stlyes.dotText}>
+                <TouchableOpacity 
+                    
+                    onPress={() => navigation.navigate("Cart")}
+                    style={{top:8,}}>
+                    <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+                    <UserIcon color={"black"}></UserIcon>
+                        <Text style={stlyes.dottext}>
                                 我的
                         </Text>
-                    </View>
+                    </View>  
                 </TouchableOpacity>
                 
 
             </View>
 
         </SafeAreaView>
+        
     )
 }
 
@@ -104,10 +134,14 @@ const stlyes = StyleSheet.create({
         paddingStart: 14,
     },
     buttoncontainer: {
+        display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingHorizontal: 10,
+        paddingHorizontal: 15,
+        height:'4%',
+        top:5,
+        left:8
     },
     cartContent: {
         flexDirection: 'row',
@@ -136,17 +170,27 @@ const stlyes = StyleSheet.create({
         bottom: -2,
         left: -4,
     },
-    dotText: {
-        fontSize: 18,
+    dottext:{
+        fontSize: 9,
+        fontWeight:'500',
+        color:"gray"
     },
-    buttonAdd: {
-        width: 33,
-        paddingStart: 12,
-        paddingEnd: 12,
-        backgroundColor: '#168fff',
-        paddingTop: 6,
-        paddingBottom: 6,
-        borderRadius: 2,
+    serchandinput: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: 'neutral-100', 
+        borderRadius: '100%', 
+        padding: 6,
+        paddingLeft: 12, 
+        paddingRight: 2,
+
+    },
+    input: {
+        flexGrow: 1,
+        fontSize: 16,
+        // marginBottom: 0,
+        paddingLeft: 8,
+        letterSpacing: 1,
     }
 })
 

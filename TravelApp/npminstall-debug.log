@@ -1,18 +1,11 @@
 {
-  root: '/Users/lvzhizhe/Desktop/ctrip/Ctrip',
+  root: '/Users/lvzhizhe/Desktop/ctrip/Ctrip_dev',
   registry: 'https://registry.npmmirror.com',
   pkgs: [
     {
       name: '',
-      version: 'react-native-heroicons/outline',
+      version: 'react-navigation/bottom-tabs',
       type: 'git',
-      alias: undefined,
-      arg: [Result]
-    },
-    {
-      name: '3.2.0',
-      version: 'latest',
-      type: 'tag',
       alias: undefined,
       arg: [Result]
     }
@@ -22,7 +15,7 @@
   cacheDir: null,
   env: {
     npm_config_registry: 'https://registry.npmmirror.com',
-    npm_config_argv: '{"remain":[],"cooked":["--fix-bug-versions","--china","--userconfig=/Users/lvzhizhe/.cnpmrc","--disturl=https://cdn.npmmirror.com/binaries/node","--registry=https://registry.npmmirror.com","react-native-heroicons/outline","3.2.0"],"original":["--fix-bug-versions","--china","--userconfig=/Users/lvzhizhe/.cnpmrc","--disturl=https://cdn.npmmirror.com/binaries/node","--registry=https://registry.npmmirror.com","react-native-heroicons/outline","3.2.0"]}',
+    npm_config_argv: '{"remain":[],"cooked":["--fix-bug-versions","--china","--userconfig=/Users/lvzhizhe/.cnpmrc","--disturl=https://cdn.npmmirror.com/binaries/node","--registry=https://registry.npmmirror.com","react-navigation/bottom-tabs"],"original":["--fix-bug-versions","--china","--userconfig=/Users/lvzhizhe/.cnpmrc","--disturl=https://cdn.npmmirror.com/binaries/node","--registry=https://registry.npmmirror.com","react-navigation/bottom-tabs"]}',
     npm_config_user_agent: 'npminstall/7.6.0 npm/? node/v20.11.1 darwin arm64',
     NODE: '/usr/local/bin/node',
     npm_node_execpath: '/usr/local/bin/node',
@@ -55,8 +48,8 @@
     npm_config_sharp_binary_host: 'https://cdn.npmmirror.com/binaries/sharp',
     npm_config_sharp_libvips_binary_host: 'https://cdn.npmmirror.com/binaries/sharp-libvips',
     npm_config_robotjs_binary_host: 'https://cdn.npmmirror.com/binaries/robotjs',
-    npm_rootpath: '/Users/lvzhizhe/Desktop/ctrip/Ctrip',
-    INIT_CWD: '/Users/lvzhizhe/Desktop/ctrip/Ctrip',
+    npm_rootpath: '/Users/lvzhizhe/Desktop/ctrip/Ctrip_dev',
+    INIT_CWD: '/Users/lvzhizhe/Desktop/ctrip/Ctrip_dev',
     npm_config_cache: '/Users/lvzhizhe/.npminstall_tarball'
   },
   binaryMirrors: {
@@ -192,7 +185,7 @@
   disableFallbackStore: false,
   workspacesMap: Map(0) {},
   enableWorkspace: false,
-  workspaceRoot: '/Users/lvzhizhe/Desktop/ctrip/Ctrip',
+  workspaceRoot: '/Users/lvzhizhe/Desktop/ctrip/Ctrip_dev',
   isWorkspaceRoot: true,
   isWorkspacePackage: false,
   strictSSL: true,
