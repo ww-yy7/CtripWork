@@ -4,7 +4,10 @@ import Home from '../pages/Home'
 import Cart from '../pages/Cart'
 import MyTravels from '../pages/MyTravels';
 import TravelsDetails from '../pages/TravelsDetails';
+import Login from '../pages/Login';
+
 import { travelsData } from '../constants';
+import Register from '../pages/Register';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,7 +26,7 @@ export default function Routes() {
                 name="Cart"
                 component={Cart}
                 options={{
-                    headerTitle: '购物车🛒'
+                    headerTitle: '我的'
                 }}
             />
 
@@ -41,6 +44,22 @@ export default function Routes() {
                 options={{
                     headerTitle: '游记详情',
                     headerShown: false,
+                }}
+            />
+              <Stack.Screen
+                name="Login"
+                component={Login}
+                options={{
+                    headerTitle: '登录页',
+                    // headerShown: false,
+                }}
+            />
+            <Stack.Screen
+                name="Register"
+                component={Register}
+                options={{
+                    headerTitle: '注册页',
+                    // headerShown: false,
                 }}
             />
         </Stack.Navigator>

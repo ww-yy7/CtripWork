@@ -29,7 +29,6 @@ const TravelsCard = ({item})=> {
   const navigation = useNavigation();
   return(
     
-    
     <TouchableOpacity 
         onPress={() => navigation.navigate("TravelsDetails",{...item}) }
         style={styles.image}
