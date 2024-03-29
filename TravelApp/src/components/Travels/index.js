@@ -1,6 +1,6 @@
 import {View, TouchableOpacity, Image, Text, StyleSheet } from "react-native";
 import React from "react";
-import { travelsData } from "../../constants";
+import { travelsdefaultData } from "../../constants";
 import { LinearGradient } from 'expo-linear-gradient'
 import { useNavigation } from '@react-navigation/native'
 
@@ -13,7 +13,7 @@ export default function Travels() {
     <View style={styles.container}>
       {/* <Text>游记</Text> */}
       {
-        travelsData.map((item, index)=>{
+        travelsdefaultData.map((item, index)=>{
             return (
                 <TravelsCard  item={item} key={index} />
             )
@@ -35,7 +35,7 @@ const TravelsCard = ({item})=> {
        >
         <Image
           source={item.image}
-          style={{width: 170, height: 230, borderRadius: 35, position: 'absolute'}} />
+          style={{width: 170, height: 230, borderRadius: 25, position: 'absolute'}} />
         
         {/* 线性渐变处理，美化样式 */}
         <LinearGradient
@@ -85,8 +85,8 @@ const styles = StyleSheet.create({
       bottom: 0,
       width: 170, 
       height: '93%',  // 渐变色高度
-      borderBottomLeftRadius: 35, 
-      borderBottomRightRadius: 35
+      borderBottomLeftRadius: 25, 
+      borderBottomRightRadius: 25
     },
 
     userinfo: {

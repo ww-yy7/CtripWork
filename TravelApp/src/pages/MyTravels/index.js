@@ -1,20 +1,30 @@
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from "react-native";
+import { useState } from "react";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from 'expo-linear-gradient'
-import { travelsData } from "../../constants";
+import { TrashIcon } from "react-native-heroicons/outline";
+import { travelsdefaultData } from "../../constants";
+
 
 
 
 
 export default function MyTravels() {
+   
+  const [travelsData,setTravelsData] = useState(travelsdefaultData)
 
+  // 定义删除游记的函数
+  const deleteMyTravel = (idToDelete) => {
+        // 过滤出要删除的游记后，更新全局状态
+        setTravelsData(currentTravelsData => currentTravelsData.filter(item => item.articleId !== idToDelete));
+      };
 
   return (
     <ScrollView style={styles.container}>
     <View style={styles.cardcontainer}>
       {
-        travelsData.filter(item => item.user === 'Zach').map((item, index) => (
-            <TravelsCard key={index} item={item} />
+        travelsData.length > 0 && travelsData.filter(item => item.user === 'Zach').map((item, index) => (
+            <TravelsCard key={index} item={item} onDelete={deleteMyTravel}/>
           ))
       }
     </View>
@@ -23,19 +33,39 @@ export default function MyTravels() {
 }
 
 
-const TravelsCard = ({item})=> {
+const TravelsCard = ({item, onDelete})=> {
 
   const navigation = useNavigation();
+  
+  const confirmDelete = (id) => {
+    Alert.alert(
+      '确认删除',
+      '确定要删除这条游记吗？',
+      [
+        {
+          text: '取消',
+          style: 'cancel',
+        },
+        {
+          text: '确定',
+          onPress: () => onDelete(id),
+        },
+      ],
+      { cancelable: false },
+    );
+  };
+  
+
   return(
     
-    
+    <View>
     <TouchableOpacity 
         onPress={() => navigation.navigate("TravelsDetails",{...item}) }
-        style={styles.image}
+        style={styles.imageview}
        >
         <Image
           source={item.image}
-          style={{width: 170, height: 230, borderRadius: 20, position: 'absolute'}} />
+          style={{width: 170, height: 230, borderTopLeftRadius: 10, borderTopRightRadius: 10, position: 'absolute'}} />
         
         {/* 线性渐变处理，美化样式 */}
         <LinearGradient
@@ -55,6 +85,15 @@ const TravelsCard = ({item})=> {
         <Text style={styles.text}>{item.shortDescription}</Text>
         
        </TouchableOpacity>
+
+        <View style={styles.states}>
+          <Text>审核中</Text>
+          <TouchableOpacity onPress={()=>{confirmDelete(item.articleId)}}>
+            <TrashIcon size={15} color="gray"></TrashIcon>
+          </TouchableOpacity>
+        </View>
+
+       </View>
   )
 }
 
@@ -68,13 +107,14 @@ const styles = StyleSheet.create({
   },
   cardcontainer: {
     marginLeft: 8,
-    marginRight: 20,
+    marginRight: 8,
+    marginTop:10,
     // width:350,
     flexDirection: 'row',
     justifyContent: 'space-between',
     flexWrap: 'wrap',
   },
-  image: {
+  imageview: {
     width: 160,  //固定宽度可兼容iphone15和iphone15promax
     height: 230,
     display: 'flex', 
@@ -90,9 +130,24 @@ const styles = StyleSheet.create({
     position:'absolute',
     bottom: 0,
     width: 170, 
-    height: '93%',  // 渐变色高度
-    borderBottomLeftRadius: 20, 
-    borderBottomRightRadius: 20
+    height: '50%',  // 渐变色高度
+    // borderBottomLeftRadius: 5, 
+    // borderBottomRightRadius: 5
+  },
+  states:{
+    width: 170,  //固定宽度可兼容iphone15和iphone15promax
+    height: 43,
+    flexDirection:'row',
+    justifyContent: 'space-between', 
+    position: 'relative', 
+    marginBottom: 5,
+    alignItems: 'center', 
+    bottom:10,
+    backgroundColor:"#fff",
+    borderBottomLeftRadius: 15, 
+    borderBottomRightRadius: 15,
+    paddingHorizontal:8,
+   
   },
 
   userinfo: {
@@ -126,4 +181,3 @@ const styles = StyleSheet.create({
     bottom: 20,
   },
 })
-
