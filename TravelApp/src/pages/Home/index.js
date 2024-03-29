@@ -91,7 +91,7 @@ export default function Home() {
                 </TouchableOpacity>
 
                 {/* 发布游记按钮 */}
-                <TouchableOpacity  >
+                <TouchableOpacity onPress={()=>{navigation.navigate("addTravel")}} >
                     <PlusCircleIcon size={55} style={{top:8}} color={"black"} strokeWidth={1} ></PlusCircleIcon>
                 </TouchableOpacity>
 
