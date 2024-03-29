@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 import Home from '../pages/Home'
-import Cart from '../pages/Cart'
+import Mine from '../pages/Mine'
 import MyTravels from '../pages/MyTravels';
 import TravelsDetails from '../pages/TravelsDetails';
 import Login from '../pages/Login';
@@ -23,8 +23,8 @@ export default function Routes() {
             />
 
             <Stack.Screen
-                name="Cart"
-                component={Cart}
+                name="Mine"
+                component={Mine}
                 options={{
                     headerTitle: '我的'
                 }}

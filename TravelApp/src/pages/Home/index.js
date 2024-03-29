@@ -78,7 +78,7 @@ export default function Home() {
                 </TouchableOpacity>    
 
                 <TouchableOpacity 
-                    onPress={() => navigation.navigate("Cart")}
+                    onPress={() => navigation.navigate("Mine")}
                     style={{top:8,}}>
                     <View style={{ flexDirection: 'column', alignItems: 'center' }}>
                     {/* <HandThumbUpIcon></HandThumbUpIcon> */}
@@ -108,7 +108,7 @@ export default function Home() {
 
                 <TouchableOpacity 
                     
-                    onPress={() => navigation.navigate("Cart")}
+                    onPress={() => navigation.navigate("Mine")}
                     style={{top:8,}}>
                     <View style={{ flexDirection: 'column', alignItems: 'center' }}>
                     <UserIcon color={"black"}></UserIcon>
