@@ -7,8 +7,10 @@ import {
   FlatList,
   Image,
   ScrollView,
+  Alert,
   TouchableOpacity,
   ImageBackground,
+
 } from "react-native";
 import MyHome from "../../components/MyHome";
 import MyTravelList from "../../components/MyTravelList";
@@ -18,20 +20,58 @@ import {
   Button,
   WhiteSpace,
   WingBlank,
+  Toast,
+  Provider,
+
 } from "@ant-design/react-native";
 import { EyeIcon, EyeSlashIcon } from "react-native-heroicons/outline";
 import { useNavigation } from "@react-navigation/native";
+import { User } from "react-native-feather";
 export default function Login() {
   const navigation = useNavigation();
-
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [usernameValue, setUsernameValue] = useState("");
+  const [passwordValue, setPasswordValue] = useState("");
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);  //设置小眼睛图标的显示状态
+  const [checked, setChecked] = useState(false); // 是否同意发布规则
 
   // 切换密码框的显示状态
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
+// 用户名输入框的校验
+  const validateUsername = () => {
+    // console.log(usernameValue);
+    if(usernameValue.length > 11){
+      console.log('手机号不能超过11位');
+    }
+    // 正则匹配手机号
+    if(!(/^1[3456789]\d{9}$/.test(usernameValue))){
+      Toast.info('请输入正确的手机号', 1)
+    }
+    
+  };
+  // 提交游记
+  const loginBtn = () => {
+    if (!usernameValue) {
+      Toast.info("用户名不能为空", 1);
+      // console.log('用户名不能为空',Toast.LONG);
+    } else if (!passwordValue) {
+      Toast.info("密码不能为空", 1);
+    } else if (!checked) {
+      Toast.info("请同意发布规则", 1);
+    } else {
+      const data = {
+        username: usernameValue,
+        password: passwordValue,
+      };
+      // 登录请求，里面加以下事件
+      Toast.info("登录成功", 1);
+      navigation.navigate("Mine");
+    }
+  };
 
   return (
+    <Provider>
     <ImageBackground
       source={require("../../../assets/images/loginpagebg.jpg")} // 替换成你的动态图像的路径
       style={styles.background}>
@@ -41,14 +81,19 @@ export default function Login() {
         <View>
           <TextInput
             style={styles.textinput}
-            placeholder="手机号码"
-            value={""}
+            placeholder="用户名"
+            onChangeText={(text) => setUsernameValue(text)}
+            onBlur={validateUsername}
+            value={usernameValue}
           />
         </View>
+        <WhiteSpace size="lg" />
         <View style={styles.password}>
           <TextInput
             style={styles.passwordInput}
-            value={"登录密码"}
+            onChangeText={(text) => setPasswordValue(text)}
+            value={passwordValue}
+            placeholder="登录密码"
             secureTextEntry={!isPasswordVisible}
           />
           {/* 根据状态变量来显示不同的图标 */}
@@ -68,14 +113,28 @@ export default function Login() {
             />
           )}
         </View>
-
-        <Button onPress={() => navigation.navigate("Mine")}>登录</Button>
-        <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-          <Text style={styles.linkText}>没有账号？立即注册</Text>
-        </TouchableOpacity>
-        <Checkbox>阅读并同意携程的《服务协议》和《个人信息保护指南》</Checkbox>
+        <WhiteSpace size="lg" />
+        <Button onPress={loginBtn}>登录</Button>
+        <View
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: 30,
+          }}>
+          <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+            <Text style={styles.linkText}>没有账号？立即注册</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.checkBox}>
+          <Checkbox style={{ color: "#fff" }}  onChange={() => setChecked(!checked)}
+          checked={checked}></Checkbox>
+          <Text style={{ color: "#fff", marginLeft: -10 }}>
+            阅读并同意携程的《服务协议》和《个人信息保护指南》
+          </Text>
+        </View>
       </View>
-    </ImageBackground>
+     </ImageBackground>
+     </Provider>
   );
 }
 
@@ -85,6 +144,7 @@ const styles = StyleSheet.create({
     resizeMode: "cover", // 保持图像的宽高比并在视图中尽可能完整显示图像
   },
   container: {
+    flex: 1,
     backgroundColor: "rgba(255,255,255,0)",
     paddingStart: 30,
     paddingEnd: 30,
@@ -100,6 +160,7 @@ const styles = StyleSheet.create({
     height: 40,
     borderColor: "#fff",
     borderBottomWidth: 1, // 底部边框
+    fontSize: 16,
   },
   password: {
     flexDirection: "row",
@@ -111,8 +172,18 @@ const styles = StyleSheet.create({
   passwordInput: {
     flex: 1,
     height: 40,
+    fontSize: 16,
   },
   linkText: {
-    color: "blue",
+    color: "#fff",
+    fontSize: 16,
+  },
+  checkBox: {
+    flexDirection: "row",
+    alignItems: "center",
+    position: "absolute",
+    bottom: 50,
+    marginLeft: 30,
+    color: "#fff",
   },
 });
