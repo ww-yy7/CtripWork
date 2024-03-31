@@ -14,7 +14,10 @@ mongoose.connection.on("connected", function () {
 const articleSchema = new Schema(
   {
     articleId: String,
-    comment: [
+    title: String,//标题
+    profile: String,//简介
+    content: String,//内容
+    comment: [ // 评论
       {
         id: String,
         nickName: String,
@@ -23,16 +26,16 @@ const articleSchema = new Schema(
         avatar: String,
       },
     ],
-    content: String,
     picture: [String],
     position: String,
     see: String, // 浏览量
     state: String, // 审核状态
     rejectReason: String, // 拒绝理由
     tags: [String], // 标签
-    time: String,
+    time: String, // 发布时间
+    playTime: String, // 游玩时间
+    money: String, // 花费
     video: [String],
-    title: String,
     likes: String, // 点赞量
   },
   { _id: false } // 设置 _id 为 false，不生成默认的 _id
