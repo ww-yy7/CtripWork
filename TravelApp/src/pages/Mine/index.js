@@ -10,7 +10,6 @@ import {
   TouchableOpacity,
   ImageBackground,
 } from "react-native";
-import { CartContext } from "../../contexts/CartContext";
 import MyHome from "../../components/MyHome";
 import MyTravelList from "../../components/MyTravelList";
 import { Card, WhiteSpace, WingBlank, Button } from "@ant-design/react-native";
@@ -38,7 +37,6 @@ export default function Mine() {
       setIsLoggedIn(false);
     }
   }, [token]);
-  // console.log(isLoggedIn)
 
   // 控制组件显示
   const [showComponent, setShowComponent] = useState("travelList");
@@ -55,14 +53,14 @@ export default function Mine() {
     <View style={styles.container}>
       {/* 没有登录的时候显示 */}
       {!isLoggedIn && (
-        <View>
-          <ImageBackground
-            source={require("../../../assets/images/headerbg.png")} // 替换成你的背景图片路径
-            style={styles.noLoginHeader}>
+        <ImageBackground
+          source={require("../../../assets/images/headerbg.png")} // 替换成你的背景图片路径
+          style={styles.noLoginHeader}>
+          <View style={{ paddingTop: 30 }}>
             {/* 放一些小图标 */}
             <View style={styles.headerIcon}>
               <ViewfinderCircleIcon size={25} strokeWidth={1.5} color="white" />
-              <Cog6ToothIcon size={25} strokeWidth={1.5} color="white" />
+              <Cog6ToothIcon size={25} strokeWidth={1.5} color="white"  onPress={() => navigation.navigate("Login")} />
             </View>
             <Text style={styles.noLoginText}>登录携程，开启旅程</Text>
             <View style={styles.changeBtn}>
@@ -79,27 +77,29 @@ export default function Mine() {
                 手机号查单
               </Button>
             </View>
-          </ImageBackground>
-          {/* 静态展示的页面，点击都会到登录页面 */}
-          <View></View>
-        </View>
+
+            {/* 静态展示的页面，点击都会到登录页面 */}
+            <View  onPress={() => navigation.navigate("Login")}></View>
+          </View>
+        </ImageBackground>
       )}
 
       {/* 登录的时候显示 */}
       {isLoggedIn && (
-        <View style={styles.loginContainer}>
+        <View >
           <ScrollView>
             {/* 放一些小图标，不一定要有功能 */}
             <ImageBackground
               source={require("../../../assets/images/minebg.png")}
-              style={styles.noLoginHeader}>
+              style={styles.loginHeader}>
               <View style={styles.headerIcon}>
                 <ViewfinderCircleIcon
                   size={25}
                   strokeWidth={1.5}
-                  color="#2f3336"
+                  color="#fff"
+                  
                 />
-                <Cog6ToothIcon size={25} strokeWidth={1.5} color="#2f3336" />
+                <Cog6ToothIcon size={25} strokeWidth={1.5} color="#fff" />
               </View>
               {/* 放置头像信息等模块 */}
               <Card style={styles.headerCard}>
@@ -108,7 +108,7 @@ export default function Mine() {
                   {/* 头像 */}
                   <Image
                     style={styles.avatar}
-                    source={require("../../../assets/images/avatar.png")}
+                    source={require("../../../assets/images/startAvatar.png")}
                   />
                   <View>
                     {/* 用户名 */}
@@ -132,13 +132,22 @@ export default function Mine() {
                     alignItems: "center",
                   }}
                   onPress={() => navigation.navigate("")}>
-                  <Text style={{ fontSize: 12, color: "#9f9fa1",marginRight:4 }}>
+                  <Text
+                    style={{ fontSize: 12, color: "#9f9fa1", marginRight: 4 }}>
                     简单的自我介绍，让你更受欢迎
                   </Text>
                   <PencilSquareIcon size={16} strokeWidth={1} color="#9f9fa1" />
                 </TouchableOpacity>
 
-                <Text style={{ fontSize: 12, color: "grey",marginLeft:10,marginTop:5 }}>粉丝 2 关注 0 获赞 0 赞过 0</Text>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: "grey",
+                    marginLeft: 10,
+                    marginTop: 5,
+                  }}>
+                  粉丝 2 关注 0 获赞 0 赞过 0
+                </Text>
               </Card>
             </ImageBackground>
             {/* 放个人游记列表处 */}
@@ -152,7 +161,7 @@ export default function Mine() {
                       styles.noSelectedText,
                       selected === "left" && styles.selectedText,
                     ]}>
-                    我的携程
+                    我的游记
                   </Text>
                   {selected === "left" && (
                     <Image
@@ -188,6 +197,7 @@ export default function Mine() {
           </ScrollView>
         </View>
       )}
+      {/* <BottomTabs/> */}
     </View>
   );
 }
@@ -213,6 +223,7 @@ const styles = StyleSheet.create({
     marginTop: -20,
     width: 80,
     height: 80,
+    borderRadius: 40,
   },
   listCard: {
     height: 1000,
@@ -245,8 +256,17 @@ const styles = StyleSheet.create({
     borderColor: "rgb(255,255,255)", // 可以设置边框颜色
   },
   noLoginHeader: {
-    height: 200,
-    padding: 10,
+    height: 240,
+    paddingStart: 10,
+    paddingEnd: 10,
+    backgroundSize: "cover", // 保证图片铺满整个视图
+    backgroundPosition: "center", // 图片居中显示
+  },
+  loginHeader: {
+    height: 240,
+    paddingStart: 10,
+    paddingEnd: 10,
+    paddingTop:30,
     backgroundSize: "cover", // 保证图片铺满整个视图
     backgroundPosition: "center", // 图片居中显示
   },
@@ -262,7 +282,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     margin: 10,
-  },
+  },  
   selectTouch: {
     justifyContent: "center",
     alignItems: "center",

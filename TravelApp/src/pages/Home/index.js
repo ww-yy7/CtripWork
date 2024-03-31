@@ -58,69 +58,6 @@ export default function Home() {
 
             </ScrollView>
 
-
-            
-
-            <View style={stlyes.buttoncontainer}>
-
-
-                <TouchableOpacity 
-                    name = "home"
-                    onPress={() => navigation.navigate("Home")}
-                    style={{top:8,}}>
-                    
-                    <View style={{ flexDirection: 'column', alignItems: 'center' }}>
-                        <HomeIcon color={"black"}></HomeIcon>
-                            <Text style={stlyes.dottext}>
-                                    首页
-                            </Text>
-                    </View>    
-                </TouchableOpacity>    
-
-                <TouchableOpacity 
-                    onPress={() => navigation.navigate("Mine")}
-                    style={{top:8,}}>
-                    <View style={{ flexDirection: 'column', alignItems: 'center' }}>
-                    {/* <HandThumbUpIcon></HandThumbUpIcon> */}
-                    <HeartIcon color={"black"}></HeartIcon>
-                        <Text style={stlyes.dottext}>
-                                赞过
-                        </Text>
-                    </View>
-                    
-                </TouchableOpacity>
-
-                {/* 发布游记按钮 */}
-                <TouchableOpacity onPress={()=>{navigation.navigate("addTravel")}} >
-                    <PlusCircleIcon size={55} style={{top:8}} color={"black"} strokeWidth={1} ></PlusCircleIcon>
-                </TouchableOpacity>
-
-                <TouchableOpacity 
-                    onPress={() => navigation.navigate("MyTravels")}
-                    style={{top:8,}}>
-                    <View style={{ flexDirection: 'column', alignItems: 'center' }}>
-                        <BookOpenIcon color={"black"}></BookOpenIcon>
-                        <Text style={stlyes.dottext}>
-                                我的游记
-                        </Text>
-                    </View>
-                </TouchableOpacity>
-
-                <TouchableOpacity 
-                    
-                    onPress={() => navigation.navigate("Mine")}
-                    style={{top:8,}}>
-                    <View style={{ flexDirection: 'column', alignItems: 'center' }}>
-                    <UserIcon color={"black"}></UserIcon>
-                        <Text style={stlyes.dottext}>
-                                我的
-                        </Text>
-                    </View>  
-                </TouchableOpacity>
-                
-
-            </View>
-
         </SafeAreaView>
         
     )
