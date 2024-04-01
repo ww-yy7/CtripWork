@@ -29,18 +29,20 @@ import {
   CurrencyYenIcon,
 } from "react-native-heroicons/outline";
 import * as ImagePicker from "expo-image-picker";
-import { Login, Register } from "../../apis/user";
-import axios from "axios";
-import request from "../../utils/request";
+import { AddTravel as fetchAddTravel } from "../../apis/user";
+import { useNavigation } from "@react-navigation/native";
+import { escapeHtml } from "../../apis/HtmlHandler";
 
 export default function AddTravel() {
+  const navigation = useNavigation();
+
   const [titleValue, setTitleValue] = useState("");
   const [profileValue, setProfileValue] = useState("");
   const [contentValue, setContentValue] = useState("");
 
   const [tags, setTags] = useState([]); // 存放标签
   const [tagVisible, setTagVisible] = useState(false); // 标签弹出框是否显示
-  const [tagValue, setTagValue] = useState(""); // 标签输入框的值
+  const [tagInputValue, setTagInputValue] = useState(""); // 标签输入框的值
 
   const [locationVisible, setLocationVisible] = useState(false); // 地点弹出框是否显示
   const [locationValue, setLocationValue] = useState(""); // 地点显示的值
@@ -64,7 +66,7 @@ export default function AddTravel() {
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true, // 是否允许编辑
       aspect: [4, 3], // 裁剪比例
-      quality: 1, // 图片质量
+      quality: 0.6, // 图片质量
     });
 
     console.log(result);
@@ -79,78 +81,52 @@ export default function AddTravel() {
     list.splice(index, 1);
     setImageList([...list]);
   };
+
   // 提交游记
-  const submitTravelNote = () => {
-    if (!titleValue) {
+  const submitTravelNote = async () => {
+    if (imageList.length === 0) {
+      Toast.info("请上传图片", 1);
+    } else if (!titleValue) {
       Toast.info("标题不能为空", 1);
     } else if (!contentValue) {
       Toast.info("内容不能为空", 1);
     } else if (!checked) {
       Toast.info("请同意发布规则", 1);
     } else {
-      const testId = "6603d54e0ea1e645565627e8"; //临时id
+      const testId = "66091d913f2de9f5008583bc"; //临时id
       const data = {
-        title: titleValue,
-        profile: profileValue,
-        content: contentValue,
+        _id: testId,
+        title: escapeHtml(titleValue),
+        profile: escapeHtml(profileValue),
+        content: escapeHtml(contentValue),
         tags: tags,
-        location: locationValue,
         picture: imageList,
-        position: locationValue,
-        playTime: playTime,
-        money: money,
+        position: escapeHtml(locationValue),
+        playTime: escapeHtml(playTime),
+        money: escapeHtml(money),
       };
-      Toast.info(data.title, 1);
+      let res = await fetchAddTravel(data);
+      // console.log(res.data);
+      if (res.data.code === 200) {
+        Toast.info("发布成功", 1);
+
+        setTimeout(() => {
+          navigation.navigate("MyTravels");
+          // 清除所有内容
+          setTitleValue("");
+          setProfileValue("");
+          setContentValue("");
+          setTags([]);
+          setImageList([]);
+          setLocationValue("");
+          setPlayTime("");
+          setMoney("");
+          setChecked(false);
+        }, 1000);
+      } else {
+        Toast.info("发布失败,请稍后重试", 1);
+      }
     }
-
-    // console.log("开始请求2");
-    // const sendGetRequest = async () => {
-    //   try {
-    //     // 发送 GET 请求
-    //     const response = await request.get("/users/login"); // 替换为您要测试的具体路径
-    //     // 输出响应数据
-    //     console.log("Response:", response.data);
-    //   } catch (error) {
-    //     // 如果请求失败，输出错误信息
-    //     console.error("Error:", error);
-    //   }
-    // };
-    // // 调用函数发送请求
-    // sendGetRequest();
-
-    try {
-      const fetchLogin = async () => {
-        console.log(111);
-        const testData = {
-          username: "fengfeng",
-          password: "123456",
-        };
-        const res = await Login(testData);
-        // console.log(res);
-      };
-      fetchLogin();
-    } catch (error) {
-      console.log(error);
-    }
-
-    // axios
-    //   .get("http://10.100.196.230:3000/api/users/login?username=wanwan&password=123456")
-    //   .then((response) => {
-    //     const result = response.data;
-    //     if (result.code === 200) {
-    //       // 注册成功
-    //       console.log(result.message);
-    //       // 可以在此处处理注册成功后的逻辑，如跳转页面、提示用户等
-    //     } else {
-    //       // 注册失败
-    //       console.error(result.message);
-    //       // 显示错误消息给用户
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.error("注册请求失败：", error);
-    //     // 处理请求失败的情况
-    //   });
   };
 
   return (
@@ -167,7 +143,7 @@ export default function AddTravel() {
         </Text>
       </View>
 
-      <View style={[styles.innerBox, { height: 500 }]}>
+      <View style={[styles.innerBox, { height: 460 }]}>
         <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
           {imageList.length > 0 &&
             imageList.map((item, index) => (
@@ -222,7 +198,7 @@ export default function AddTravel() {
           showsVerticalScrollIndicator={false}>
           <List>
             <TextareaItem
-              style={{ borderTopWidth: 0.5 ,borderColor:'lightgray'}} // 添加这行样式设置 // 添加这行样式设置，去掉下划线
+              style={{ borderTopWidth: 0.5, borderColor: "lightgray" }} // 添加这行样式设置 // 添加这行样式设置，去掉下划线
               rows={10}
               placeholder="详细分享你的真实体验、实用攻略和一些小Tips并带上明确的推荐理由，更容易被推荐哦!"
               count={500}
@@ -253,17 +229,25 @@ export default function AddTravel() {
           <View style={styles.modalView}>
             <TextInput
               style={styles.tagInput}
-              onChangeText={(text) => setTagValue(text)}
-              value={tagValue}
+              onChangeText={(text) => setTagInputValue(text)}
+              value={tagInputValue}
               placeholder="填写标签"
             />
             <Button
-              style={styles.modalBtn}
+              style={[
+                styles.modalBtn,
+                {
+                  backgroundColor: tagInputValue
+                    ? "rgb(29,177,213)"
+                    : "lightgray",
+                  borderColor: tagInputValue ? "rgb(29,177,213)" : "lightgray",
+                },
+              ]}
               type="primary"
               onPress={() => {
-                if (tagValue) {
-                  setTags([...tags, tagValue]);
-                  setTagValue("");
+                if (tagInputValue) {
+                  setTags([...tags, tagInputValue]);
+                  setTagInputValue("");
                   setTagVisible(false);
                 } else {
                   Toast.info("标签不能为空", 1);
@@ -276,7 +260,10 @@ export default function AddTravel() {
           <Button
             type="primary"
             onPress={() => setTagVisible(false)}
-            style={{ backgroundColor: "lightgray", borderColor: "lightgray" }}>
+            style={{
+              backgroundColor: "rgb(29,177,213)",
+              borderColor: "rgb(29,177,213)",
+            }}>
             关闭
           </Button>
         </Modal>
@@ -573,7 +560,8 @@ const styles = StyleSheet.create({
   },
   titleInput: {
     height: 45,
-    fontSize: 20,
+    fontSize: 24,
+    fontWeight: "500",
     borderColor: "lightgray",
     // borderWidth: 1,
     // borderRadius: 5,
@@ -582,8 +570,8 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   profileInput: {
-    height: 40,
-    fontSize: 16,
+    height: 30,
+    fontSize: 18,
     borderColor: "lightgray",
     // borderWidth: 1,
     // borderRadius: 5,
@@ -604,11 +592,11 @@ const styles = StyleSheet.create({
   btn: {
     backgroundColor: "rgb(255,255,255)",
     // color:'lightgray',
-    width: 80,
+    width: 70,
     height: 25,
     borderWidth: 1,
     borderColor: "rgb(233,233,233)",
-    borderRadius: 10,
+    borderRadius: 5,
     justifyContent: "center",
     alignItems: "center",
     marginLeft: 5,

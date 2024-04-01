@@ -4,8 +4,9 @@ import Home from "../pages/Home";
 import Mine from "../pages/Mine";
 import MyTravels from "../pages/MyTravels";
 import AddTravel from "../pages/AddTravel";
+import Message from "../pages/Message";
 import {
-  BookOpenIcon,
+  ChatBubbleBottomCenterTextIcon,
   HomeIcon,
   HeartIcon,
   UserIcon,
@@ -41,7 +42,7 @@ const BottomTabs = () => {
         component={MyTravels}
         options={{
           // headerShown: false,
-          tabBarLabel: "赞过",
+          tabBarLabel: "推荐",
           tabBarActiveTintColor: "#2677e2",
           tabBarInactiveTintColor: "grey",
           tabBarIcon: ({ focused }) => {
@@ -71,18 +72,18 @@ const BottomTabs = () => {
         }}
       />
       <Tab.Screen
-        name="TravelsDetails"
-        component={Mine}
+        name="Message"
+        component={Message}
         options={{
           headerShown: false,
-          tabBarLabel: "详情",
+          tabBarLabel: "消息",
           tabBarActiveTintColor: "#2677e2",
           tabBarInactiveTintColor: "grey",
           tabBarIcon: ({ focused }) => {
             if (focused) {
-              return <BookOpenIcon color="#2677e2"></BookOpenIcon>;
+              return <ChatBubbleBottomCenterTextIcon color="#2677e2"></ChatBubbleBottomCenterTextIcon>;
             } else {
-              return <BookOpenIcon color="grey"></BookOpenIcon>;
+              return <ChatBubbleBottomCenterTextIcon color="grey"></ChatBubbleBottomCenterTextIcon>;
             }
           },
         }}

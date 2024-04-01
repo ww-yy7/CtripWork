@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -19,14 +19,47 @@ import {
   PencilSquareIcon,
 } from "react-native-heroicons/outline";
 import { useNavigation } from "@react-navigation/native";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Register from "../Register";
 export default function Mine() {
   const user = {
     userName: "ww",
   };
-  const navigation = useNavigation();
+
+  // useEffect(() => {
+  //   // 在组件挂载时获取本地存储的token值
+  //   const getToken = async () => {
+  //     try {
+  //       const token = await AsyncStorage.getItem("token");
+  //       if (token !== null) {
+  //         // 如果token存在，进行相应的处理
+  //         console.log("获取到的token值为:", token);
+  //       } else {
+  //         // 如果token不存在，进行相应的处理
+  //         console.log("token不存在");
+  //       }
+  //     } catch (error) {
+  //       // 获取token值失败，进行相应的处理
+  //       console.error("获取token值失败:", error);
+  //     }
+  //   };
+
+  //   getToken(); // 调用异步函数
+  // }, []); // 第二个参数为空数组，表示只在组件挂载时执行一次
+  // console.log("useEffect执行"); // 添加此行，用于检查useEffect是否执行
   const token = false;
+  // console.log(token, "token");
+  // 获取localStorage中的id
+  // const id =  AsyncStorage.getItem("id");
+  // console.log(id, "id");
+  // const removeToken = () =>{
+  //   AsyncStorage.removeItem("token");
+  //   AsyncStorage.removeItem("id");
+  // }
+  // console.log(token, "token");
+  const navigation = useNavigation();
   const [selected, setSelected] = useState("left");
+
   // 判断是否登录
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   useEffect(() => {
@@ -60,7 +93,12 @@ export default function Mine() {
             {/* 放一些小图标 */}
             <View style={styles.headerIcon}>
               <ViewfinderCircleIcon size={25} strokeWidth={1.5} color="white" />
-              <Cog6ToothIcon size={25} strokeWidth={1.5} color="white"  onPress={() => navigation.navigate("Login")} />
+              <Cog6ToothIcon
+                size={25}
+                strokeWidth={1.5}
+                color="white"
+                onPress={() => navigation.navigate("Login")}
+              />
             </View>
             <Text style={styles.noLoginText}>登录携程，开启旅程</Text>
             <View style={styles.changeBtn}>
@@ -79,14 +117,14 @@ export default function Mine() {
             </View>
 
             {/* 静态展示的页面，点击都会到登录页面 */}
-            <View  onPress={() => navigation.navigate("Login")}></View>
+            <View onPress={() => navigation.navigate("Login")}></View>
           </View>
         </ImageBackground>
       )}
 
       {/* 登录的时候显示 */}
       {isLoggedIn && (
-        <View >
+        <View>
           <ScrollView>
             {/* 放一些小图标，不一定要有功能 */}
             <ImageBackground
@@ -97,7 +135,6 @@ export default function Mine() {
                   size={25}
                   strokeWidth={1.5}
                   color="#fff"
-                  
                 />
                 <Cog6ToothIcon size={25} strokeWidth={1.5} color="#fff" />
               </View>
@@ -188,6 +225,7 @@ export default function Mine() {
                   )}
                 </TouchableOpacity>
               </View>
+              <Button>退出登录</Button>
               <View>
                 {/* 根据状态变量显示对应的组件 */}
                 {showComponent === "home" && <MyHome />}
@@ -266,7 +304,7 @@ const styles = StyleSheet.create({
     height: 240,
     paddingStart: 10,
     paddingEnd: 10,
-    paddingTop:30,
+    paddingTop: 30,
     backgroundSize: "cover", // 保证图片铺满整个视图
     backgroundPosition: "center", // 图片居中显示
   },
@@ -282,7 +320,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     margin: 10,
-  },  
+  },
   selectTouch: {
     justifyContent: "center",
     alignItems: "center",

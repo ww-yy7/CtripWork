@@ -18,7 +18,6 @@ export default function Routes() {
         }}
       />
 
-      
       <Stack.Screen
         name="TravelsDetails"
         component={TravelsDetails}

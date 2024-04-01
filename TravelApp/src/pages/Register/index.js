@@ -20,6 +20,7 @@ import {
   ChevronLeftIcon,
 } from "react-native-heroicons/outline";
 import { useNavigation } from "@react-navigation/native";
+import { Register as fetchRegister } from "../../apis/user";
 
 export default function Register() {
   const navigation = useNavigation();
@@ -50,7 +51,7 @@ export default function Register() {
       Toast.info("用户名不能超过12位", 1);
       return false; // 用户名不符合规则
     }
-    // 校验用户名是否存在
+    // 校验用户名是否重复
     else {
       // 请求后端接口，校验用户名是否存在
       // 如果不存在，提示用户
@@ -80,13 +81,14 @@ export default function Register() {
       Toast.info("密码不能包含空格", 1);
       return false; // 密码不符合规则
     } else {
-      Toast.info("密码设置正确", 1);
+      // Toast.info("密码设置正确", 1);
       return true; // 密码符合规则
     }
   };
+ 
 
   // 注册按钮的点击事件
-  const registerBtn = () => {
+  const registerBtn = async () => {
     // 校验用户名是否符合要求
     const isUsernameValid = validateUsername();
     if (!isUsernameValid) {
@@ -102,6 +104,7 @@ export default function Register() {
       Toast.info("请同意发布规则", 1);
       return;
     } else {
+      // console.log(111);
       // 执行注册逻辑
       const data = {
         username: usernameValue,
@@ -111,10 +114,15 @@ export default function Register() {
         Avatar: "../../../assets/images/startAvatar.jpg",
         sex: "",
       };
-      // 注册，里面加以下事件
-      Toast.info("注册成功", 1);
-      navigation.navigate("Mine");
-      // console.log(data);
+      console.log(1);
+      let res = await fetchRegister(data);
+      if (res.data.code === 200) {
+        // 注册，里面加以下事件
+        Toast.info("注册成功,去登录", 1);
+        navigation.navigate("Login");
+      }else{
+        Toast.info("注册失败", 1);
+      }
     }
   };
 

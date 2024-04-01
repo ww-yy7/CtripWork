@@ -20,6 +20,8 @@ import {
   ChevronLeftIcon,
 } from "react-native-heroicons/outline";
 import { useNavigation } from "@react-navigation/native";
+import { Login as fetchLogin } from "../../apis/user";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function Login() {
   const navigation = useNavigation();
   const [usernameValue, setUsernameValue] = useState("");
@@ -27,6 +29,7 @@ export default function Login() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false); //设置小眼睛图标的显示状态
   const [checked, setChecked] = useState(false); // 是否同意发布规则
 
+  
   // 切换密码框的显示状态
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
@@ -53,7 +56,7 @@ export default function Login() {
       // Toast.info("用户名不存在", 1);
       // return false; // 用户名不存在
       // 如果存在
-      // return true; // 用户名存在
+      return true; // 用户名存在
     }
   };
 
@@ -68,9 +71,10 @@ export default function Login() {
     // 如果不正确，提示用户
     // Toast.info("密码错误", 1);
     // 如果正确
+    return true; // 密码正确
   };
   // 登录按钮的点击事件
-  const loginBtn = () => {
+  const loginBtn = async () => {
     // 校验用户名是否符合要求
     const isUsernameValid = validateUsername();
     if (!isUsernameValid) {
@@ -89,10 +93,20 @@ export default function Login() {
         username: usernameValue,
         password: passwordValue,
       };
-      // 登录请求，里面加以下事件,获取整个用户信息，并将token存入localStrorage
+      console.log(data);
+      // 登录请求，里面加以下事件,获取整个用户信息，并将token存入localStrorage，用async和await
+    let res=await fetchLogin(data);
+    if(res.data.code===200){
       Toast.info("登录成功", 1);
       navigation.navigate("Mine");
-    }
+      // 将token和—_ID存入localStorage
+      await AsyncStorage.setItem("token", res.data.token)
+      await AsyncStorage.setItem("id",res.data._ID)
+      // console.log(res.data._ID, "id");
+      console.log(res.data.token, "token");
+    }  else{
+      Toast.info("登录失败", 1);
+    }}
   };
 
   return (
@@ -200,6 +214,7 @@ const styles = StyleSheet.create({
     borderColor: "#fff",
     borderBottomWidth: 1, // 底部边框
     fontSize: 16,
+    color: "#fff",
   },
   password: {
     flexDirection: "row",
