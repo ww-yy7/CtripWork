@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useContext, useEffect } from "react";
 import {
   View,
   Text,
@@ -12,7 +12,13 @@ import {
 } from "react-native";
 import MyHome from "../../components/MyHome";
 import MyTravelList from "../../components/MyTravelList";
-import { Card, WhiteSpace, WingBlank, Button } from "@ant-design/react-native";
+import {
+  Card,
+  WhiteSpace,
+  WingBlank,
+  Button,
+  Popover,
+} from "@ant-design/react-native";
 import {
   Cog6ToothIcon,
   ViewfinderCircleIcon,
@@ -21,55 +27,21 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Register from "../Register";
+import { UserContext } from "../../contexts/UserContext";
+
 export default function Mine() {
   const user = {
     userName: "ww",
   };
-
-  // useEffect(() => {
-  //   // 在组件挂载时获取本地存储的token值
-  //   const getToken = async () => {
-  //     try {
-  //       const token = await AsyncStorage.getItem("token");
-  //       if (token !== null) {
-  //         // 如果token存在，进行相应的处理
-  //         console.log("获取到的token值为:", token);
-  //       } else {
-  //         // 如果token不存在，进行相应的处理
-  //         console.log("token不存在");
-  //       }
-  //     } catch (error) {
-  //       // 获取token值失败，进行相应的处理
-  //       console.error("获取token值失败:", error);
-  //     }
-  //   };
-
-  //   getToken(); // 调用异步函数
-  // }, []); // 第二个参数为空数组，表示只在组件挂载时执行一次
-  // console.log("useEffect执行"); // 添加此行，用于检查useEffect是否执行
-  const token = false;
-  // console.log(token, "token");
-  // 获取localStorage中的id
-  // const id =  AsyncStorage.getItem("id");
-  // console.log(id, "id");
-  // const removeToken = () =>{
-  //   AsyncStorage.removeItem("token");
-  //   AsyncStorage.removeItem("id");
-  // }
-  // console.log(token, "token");
   const navigation = useNavigation();
   const [selected, setSelected] = useState("left");
+  // 导入context里的全局数据
+  const { token, clearTokenFromStorage } = useContext(UserContext);
 
-  // 判断是否登录
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  useEffect(() => {
-    // 当 token 发生变化时，更新登录状态
-    if (token) {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-    }
-  }, [token]);
+  // 退出登录
+  const logOut = () => {
+    clearTokenFromStorage();
+  };
 
   // 控制组件显示
   const [showComponent, setShowComponent] = useState("travelList");
@@ -81,11 +53,10 @@ export default function Mine() {
     setShowComponent("home");
     setSelected("right");
   };
-
-  return (
-    <View style={styles.container}>
-      {/* 没有登录的时候显示 */}
-      {!isLoggedIn && (
+  if (!token) {
+    return (
+      <View style={styles.container}>
+        {/* 没有登录的时候显示 */}
         <ImageBackground
           source={require("../../../assets/images/headerbg.png")} // 替换成你的背景图片路径
           style={styles.noLoginHeader}>
@@ -120,124 +91,117 @@ export default function Mine() {
             <View onPress={() => navigation.navigate("Login")}></View>
           </View>
         </ImageBackground>
-      )}
-
-      {/* 登录的时候显示 */}
-      {isLoggedIn && (
-        <View>
-          <ScrollView>
-            {/* 放一些小图标，不一定要有功能 */}
-            <ImageBackground
-              source={require("../../../assets/images/minebg.png")}
-              style={styles.loginHeader}>
-              <View style={styles.headerIcon}>
-                <ViewfinderCircleIcon
-                  size={25}
-                  strokeWidth={1.5}
-                  color="#fff"
+      </View>
+    );
+  } else {
+    return (
+      <View style={styles.container}>
+        <ScrollView>
+          {/* 放一些小图标，不一定要有功能 */}
+          <ImageBackground
+            source={require("../../../assets/images/minebg.png")}
+            style={styles.loginHeader}>
+            <View style={styles.headerIcon}>
+              <ViewfinderCircleIcon size={25} strokeWidth={1.5} color="#fff" />
+              <Cog6ToothIcon size={25} strokeWidth={1.5} color="#fff" />
+            </View>
+            {/* 放置头像信息等模块 */}
+            <Card style={styles.headerCard}>
+              {/* 头像及用户名等 */}
+              <View style={styles.user}>
+                {/* 头像 */}
+                <Image
+                  style={styles.avatar}
+                  source={require("../../../assets/images/startAvatar.png")}
                 />
-                <Cog6ToothIcon size={25} strokeWidth={1.5} color="#fff" />
-              </View>
-              {/* 放置头像信息等模块 */}
-              <Card style={styles.headerCard}>
-                {/* 头像及用户名等 */}
-                <View style={styles.user}>
-                  {/* 头像 */}
-                  <Image
-                    style={styles.avatar}
-                    source={require("../../../assets/images/startAvatar.png")}
-                  />
-                  <View>
-                    {/* 用户名 */}
-                    <View
-                      style={{ flexDirection: "row", alignItems: "center" }}>
-                      <Text style={{ fontSize: 20, marginLeft: 20 }}>
-                        {user.userName}
-                      </Text>
-                      <Image
-                        source={require("../../../assets/images/vip.png")}
-                        style={{ width: 20, height: 20, marginLeft: 10 }}
-                      />
-                    </View>
+                <View>
+                  {/* 用户名 */}
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <Text style={{ fontSize: 20, marginLeft: 20 }}>
+                      {user.userName}
+                    </Text>
+                    <Image
+                      source={require("../../../assets/images/vip.png")}
+                      style={{ width: 20, height: 20, marginLeft: 10 }}
+                    />
                   </View>
                 </View>
-                <TouchableOpacity
-                  style={{
-                    flexDirection: "row",
-                    marginLeft: 10,
-                    marginTop: 10,
-                    alignItems: "center",
-                  }}
-                  onPress={() => navigation.navigate("")}>
-                  <Text
-                    style={{ fontSize: 12, color: "#9f9fa1", marginRight: 4 }}>
-                    简单的自我介绍，让你更受欢迎
-                  </Text>
-                  <PencilSquareIcon size={16} strokeWidth={1} color="#9f9fa1" />
-                </TouchableOpacity>
-
+              </View>
+              <TouchableOpacity
+                style={{
+                  flexDirection: "row",
+                  marginLeft: 10,
+                  marginTop: 10,
+                  alignItems: "center",
+                }}
+                onPress={() => navigation.navigate("")}>
                 <Text
-                  style={{
-                    fontSize: 12,
-                    color: "grey",
-                    marginLeft: 10,
-                    marginTop: 5,
-                  }}>
-                  粉丝 2 关注 0 获赞 0 赞过 0
+                  style={{ fontSize: 12, color: "#9f9fa1", marginRight: 4 }}>
+                  简单的自我介绍，让你更受欢迎
                 </Text>
-              </Card>
-            </ImageBackground>
-            {/* 放个人游记列表处 */}
-            <Card style={styles.listCard}>
-              <View style={styles.selectContainer}>
-                <TouchableOpacity
-                  style={styles.selectTouch}
-                  onPress={handleShowHome}>
-                  <Text
-                    style={[
-                      styles.noSelectedText,
-                      selected === "left" && styles.selectedText,
-                    ]}>
-                    我的游记
-                  </Text>
-                  {selected === "left" && (
-                    <Image
-                      style={styles.heng}
-                      source={require("../../../assets/images/heng.png")}
-                    />
-                  )}
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.selectTouch}
-                  onPress={handleShowTravelList}>
-                  <Text
-                    style={[
-                      styles.noSelectedText,
-                      selected === "right" && styles.selectedText,
-                    ]}>
-                    个人主页
-                  </Text>
-                  {selected === "right" && (
-                    <Image
-                      style={styles.heng}
-                      source={require("../../../assets/images/heng.png")}
-                    />
-                  )}
-                </TouchableOpacity>
-              </View>
-              <Button>退出登录</Button>
-              <View>
-                {/* 根据状态变量显示对应的组件 */}
-                {showComponent === "home" && <MyHome />}
-                {showComponent === "travelList" && <MyTravelList />}
-              </View>
+                <PencilSquareIcon size={16} strokeWidth={1} color="#9f9fa1" />
+              </TouchableOpacity>
+
+              <Text
+                style={{
+                  fontSize: 12,
+                  color: "grey",
+                  marginLeft: 10,
+                  marginTop: 5,
+                }}>
+                粉丝 2 关注 0 获赞 0 赞过 0
+              </Text>
             </Card>
-          </ScrollView>
-        </View>
-      )}
-      {/* <BottomTabs/> */}
-    </View>
-  );
+          </ImageBackground>
+          {/* 放个人游记列表处 */}
+          <Card style={styles.listCard}>
+            <View style={styles.selectContainer}>
+              <TouchableOpacity
+                style={styles.selectTouch}
+                onPress={handleShowHome}>
+                <Text
+                  style={[
+                    styles.noSelectedText,
+                    selected === "left" && styles.selectedText,
+                  ]}>
+                  我的游记
+                </Text>
+                {selected === "left" && (
+                  <Image
+                    style={styles.heng}
+                    source={require("../../../assets/images/heng.png")}
+                  />
+                )}
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.selectTouch}
+                onPress={handleShowTravelList}>
+                <Text
+                  style={[
+                    styles.noSelectedText,
+                    selected === "right" && styles.selectedText,
+                  ]}>
+                  个人主页
+                </Text>
+                {selected === "right" && (
+                  <Image
+                    style={styles.heng}
+                    source={require("../../../assets/images/heng.png")}
+                  />
+                )}
+              </TouchableOpacity>
+            </View>
+            <Button onPress={logOut}>退出登录</Button>
+            <View>
+              {/* 根据状态变量显示对应的组件 */}
+              {showComponent === "home" && <MyHome />}
+              {showComponent === "travelList" && <MyTravelList />}
+            </View>
+          </Card>
+        </ScrollView>
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({

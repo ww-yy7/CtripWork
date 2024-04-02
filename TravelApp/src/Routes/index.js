@@ -8,7 +8,7 @@ const Stack = createNativeStackNavigator();
 
 export default function Routes() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator >
       {/* 底部导航栏 */}
       <Stack.Screen
         name="BottomTabs"
@@ -42,8 +42,6 @@ export default function Routes() {
           headerShown: false,
         }}
       />
-    
-      
     </Stack.Navigator>
   );
 }

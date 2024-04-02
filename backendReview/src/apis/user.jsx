@@ -18,6 +18,14 @@ export function getAllTravelNote() {
     method: "GET",
   });
 }
+// 根据articleId获取游记
+export function getTravelNoteById(articleId) {
+  return request({
+    url: `/users/getAllTravelNote`,
+    method: "GET",
+    params: {articleId},
+  });
+}
 
 // 修改游记状态
 export function changeArticleState(data) {

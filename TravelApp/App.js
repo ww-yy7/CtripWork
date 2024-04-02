@@ -3,7 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 
 import Routes from "./src/Routes";
 import CartProvider from "./src/contexts/CartContext";
-
+import UserProvider from "./src/contexts/UserContext";
 import { AppLoading } from "expo";
 import * as Font from "expo-font";
 import { useEffect, useState } from "react";
@@ -50,10 +50,10 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <CartProvider>
+      <UserProvider>
         <StatusBar backgroundColor="#FAFAFA" barStyle="dark-content" />
         <Routes />
-      </CartProvider>
+      </UserProvider>
     </NavigationContainer>
   );
 }

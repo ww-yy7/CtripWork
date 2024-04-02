@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState ,useContext} from "react";
 import {
   View,
   Text,
@@ -22,14 +22,16 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { Login as fetchLogin } from "../../apis/user";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { UserContext } from "../../contexts/UserContext";
 export default function Login() {
   const navigation = useNavigation();
   const [usernameValue, setUsernameValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
+  
   const [isPasswordVisible, setIsPasswordVisible] = useState(false); //设置小眼睛图标的显示状态
   const [checked, setChecked] = useState(false); // 是否同意发布规则
 
-  
+  const { saveTokenToStorage,getToken } = useContext(UserContext);
   // 切换密码框的显示状态
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
@@ -98,9 +100,10 @@ export default function Login() {
     let res=await fetchLogin(data);
     if(res.data.code===200){
       Toast.info("登录成功", 1);
-      navigation.navigate("Mine");
       // 将token和—_ID存入localStorage
-      await AsyncStorage.setItem("token", res.data.token)
+      saveTokenToStorage(res.data.token);
+      getToken();
+      navigation.navigate("Mine");
       await AsyncStorage.setItem("id",res.data._ID)
       // console.log(res.data._ID, "id");
       console.log(res.data.token, "token");

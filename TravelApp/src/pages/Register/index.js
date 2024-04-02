@@ -86,7 +86,6 @@ export default function Register() {
     }
   };
  
-
   // 注册按钮的点击事件
   const registerBtn = async () => {
     // 校验用户名是否符合要求
@@ -114,8 +113,8 @@ export default function Register() {
         Avatar: "../../../assets/images/startAvatar.jpg",
         sex: "",
       };
-      console.log(1);
       let res = await fetchRegister(data);
+      // console.log(res.data);
       if (res.data.code === 200) {
         // 注册，里面加以下事件
         Toast.info("注册成功,去登录", 1);
