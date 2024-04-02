@@ -1,4 +1,4 @@
-import { useState ,useContext} from "react";
+import { useState, useContext } from "react";
 import {
   View,
   Text,
@@ -20,30 +20,30 @@ import {
   ChevronLeftIcon,
 } from "react-native-heroicons/outline";
 import { useNavigation } from "@react-navigation/native";
-import { Login as fetchLogin } from "../../apis/user";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Login as fetchLogin, checkUsername } from "../../apis/user";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { UserContext } from "../../contexts/UserContext";
 export default function Login() {
   const navigation = useNavigation();
   const [usernameValue, setUsernameValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
-  
+
   const [isPasswordVisible, setIsPasswordVisible] = useState(false); //设置小眼睛图标的显示状态
   const [checked, setChecked] = useState(false); // 是否同意发布规则
 
-  const { saveTokenToStorage,getToken } = useContext(UserContext);
+  const { saveTokenToStorage, saveIDToStorage } = useContext(UserContext);
   // 切换密码框的显示状态
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
 
   // 用户名输入框的校验
-  const validateUsername = () => {
+  const validateUsername = async () => {
     // 定义一个正则表达式，匹配任何非空白字符
     const pattern = /^\S+$/;
     // 正则匹配手机号
     if (usernameValue.length === 0) {
-      Toast.info("用户名输入不为空", 1);
+      // Toast.info("用户名输入不为空", 1);
       return false; // 用户名不符合规则
     }
     // 校验空格
@@ -53,63 +53,62 @@ export default function Login() {
     }
     // 校验用户名是否存在
     else {
-      // 请求后端接口，校验用户名是否存在
-      // 如果不存在，提示用户
-      // Toast.info("用户名不存在", 1);
-      // return false; // 用户名不存在
-      // 如果存在
-      return true; // 用户名存在
+      let res = await checkUsername(usernameValue);
+      console.log(res.data.code, "code");
+      if (res.data.code === 400) {
+        // 用户名存在
+        return true;
+      } else {
+        Toast.info("用户名不存在，请注册", 1);
+        return false; // 用户名不存在
+      }
     }
   };
 
   // 密码输入框的校验
-  const validatePassword = () => {
+  const validatePassword = async () => {
     // 密码不为空
     if (passwordValue.length === 0) {
-      Toast.info("密码输入不为空", 1);
+      // Toast.info("密码输入不为空", 1);
       return false; // 密码不符合规则
+    } else {
+      return true; // 密码正确
     }
-    // 请求后端接口，校验密码是否正确
-    // 如果不正确，提示用户
-    // Toast.info("密码错误", 1);
-    // 如果正确
-    return true; // 密码正确
   };
   // 登录按钮的点击事件
   const loginBtn = async () => {
     // 校验用户名是否符合要求
     const isUsernameValid = validateUsername();
     if (!isUsernameValid) {
+      Toast.info("用户名不符合要求", 1);
       return; // 如果用户名不符合要求，不执行后续注册逻辑
     }
     // 校验密码是否符合要求
     const isPasswordValid = validatePassword();
     if (!isPasswordValid) {
+      Toast.info("密码不符合要求", 1);
       return; // 如果密码不符合要求，不执行后续注册逻辑
-    }
-    if (!checked) {
-      Toast.info("请同意发布规则", 1);
-      return;
     } else {
       const data = {
         username: usernameValue,
         password: passwordValue,
       };
-      console.log(data);
       // 登录请求，里面加以下事件,获取整个用户信息，并将token存入localStrorage，用async和await
-    let res=await fetchLogin(data);
-    if(res.data.code===200){
-      Toast.info("登录成功", 1);
-      // 将token和—_ID存入localStorage
-      saveTokenToStorage(res.data.token);
-      getToken();
+      let res = await fetchLogin(data);
+      if (res.data.code === 200) {
+        // 将token和—_ID存入localStorage
+        saveTokenToStorage(res.data.token);
+        saveIDToStorage(res.data.userInfo._id);
+      } else {
+        Toast.info("密码错误", 1);
+        return;
+      }
+    }
+    if (!checked) {
+      Toast.info("请同意服务协议", 1);
+    } else {
       navigation.navigate("Mine");
-      await AsyncStorage.setItem("id",res.data._ID)
-      // console.log(res.data._ID, "id");
-      console.log(res.data.token, "token");
-    }  else{
-      Toast.info("登录失败", 1);
-    }}
+    }
   };
 
   return (

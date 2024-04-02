@@ -6,8 +6,13 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var manageRouter = require('./routes/manage')
+const bodyParser = require('body-parser');
 
 var app = express();
+
+// 设置请求体大小限制为10MB
+app.use(bodyParser.json({limit: '100mb'}));
+app.use(bodyParser.urlencoded({limit: '100mb', extended: true}));
 
 const cors = require("cors");
 app.use(cors()); //使用cors中间件
@@ -25,6 +30,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/api/manage', manageRouter);
 app.use('/api/users', usersRouter);
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

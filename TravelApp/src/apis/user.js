@@ -3,8 +3,6 @@ import request from "../utils/request";
 
 // 登录
 export function Login({ username, password }) {
-  // console.log(1131);
-  // console.log(data, "data");
   return request({
     url: `/users/login`,
     method: "GET",
@@ -18,6 +16,14 @@ export function Register(data) {
     url: `/users/register`,
     method: "POST",
     data,
+  });
+}
+//用户名重复校验
+export function checkUsername(username) {
+  return request({
+    url: `/users/checkUsername`,
+    method: "GET",
+    params: { username },
   });
 }
 // 新建游记

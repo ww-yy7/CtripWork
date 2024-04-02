@@ -18,6 +18,7 @@ import {
   WingBlank,
   Button,
   Popover,
+  Item,
 } from "@ant-design/react-native";
 import {
   Cog6ToothIcon,
@@ -36,12 +37,8 @@ export default function Mine() {
   const navigation = useNavigation();
   const [selected, setSelected] = useState("left");
   // 导入context里的全局数据
-  const { token, clearTokenFromStorage } = useContext(UserContext);
-
-  // 退出登录
-  const logOut = () => {
-    clearTokenFromStorage();
-  };
+  // const { token } = useContext(UserContext);
+  const token = true;
 
   // 控制组件显示
   const [showComponent, setShowComponent] = useState("travelList");
@@ -53,6 +50,7 @@ export default function Mine() {
     setShowComponent("home");
     setSelected("right");
   };
+
   if (!token) {
     return (
       <View style={styles.container}>
@@ -103,7 +101,12 @@ export default function Mine() {
             style={styles.loginHeader}>
             <View style={styles.headerIcon}>
               <ViewfinderCircleIcon size={25} strokeWidth={1.5} color="#fff" />
-              <Cog6ToothIcon size={25} strokeWidth={1.5} color="#fff" />
+              <Cog6ToothIcon
+                size={25}
+                strokeWidth={1.5}
+                color="#fff"
+                onPress={() => navigation.navigate("Setting")}
+              />
             </View>
             {/* 放置头像信息等模块 */}
             <Card style={styles.headerCard}>
@@ -191,7 +194,7 @@ export default function Mine() {
                 )}
               </TouchableOpacity>
             </View>
-            <Button onPress={logOut}>退出登录</Button>
+
             <View>
               {/* 根据状态变量显示对应的组件 */}
               {showComponent === "home" && <MyHome />}
@@ -302,5 +305,10 @@ const styles = StyleSheet.create({
   heng: {
     width: 30,
     height: 10,
+  },
+  overlay: {
+    backgroundColor: "rgba(0,0,0,0.5)",
+    padding: 20,
+    borderRadius: 10,
   },
 });

@@ -1,16 +1,19 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import React, { useState, createContext, useEffect } from "react";
+import React, { useState, createContext } from "react";
 
 export const UserContext = createContext({});
 
 function UserProvider({ children }) {
   const [token, setToken] = useState("");
-  const getToken = async () => {
+  const [id, setID] = useState("");
+
+  // 将 id 存储在本地缓存中
+  const saveIDToStorage = async (idValue) => {
     try {
-      const token = await AsyncStorage.getItem("token");
+      await AsyncStorage.setItem("id", idValue);
+      setID(idValue);
     } catch (error) {
-      // 获取token值失败，进行相应的处理
-      // console.error("获取token值失败:", error);
+      console.error("id值没有存储", error);
     }
   };
   // 将 token 存储在本地缓存中
@@ -20,24 +23,29 @@ function UserProvider({ children }) {
       // console.log(tokenValue, "token已存储");
       setToken(tokenValue);
     } catch (error) {
-      console.error("Error saving token to storage:", error);
+      console.error("token值没有存储", error);
     }
   };
-  const clearTokenFromStorage = async () => {
+  // 清除token值和id值
+  const clearuserInfo = async () => {
     try {
       await AsyncStorage.removeItem("token");
+      await AsyncStorage.removeItem("id");
       setToken(null);
+      setID(null);
     } catch (error) {
-      console.error("Error clearing token from storage:", error);
+      console.error("token值没有清除", error);
     }
   };
+
   return (
     <UserContext.Provider
       value={{
+        id,
         token,
-        getToken,
         saveTokenToStorage,
-        clearTokenFromStorage,
+        clearuserInfo,
+        saveIDToStorage,
       }}>
       {children}
     </UserContext.Provider>

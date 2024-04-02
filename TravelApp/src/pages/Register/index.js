@@ -20,7 +20,7 @@ import {
   ChevronLeftIcon,
 } from "react-native-heroicons/outline";
 import { useNavigation } from "@react-navigation/native";
-import { Register as fetchRegister } from "../../apis/user";
+import { Register as fetchRegister, checkUsername } from "../../apis/user";
 
 export default function Register() {
   const navigation = useNavigation();
@@ -35,12 +35,12 @@ export default function Register() {
   };
 
   // 用户名输入框的校验
-  const validateUsername = () => {
+  const validateUsername = async () => {
     // 定义一个正则表达式，匹配任何非空白字符
     const pattern = /^\S+$/;
     // 正则匹配手机号
     if (usernameValue.length === 0) {
-      Toast.info("用户名输入不为空", 1);
+      // Toast.info("用户名输入不为空", 1);
       return false; // 用户名不符合规则
     }
     // 校验空格
@@ -53,10 +53,14 @@ export default function Register() {
     }
     // 校验用户名是否重复
     else {
-      // 请求后端接口，校验用户名是否存在
-      // 如果不存在，提示用户
-      // Toast.info("用户名重复", 1);
-      return true; // 用户名符合规则
+      let res = await checkUsername(usernameValue);
+      console.log(res.data.code, "code111");
+      if (res.data.code === 200) {
+        return true; // 用户名符合规则
+      }else{
+        Toast.info("用户名重复", 1);
+        return false
+      }     
     }
   };
   // 设置密码输入框的校验
@@ -68,7 +72,7 @@ export default function Register() {
     const pattern2 = /^(?![0-9]+$)(?![a-zA-Z]+$)(?![^0-9a-zA-Z]+$).{6,16}$/;
     // 密码不为空
     if (passwordValue.length === 0) {
-      Toast.info("密码输入不为空", 1);
+      // Toast.info("密码输入不为空", 1);
       return false; // 密码不符合规则
     }
     // 正则匹配手机号
@@ -85,7 +89,7 @@ export default function Register() {
       return true; // 密码符合规则
     }
   };
- 
+
   // 注册按钮的点击事件
   const registerBtn = async () => {
     // 校验用户名是否符合要求
@@ -114,12 +118,12 @@ export default function Register() {
         sex: "",
       };
       let res = await fetchRegister(data);
-      // console.log(res.data);
+      console.log(res.data.code, "code注册");
       if (res.data.code === 200) {
         // 注册，里面加以下事件
         Toast.info("注册成功,去登录", 1);
         navigation.navigate("Login");
-      }else{
+      } else {
         Toast.info("注册失败", 1);
       }
     }

@@ -3,6 +3,7 @@ import TravelsDetails from "../pages/TravelsDetails";
 import Login from "../pages/Login";
 import BottomTabs from "../navigator";
 import Register from "../pages/Register";
+import Setting from "../pages/Setting";
 
 const Stack = createNativeStackNavigator();
 
@@ -42,6 +43,14 @@ export default function Routes() {
           headerShown: false,
         }}
       />
+        <Stack.Screen
+        name="Setting"
+        component={Setting}
+        options={{
+          headerTitle: "设置",
+        }}
+      />
+
     </Stack.Navigator>
   );
 }

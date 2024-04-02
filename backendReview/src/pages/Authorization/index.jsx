@@ -23,13 +23,15 @@ import {
 import dayjs from "dayjs";
 import { unescapeHtml } from "../../apis/HtmlHandler";
 import PropTypes from "prop-types";
+import './index.scss'
 
 const PreviewModel = ({ article }) => {
   // 预览框子组件
   const { title, profile, content, picture, position,tags } = article;
   return (
     <div>
-      {picture.length > 0 && (picture.map((item) => <img src={item} key={item} alt="图片" />))}
+      {picture.length > 0 && (picture.map((item) => <img className="img" src={`data:image/jpeg;base64,${item}`} key={item} alt="Base64 Image" />))}
+       
       <p>文章标题: {title}</p>
       <p>文章简介: {profile}</p>
       <p>文章内容: {content}</p>
