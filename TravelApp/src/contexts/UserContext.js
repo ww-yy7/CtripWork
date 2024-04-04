@@ -6,6 +6,7 @@ export const UserContext = createContext({});
 function UserProvider({ children }) {
   const [token, setToken] = useState("");
   const [id, setID] = useState("");
+  const [userInfo, setUserInfo] = useState({});
 
   // 将 id 存储在本地缓存中
   const saveIDToStorage = async (idValue) => {
@@ -14,6 +15,15 @@ function UserProvider({ children }) {
       setID(idValue);
     } catch (error) {
       console.error("id值没有存储", error);
+    }
+  };
+  // 存储用户信息
+  const saveUserInfoToStorage = async (userInfoValue) => {
+    try {
+      await AsyncStorage.setItem("userInfo", JSON.stringify(userInfoValue));
+      setUserInfo(userInfoValue);
+    } catch (error) {
+      console.error("userInfo值没有存储", error);
     }
   };
   // 将 token 存储在本地缓存中
@@ -41,8 +51,10 @@ function UserProvider({ children }) {
   return (
     <UserContext.Provider
       value={{
-        id,
+        id, // 用户ID
         token,
+        userInfo,
+        saveUserInfoToStorage,
         saveTokenToStorage,
         clearuserInfo,
         saveIDToStorage,

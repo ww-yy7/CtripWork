@@ -50,6 +50,10 @@ export default function Mine() {
     setShowComponent("home");
     setSelected("right");
   };
+  const touchAvatar = () => {
+    console.log("点击头像");
+    navigation.navigate("EditProfile");
+  };
 
   if (!token) {
     return (
@@ -113,10 +117,12 @@ export default function Mine() {
               {/* 头像及用户名等 */}
               <View style={styles.user}>
                 {/* 头像 */}
-                <Image
-                  style={styles.avatar}
-                  source={require("../../../assets/images/startAvatar.png")}
-                />
+                <TouchableOpacity onPress={touchAvatar}>
+                  <Image
+                    style={styles.avatar}
+                    source={require("../../../assets/images/startAvatar.png")}
+                  />
+                </TouchableOpacity>
                 <View>
                   {/* 用户名 */}
                   <View style={{ flexDirection: "row", alignItems: "center" }}>

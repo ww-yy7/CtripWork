@@ -4,7 +4,8 @@ import Login from "../pages/Login";
 import BottomTabs from "../navigator";
 import Register from "../pages/Register";
 import SearchScreen from "../pages/Serch";
-import Setting from "../pages/Setting"
+import Setting from "../pages/Setting";
+import EditProfile from "../pages/EditProfile";
 
 const Stack = createNativeStackNavigator();
 
@@ -19,8 +20,6 @@ export default function Routes() {
           headerShown: false,
         }}
       />
-
-      
       <Stack.Screen
         name="TravelsDetails"
         component={TravelsDetails}
@@ -60,8 +59,13 @@ export default function Routes() {
           headerTitle: "设置",
         }}
       />
-    
-      
+      <Stack.Screen
+        name="EditProfile"
+        component={EditProfile}
+        options={{
+          headerTitle: "修改简介",
+        }}
+      />
     </Stack.Navigator>
   );
 }

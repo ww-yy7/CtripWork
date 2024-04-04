@@ -31,7 +31,7 @@ export default function Login() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false); //设置小眼睛图标的显示状态
   const [checked, setChecked] = useState(false); // 是否同意发布规则
 
-  const { saveTokenToStorage, saveIDToStorage } = useContext(UserContext);
+  const { saveTokenToStorage, saveIDToStorage,saveUserInfoToStorage } = useContext(UserContext);
   // 切换密码框的显示状态
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
@@ -95,10 +95,14 @@ export default function Login() {
       };
       // 登录请求，里面加以下事件,获取整个用户信息，并将token存入localStrorage，用async和await
       let res = await fetchLogin(data);
+      console.log(res.data.userInfo, "userInfo");
       if (res.data.code === 200) {
         // 将token和—_ID存入localStorage
         saveTokenToStorage(res.data.token);
         saveIDToStorage(res.data.userInfo._id);
+        const { Avatar, nickName, sex, age,email,address,phone,introduction } = res.data.userInfo;
+        console.log({ Avatar, nickName, sex, age,email,address,phone,introduction },'userInfo');
+        saveUserInfoToStorage({ Avatar, nickName, sex, age,email,address,phone,introduction })
       } else {
         Toast.info("密码错误", 1);
         return;

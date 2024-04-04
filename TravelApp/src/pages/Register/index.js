@@ -116,6 +116,11 @@ export default function Register() {
         article: [],
         Avatar: "../../../assets/images/startAvatar.jpg",
         sex: "",
+        age: "",
+        email: "",
+        address: "",
+        phone: "",
+        introduction: "",
       };
       let res = await fetchRegister(data);
       console.log(res.data.code, "code注册");

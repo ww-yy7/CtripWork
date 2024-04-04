@@ -105,7 +105,7 @@ export default function AddTravel() {
     } else {
       
       const data = {
-        _id,
+        _id, // 发布游记的用户ID
         title: escapeHtml(titleValue),
         profile: escapeHtml(profileValue),
         content: escapeHtml(contentValue),
@@ -165,7 +165,6 @@ export default function AddTravel() {
               <View key={index}>
                 <Image
                   key={item}
-                  // source={{ uri: item }}
                   source={{ uri: `data:image/jpeg;base64,${item}` }} // base64
                   style={{
                     width: 100,
