@@ -258,10 +258,9 @@ const styles = StyleSheet.create({
   checkBox: {
     flexDirection: "row",
     alignItems: "center",
-    position: "absolute",
-    bottom: 50,
-    marginLeft: 30,
+    marginLeft: 0,
     color: "#fff",
+    marginTop: 380,
   },
   registerBtn: {
     backgroundColor: "rgba(255,255,255,0.5)",

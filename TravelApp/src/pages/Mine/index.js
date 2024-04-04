@@ -37,8 +37,8 @@ export default function Mine() {
   const navigation = useNavigation();
   const [selected, setSelected] = useState("left");
   // 导入context里的全局数据
-  // const { token } = useContext(UserContext);
-  const token = true;
+  const { token } = useContext(UserContext);
+  // const token = true;
 
   // 控制组件显示
   const [showComponent, setShowComponent] = useState("travelList");

@@ -3,9 +3,7 @@ import {
   View,
   Text,
   StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  ImageBackground,
+    ScrollView,
 } from "react-native";
 import {
   Checkbox,
@@ -13,6 +11,8 @@ import {
   WhiteSpace,
   Toast,
   Provider,
+  List,
+  Brief,
 } from "@ant-design/react-native";
 import {
   EyeIcon,
@@ -23,39 +23,84 @@ import { useNavigation } from "@react-navigation/native";
 import { Register as fetchRegister, checkUsername } from "../../apis/user";
 import { UserContext } from "../../contexts/UserContext";
 
-
 export default function Setting() {
   const navigation = useNavigation();
   const { clearuserInfo } = useContext(UserContext);
-
-   // 退出登录
-   const logOut = () => {
+  const Item = List.Item;
+  const Brief = Item.Brief;
+  // 退出登录
+  const logOut = () => {
     clearuserInfo();
-    navigation.navigate("Home");
+    navigation.navigate("Mine");
   };
 
-
   return (
-    <Provider>
-      <ImageBackground
-        source={require("../../../assets/images/registerbg.jpg")}
-        style={styles.background}>
-        <Button onPress={logOut}>退出登录</Button>
-      </ImageBackground>
-    </Provider>
+    <ScrollView style={styles.container}>
+     
+      <View  style={{borderBottomWidth:0}}>
+        <Item style={styles.item} arrow="horizontal" onPress={() => {}}>
+          个人信息
+        </Item>
+        <Item style={styles.item} arrow="horizontal" onPress={() => {}}>
+          账号安全
+        </Item>
+        <Item style={styles.item} arrow="horizontal" onPress={() => {}}>
+          标题文字
+        </Item>
+        </View>
+        <WhiteSpace size="lg" />
+        <List>
+        <Item style={styles.item} arrow="horizontal" onPress={() => {}}>
+          个人主页换肤
+        </Item>
+        <Item style={styles.item} arrow="horizontal" onPress={() => {}}>
+          消息通知
+        </Item>
+        <Item style={styles.item} arrow="horizontal" onPress={() => {}}>
+          零流量升级
+        </Item>
+        <Item style={styles.item} arrow="horizontal" onPress={() => {}}>
+         使用移动网络改善内容浏览体验
+        </Item>
+      </List>
+      <WhiteSpace size="lg" />
+        <List>
+        <Item style={styles.item} arrow="horizontal" onPress={() => {}}>
+          隐私设置
+        </Item>
+        <Item style={styles.item} arrow="horizontal" onPress={() => {}}>
+          通用设置
+        </Item>
+        <Item style={styles.item} arrow="horizontal" onPress={() => {}}>
+          清理缓存
+        </Item>
+      </List>
+      <WhiteSpace size="lg" />
+        <List>
+        <Item style={styles.item} arrow="horizontal" onPress={() => {}}>
+          意见反馈
+        </Item>
+        <Item style={styles.item} arrow="horizontal" onPress={() => {}}>
+          关于携程旅行
+        </Item>
+      </List>
+      <Button  style={styles.outBtn} type='primary' onPress={logOut}>退出登录</Button>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-    resizeMode: "cover", // 保持图像的宽高比并在视图中尽可能完整显示图像
-  },
   container: {
     flex: 1,
-    backgroundColor: "rgba(255,255,255,0)",
-    paddingStart: 30,
-    paddingEnd: 30,
-    paddingTop: 50,
+    backgroundColor: "#f5f5f9",
+    paddingTop: 10,
   },
+  outBtn: {
+    marginTop: 50,
+    marginHorizontal: 30,
+  },
+  item:{
+    backgroundColor: "#fff",
+    borderBottomWidth: 0
+  }
 });
