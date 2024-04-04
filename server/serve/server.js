@@ -14,18 +14,10 @@ mongoose.connection.on("connected", function () {
 const articleSchema = new Schema(
   {
     articleId: String,
+    user:String, // 发布者的用户ID
     title: String,//标题
     profile: String,//简介
     content: String,//内容
-    comment: [ // 评论
-      {
-        id: String,
-        nickName: String,
-        time: String,
-        content: String,
-        avatar: String,
-      },
-    ],
     picture: [String],
     position: String,
     see: String, // 浏览量
@@ -37,6 +29,15 @@ const articleSchema = new Schema(
     money: String, // 花费
     video: [String],
     likes: String, // 点赞量
+    comment: [ // 评论
+    {
+      id: String,
+      nickName: String,
+      time: String,
+      content: String,
+      avatar: String,
+    },
+  ],
   },
   { _id: false } // 设置 _id 为 false，不生成默认的 _id
 );
@@ -45,11 +46,16 @@ const articleSchema = new Schema(
 const userInfoSchema = new Schema(
   {
     article: [articleSchema], // 嵌套 Article Schema
+    username: String,
+    password: String,
     Avatar: String,
     nickName: String,
-    password: String,
     sex: String,
-    username: String,
+    age: String,
+    email: String,
+    address: String,
+    phone: String,
+    introduction: String,
   },
   { collection: "userInfo" }
 ); // 设置集合名称为 'userInfo'
@@ -127,7 +133,7 @@ function createArticle(newNoteObj) {
   return new Promise((resolve, reject) => {
     UserInfo.updateOne(
       { _id: ObjectId(newNoteObj._id) }, // 根据用户的 _id 来查找用户
-      { $push: { article: { ...newNoteObj, articleId } } }, // push操作往 article 数组里添加新的游记
+      { $push: { article: { ...newNoteObj, articleId,user:newNoteObj._id } } }, // push操作往 article 数组里添加新的游记
       function (err, doc) {
         if (!err) {
           resolve({ ...doc, articleId });

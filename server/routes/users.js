@@ -218,7 +218,9 @@ router.get("/getAllTravelNote", function (req, res, next) {
 // 更新游记
 router.put("/updateTravelNote", function (req, res, next) {
   console.log(req.body, "updateTravelNote");
-  updateArticle(req.body)
+  const { articleId,article } = req.body;
+  const data = {articleId,article:{...article,user:articleId,likes:"0"}} // 添加用户ID
+  updateArticle(data)
     .then((result) => {
       res.json({
         code: 200,
