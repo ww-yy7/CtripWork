@@ -13,10 +13,6 @@ const request = axios.create({
   timeout: 5000
 })
 
-
-
-
-
 // // 添加请求拦截器
 // // 在请求发送之前 做拦截 插入一些自定义的配置 [参数的处理]
 // request.interceptors.request.use((config) => {

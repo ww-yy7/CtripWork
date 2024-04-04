@@ -59,8 +59,8 @@ const TravelsCard = ({item})=> {
        >
         <Image
           suppressHydrationWarning={true}  // 消除source的警告
-          source={item.picture}
-          // source={{ uri: `data:image/jpeg;base64,${item.picture}` }} // base64
+          // source={item.picture}
+          source={{ uri: `data:image/jpeg;base64,${item.picture}` }} // base64
           style={{width: 170, height: 230, borderRadius: 25, position: 'absolute'}} />
         
         {/* 线性渐变处理，美化样式 */}

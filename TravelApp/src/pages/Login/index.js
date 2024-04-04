@@ -243,6 +243,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginLeft: 0,
     color: "#fff",
-    marginTop: 380,
+    marginTop: 280,
   },
 });

@@ -37,7 +37,8 @@ import { UserContext } from "../../contexts/UserContext";
 import { useContext } from "react";
 
 export default function AddTravel() {
-  const { id:_id }= useContext(UserContext);
+  const { id:_id,userInfo:{nickName} }= useContext(UserContext);
+  // console.log(nickName,'nickName');
   const navigation = useNavigation();
 
   const [token, setToken] = useState("tempToken");
@@ -106,6 +107,7 @@ export default function AddTravel() {
       
       const data = {
         _id, // 发布游记的用户ID
+        user:nickName,
         title: escapeHtml(titleValue),
         profile: escapeHtml(profileValue),
         content: escapeHtml(contentValue),
