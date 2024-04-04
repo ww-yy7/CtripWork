@@ -3,13 +3,14 @@ import TravelsDetails from "../pages/TravelsDetails";
 import Login from "../pages/Login";
 import BottomTabs from "../navigator";
 import Register from "../pages/Register";
-import Setting from "../pages/Setting";
+import SearchScreen from "../pages/Serch";
+import Setting from "../pages/Setting"
 
 const Stack = createNativeStackNavigator();
 
 export default function Routes() {
   return (
-    <Stack.Navigator >
+    <Stack.Navigator>
       {/* 底部导航栏 */}
       <Stack.Screen
         name="BottomTabs"
@@ -19,6 +20,7 @@ export default function Routes() {
         }}
       />
 
+      
       <Stack.Screen
         name="TravelsDetails"
         component={TravelsDetails}
@@ -43,14 +45,23 @@ export default function Routes() {
           headerShown: false,
         }}
       />
-        <Stack.Screen
+      <Stack.Screen
+        name="Search"
+        component={SearchScreen}
+        options={{
+          headerTitle: "搜索页",
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
         name="Setting"
         component={Setting}
         options={{
           headerTitle: "设置",
         }}
       />
-
+    
+      
     </Stack.Navigator>
   );
 }

@@ -1,0 +1,76 @@
+{
+  "_id": {
+    "$oid": "6608c8334df02fe702f95774"
+  },
+  "article": [
+    {
+      "articleId": "1",
+      "title": "落日海边🏝️",
+      "duration": "7天",
+      "position": "亚龙湾",
+      "price": "3000",
+      "shortDescription": "哈哈哈",
+      "content": "正文正文",
+      "picture": [
+        "/Users/lvzhizhe/Desktop/ctrip/Ctrip_dev/assets/images/ocean.png" ,
+        "/Users/lvzhizhe/Desktop/ctrip/Ctrip_dev/assets/images/beach.png"
+      ],
+      "user": "Zach",
+
+      "comment": [
+        {
+          "id": "String",
+          "nickName": "String",
+          "time": "String",
+          "content": "String",
+          "avatar": "String"
+        }
+      ],
+      "see": "String", 
+      "state": "已通过", 
+      "rejectReason": "String", 
+      "tags": ["ocean"],
+      "time": "String",
+      "video": ["111"],
+      "likes": "String"
+    },
+    {
+      "articleId": "2",
+      "title": "沙滩椰林🏖️",
+      "duration": "3天",
+      "position": "椰梦长廊",
+      "price": "1000",
+      "shortDescription": "哈哈哈哈",
+      "content": "正文正文",
+      "picture": [
+        "/Users/lvzhizhe/Desktop/ctrip/Ctrip_dev/assets/images/beach.png" ,
+        "/Users/lvzhizhe/Desktop/ctrip/Ctrip_dev/assets/images/ocean.png"
+      ],
+      "user": "Zach",
+
+      "comment": [
+        {
+          "id": "String",
+          "nickName": "String",
+          "time": "String",
+          "content": "String",
+          "avatar": "String"
+        }
+      ],
+      "see": "String", 
+      "state": "待审核", 
+      "rejectReason": "String", 
+      "tags": ["ocean"],
+      "time": "String",
+      "video": ["111"],
+      "likes": "String"
+    }
+  ],
+  "Avatar": "http://dummyimage.com/100x100",
+  "nickName": "Zach",
+  "password": "$2b$10$vR.hIyjT7gUCYOxTUpB93OFWqYMTNn0xC.bK6Gzn.kQUduqXlOGqq",
+  "sex": "男",
+  "username": "Zach",
+  "__v": 0
+}
+

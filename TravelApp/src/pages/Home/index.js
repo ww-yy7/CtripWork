@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native'
 
 import Categories from '../../components/Categories'
 import Travels from '../../components/Travels'
+import SearchScreen from '../Serch'
 import { AlignRight } from 'react-native-feather'
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
@@ -20,7 +21,8 @@ const Tab = createBottomTabNavigator();
 export default function Home() {
     
     const navigation = useNavigation();
-    
+
+       
     return (
         
 
@@ -28,7 +30,7 @@ export default function Home() {
             <ScrollView >
                  
             
-            <View style={stlyes.cartContent}>
+            <View style={stlyes.top}>
                 <Text style={stlyes.title}>让我们一起探索！</Text>
                 <TouchableOpacity>
                     <Image source={require('../../../assets/images/avatar.png')} style={{height: 40, width: 40}}></Image>
@@ -37,15 +39,21 @@ export default function Home() {
             </View>
 
             <View>
+                
                 <View style={stlyes.serchandinput}>
                     <MagnifyingGlassIcon size={20} strokeWidth={3} color="gray" />
                     
                     <TextInput
                       placeholder='搜索游记、用户...'
                       placeholderTextColor={'gray'}
+                    //   onFocus={() => navigation.navigate("Search")}
+                    //   value={searchText}
+                      onSubmitEditing={() => navigation.navigate("Search")}
                       style={stlyes.input}
                       />
+                    
                 </View>
+                
             </View>
 
             <View>
@@ -80,7 +88,7 @@ const stlyes = StyleSheet.create({
         top:5,
         left:8
     },
-    cartContent: {
+    top: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',

@@ -33,7 +33,11 @@ import { AddTravel as fetchAddTravel } from "../../apis/user";
 import { useNavigation } from "@react-navigation/native";
 import { escapeHtml } from "../../apis/HtmlHandler";
 
+import { UserContext } from "../../contexts/UserContext";
+import { useContext } from "react";
+
 export default function AddTravel() {
+  const { id:_id }= useContext(UserContext);
   const navigation = useNavigation();
 
   const [token, setToken] = useState("tempToken");
@@ -99,9 +103,9 @@ export default function AddTravel() {
     } else if (!checked) {
       Toast.info("请同意发布规则", 1);
     } else {
-      const testId = "66091d913f2de9f5008583bc"; //临时id
+      
       const data = {
-        _id: testId,
+        _id,
         title: escapeHtml(titleValue),
         profile: escapeHtml(profileValue),
         content: escapeHtml(contentValue),

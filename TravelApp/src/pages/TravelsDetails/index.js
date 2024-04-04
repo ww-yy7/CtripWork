@@ -4,6 +4,9 @@ import { ChevronLeftIcon, ShareIcon, MapPinIcon, ClockIcon, PencilIcon, PencilSq
 import {HeartIcon, StarIcon, } from "react-native-heroicons/solid";
 import { useNavigation } from "@react-navigation/native";
 import { theme } from "../../theme";
+import SwiperComponent from "../../components/Swiper";
+// import Swiper from "react-native-swiper";
+import { FastForward } from "react-native-feather";
 
 
 
@@ -13,10 +16,14 @@ export default function TravelsDetails(props){
   const navigation = useNavigation()
   const [isFavourite, toggleFavourite] = useState(false);
   const [isCollect, toggleCollect] = useState(false);
+
+  
+
   return(
     <View>
-      <Image source={item.image} style={styles.imagecontainer}/>
-
+      {/* <Image source={item.article[0].picture} style={styles.imagecontainer}/> */}
+      <SwiperComponent item={item}></SwiperComponent>
+      
       
       <SafeAreaView style={styles.safeareaview}>
         {/* 返回按钮 */}
@@ -80,7 +87,7 @@ export default function TravelsDetails(props){
 
           
           {/* 游记正文 */}
-          <Text style={styles.description}>{item?.longDescription}</Text>
+          <Text style={styles.description}>{item?.content}</Text>
           
           
         </ScrollView>
@@ -168,6 +175,7 @@ const styles = StyleSheet.create({
     marginTop: -40, 
     borderTopLeftRadius: 40, 
     borderTopRightRadius: 40,
+    // top: 40
   }, 
   scrollview:{
     flexDirection: 'column', // 假设是垂直方向的空间间隔
@@ -232,7 +240,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: 'white', 
-    height: '10%'
+    height: '10%',
   },
   commentview: {
     flexDirection: 'row',

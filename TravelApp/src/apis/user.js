@@ -2,11 +2,11 @@
 import request from "../utils/request";
 
 // 登录
-export function Login({ username, password }) {
+export function Login({username, password}) {
   return request({
     url: `/users/login`,
     method: "GET",
-    params: { username, password },
+    params: {username,password},
   });
 }
 
@@ -32,5 +32,44 @@ export function AddTravel(data) {
     url: `/users/addTravelNote`,
     method: "POST",
     data,
+  });
+}
+
+// 封装获取游记数据的请求函数
+export function getAllTravelNote(params = {}) {
+  return request.get('/users/getAllTravelNote', { params })
+    .then((response) => {
+      if (response.data.code === 200) {
+        return response.data.resultList;
+      } else {
+        throw new Error(response.data.reason);
+      }
+    })
+    .catch((error) => {
+      console.error('获取游记失败：', error.message || error.response?.data);
+      throw error;
+    });
+}
+
+// 封装搜索游记的函数
+export function searchTravelNote(searchInfo) {
+  return request({
+    url: '/users/searchTravelNote', // 你的后端接口路径
+    method: 'GET', // 请求方法
+    params: { searchInfo }, // 将搜索信息作为查询参数
+  })
+  .then((response) => {
+    if (response.data.code === 200) {
+      // 查询成功，返回结果列表
+      return response.data.resultList;
+    } else {
+      // 查询失败，抛出错误
+      throw new Error(response.data.msg);
+    }
+  })
+  .catch((error) => {
+    // 处理请求失败的情况
+    console.error('查询游记失败:', error.message || error);
+    throw error;
   });
 }

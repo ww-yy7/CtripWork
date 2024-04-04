@@ -4,12 +4,16 @@ import Home from "../pages/Home";
 import Mine from "../pages/Mine";
 import MyTravels from "../pages/MyTravels";
 import AddTravel from "../pages/AddTravel";
-import Message from "../pages/Message";
+import TravelsDetails from "../pages/TravelsDetails";
+import LikeTravesls from "../pages/LikeTravels"
+import Message from "../pages/Message"
+
 import {
-  ChatBubbleBottomCenterTextIcon,
+  BookOpenIcon,
   HomeIcon,
   HeartIcon,
   UserIcon,
+  ChatBubbleBottomCenterTextIcon
 } from "react-native-heroicons/outline";
 import {
 
@@ -41,7 +45,7 @@ const BottomTabs = () => {
         name="MyTravels"
         component={MyTravels}
         options={{
-          // headerShown: false,
+          headerShown: false, 
           tabBarLabel: "推荐",
           tabBarActiveTintColor: "#2677e2",
           tabBarInactiveTintColor: "grey",

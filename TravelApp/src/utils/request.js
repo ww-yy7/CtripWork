@@ -9,9 +9,11 @@ import { Platform } from 'react-native';
 // 3. 请求拦截器 / 响应拦截器
 
 const request = axios.create({
-  baseURL: 'http://10.100.230.102:3000/api',
+  baseURL: 'http://localhost:3000/api',
   timeout: 5000
 })
+
+
 
 
 

@@ -3,20 +3,41 @@ import React from "react";
 import { travelsdefaultData } from "../../constants";
 import { LinearGradient } from 'expo-linear-gradient'
 import { useNavigation } from '@react-navigation/native'
+import { useState, useEffect } from "react";
+import { getAllTravelNote } from "../../apis/user";
 
 
 
 
 export default function Travels() {
+
+  const [travelsData, setTravelsData] = useState([]);
+  
+  useEffect(() => {
+    getAllTravelNote()
+      .then((travelNotes) => {
+        setTravelsData(travelNotes);
+      })
+      .catch((error) => {
+        console.error('获取游记数据时发生错误：', error);
+      });
+
+  }, []);
+
+  
   
   return (
     <View style={styles.container}>
-      {/* <Text>游记</Text> */}
       {
-        travelsdefaultData.map((item, index)=>{
+        // 首先遍历 travelsData
+        travelsData.map((item, itemIndex) => {
+          // 然后对于每个 item，遍历其 article 属性
+          return item.article.map((articleItem, articleIndex) => {
+            // 为每篇文章创建 TravelsCard 组件
             return (
-                <TravelsCard  item={item} key={index} />
-            )
+              <TravelsCard item={articleItem} key={`${itemIndex}-${articleIndex}`} />
+            );
+          });
         })
       }
     </View>
@@ -27,14 +48,19 @@ export default function Travels() {
 const TravelsCard = ({item})=> {
 
   const navigation = useNavigation();
+  
+
   return(
     
+
     <TouchableOpacity 
         onPress={() => navigation.navigate("TravelsDetails",{...item}) }
         style={styles.image}
        >
         <Image
-          source={item.image}
+          suppressHydrationWarning={true}  // 消除source的警告
+          source={item.picture}
+          // source={{ uri: `data:image/jpeg;base64,${item.picture}` }} // base64
           style={{width: 170, height: 230, borderRadius: 25, position: 'absolute'}} />
         
         {/* 线性渐变处理，美化样式 */}
@@ -55,6 +81,7 @@ const TravelsCard = ({item})=> {
         <Text style={styles.text}>{item.shortDescription}</Text>
         
        </TouchableOpacity>
+       
   )
 }
 

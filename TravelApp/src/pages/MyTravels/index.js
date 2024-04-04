@@ -1,31 +1,55 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from 'expo-linear-gradient'
-import { TrashIcon } from "react-native-heroicons/outline";
-import { travelsdefaultData } from "../../constants";
-
-
+import { TrashIcon, PencilSquareIcon } from "react-native-heroicons/outline";
+// import { travelsdefaultData } from "../../constants";
+import { getAllTravelNote } from "../../apis/user";
 
 
 
 export default function MyTravels() {
    
-  const [travelsData,setTravelsData] = useState(travelsdefaultData)
+  
+  const [travelsData, setTravelsData] = useState([]);
+
+
+  useEffect(() => {
+    getAllTravelNote()
+      .then((travelNotes) => {
+        setTravelsData(travelNotes);
+      })
+      .catch((error) => {
+        console.error('获取游记数据时发生错误：', error);
+      });
+
+  },[]);
 
   // 定义删除游记的函数
   const deleteMyTravel = (idToDelete) => {
-        // 过滤出要删除的游记后，更新全局状态
-        setTravelsData(currentTravelsData => currentTravelsData.filter(item => item.articleId !== idToDelete));
-      };
+    // 过滤出要删除的游记后，更新全局状态
+    setTravelsData(currentTravelsData => currentTravelsData.filter(item => item.articleId !== idToDelete));
+  };
 
   return (
     <ScrollView style={styles.container}>
     <View style={styles.cardcontainer}>
-      {
-        travelsData.length > 0 && travelsData.filter(item => item.user === 'Zach').map((item, index) => (
+      {/* {
+        travelsData.length > 0 && travelsData.filter(item => item.username === 'Zach').map((item, index) => (
             <TravelsCard key={index} item={item} onDelete={deleteMyTravel}/>
           ))
+      } */}
+      {
+        // 首先遍历 travelsData
+        travelsData.length > 0 && travelsData.filter(item => item.username === 'Zach').map((item, itemIndex) => {
+          // 然后对于每个 item，遍历其 article 属性
+          return item.article.map((articleItem, articleIndex) => {
+            // 为每篇文章创建 TravelsCard 组件
+            return (
+              <TravelsCard item={articleItem} key={`${itemIndex}-${articleIndex}`} />
+            );
+          });
+        })
       }
     </View>
     </ScrollView>
@@ -64,7 +88,7 @@ const TravelsCard = ({item, onDelete})=> {
         style={styles.imageview}
        >
         <Image
-          source={item.image}
+          source={item.picture}
           style={{width: 170, height: 230, borderTopLeftRadius: 10, borderTopRightRadius: 10, position: 'absolute'}} />
         
         {/* 线性渐变处理，美化样式 */}
@@ -77,7 +101,7 @@ const TravelsCard = ({item, onDelete})=> {
 
 
         <View style={styles.userinfo}>
-            <Text style={styles.title}>{item.user}</Text>          
+            <Text style={styles.title}>{item.username}</Text>          
             <Image source={require('../../../assets/images/avatar.png')} style={{height: 16, width: 16}} />      
         </View>
             
@@ -86,12 +110,58 @@ const TravelsCard = ({item, onDelete})=> {
         
        </TouchableOpacity>
 
-        <View style={styles.states}>
+        {/* <View style={styles.states}>
           <Text>审核中</Text>
           <TouchableOpacity onPress={()=>{confirmDelete(item.articleId)}}>
             <TrashIcon size={15} color="gray"></TrashIcon>
           </TouchableOpacity>
-        </View>
+        </View> */}
+        <View style={styles.states}>
+        {(() => {
+          switch (item.state) {
+            case '待审核':
+              return (
+                <>
+                  <Text>审核中</Text>
+                  {/* 编辑按钮 */}
+                  <TouchableOpacity     
+                  >
+                      <PencilSquareIcon size={15} color="gray" />
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => confirmDelete(item.articleId)}>
+                    <TrashIcon size={15} color="gray" />
+                  </TouchableOpacity>
+                </>
+              );
+            case '未通过':
+              return (
+                <>
+                  <Text>未通过</Text>
+                  {/* 编辑按钮 */}
+
+                  <TouchableOpacity onPress={() => confirmDelete(item.articleId)}>
+                    <TrashIcon size={15} color="gray" />
+                  </TouchableOpacity>
+                  
+                </>
+              );
+            case '已通过':
+              return (
+                <>
+                  <Text>已通过</Text>
+                  <TouchableOpacity onPress={() => confirmDelete(item.articleId)}>
+                    <TrashIcon size={15} color="gray" />
+                  </TouchableOpacity>
+                  {/* 已通过则不可编辑，这里不显示编辑按钮 */}
+                </>
+              );
+            default:
+              return (
+                <Text>未知状态</Text>
+              );
+          }
+        })()}
+      </View>
 
        </View>
   )
@@ -113,6 +183,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     flexWrap: 'wrap',
+    top:50
   },
   imageview: {
     width: 160,  //固定宽度可兼容iphone15和iphone15promax
@@ -181,3 +252,5 @@ const styles = StyleSheet.create({
     bottom: 20,
   },
 })
+
+

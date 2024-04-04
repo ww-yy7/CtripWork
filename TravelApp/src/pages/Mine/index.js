@@ -212,6 +212,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 30,
+    top:15,
   },
   headerCard: {
     padding: 10,

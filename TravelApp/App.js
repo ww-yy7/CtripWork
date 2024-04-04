@@ -1,13 +1,15 @@
+import { StatusBar } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
-import { StatusBar } from 'react-native';
-// import { StatusBar } from 'react-native-web';
 
 import Routes from "./src/Routes";
 import CartProvider from "./src/contexts/CartContext";
-import UserProvider from "./src/contexts/UserContext";
+
 import { AppLoading } from "expo";
 import * as Font from "expo-font";
 import { useEffect, useState } from "react";
+import { TravelsDataProvider } from "./src/contexts/TravelsContext";
+
+import UserProvider from "./src/contexts/UserContext";
 
 export default function App() {
   const [theme, setTheme] = useState(null);
@@ -36,25 +38,14 @@ export default function App() {
     setIsReady(true);
   }, []);
 
-// if (!isReady) {
-//   return <AppLoading />;
-// }else{
-//   return (
-//     <NavigationContainer>
-//       <CartProvider>
-//         <StatusBar backgroundColor="#FAFAFA" barStyle="dark-content" />
-//         <Routes />
-//       </CartProvider>
-//     </NavigationContainer>
-//   );
-// }
+
 
   return (
     <NavigationContainer>
-      <UserProvider>
+        <UserProvider>
         <StatusBar backgroundColor="#FAFAFA" barStyle="dark-content" />
         <Routes />
-      </UserProvider>
+        </UserProvider>
     </NavigationContainer>
   );
 }
