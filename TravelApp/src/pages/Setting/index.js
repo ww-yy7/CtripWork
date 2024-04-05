@@ -27,7 +27,6 @@ export default function Setting() {
   const navigation = useNavigation();
   const { clearuserInfo } = useContext(UserContext);
   const Item = List.Item;
-  const Brief = Item.Brief;
   // 退出登录
   const logOut = () => {
     clearuserInfo();

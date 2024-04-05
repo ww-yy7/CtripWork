@@ -59,10 +59,11 @@ const BottomTabs = () => {
         }}
       />
       <Tab.Screen
-        name="记录life"
+        name="AddTravel"
         component={AddTravel}
         options={{
           // headerShown: false,
+          title: "记录life",
           tabBarLabel: "",
           tabBarActiveTintColor: "#2677e2",
           tabBarInactiveTintColor: "grey",

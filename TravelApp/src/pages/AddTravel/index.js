@@ -368,10 +368,10 @@ export default function AddTravel() {
                   styles.modalBtn,
                   {
                     backgroundColor: tagInputValue
-                      ? "rgb(29,177,213)"
+                      ? "#2677e2"
                       : "lightgray",
                     borderColor: tagInputValue
-                      ? "rgb(29,177,213)"
+                      ? "#2677e2"
                       : "lightgray",
                   },
                 ]}
@@ -393,8 +393,8 @@ export default function AddTravel() {
               type="primary"
               onPress={() => setTagVisible(false)}
               style={{
-                backgroundColor: "rgb(29,177,213)",
-                borderColor: "rgb(29,177,213)",
+                backgroundColor: "#2677e2",
+                borderColor: "#2677e2",
               }}>
               关闭
             </Button>
@@ -419,10 +419,10 @@ export default function AddTravel() {
                   styles.modalBtn,
                   {
                     backgroundColor: locationInputValue
-                      ? "rgb(29,177,213)"
+                      ? "#2677e2"
                       : "lightgray",
                     borderColor: locationInputValue
-                      ? "rgb(29,177,213)"
+                      ? "#2677e2"
                       : "lightgray",
                   },
                 ]}
@@ -444,8 +444,8 @@ export default function AddTravel() {
               type="primary"
               onPress={() => setLocationVisible(false)}
               style={{
-                backgroundColor: "rgb(29,177,213)",
-                borderColor: "rgb(29,177,213)",
+                backgroundColor: "#2677e2",
+                borderColor: "#2677e2",
               }}>
               关闭
             </Button>
@@ -470,10 +470,10 @@ export default function AddTravel() {
                   styles.modalBtn,
                   {
                     backgroundColor: playTimeInputValue
-                      ? "rgb(29,177,213)"
+                      ? "#2677e2"
                       : "lightgray",
                     borderColor: playTimeInputValue
-                      ? "rgb(29,177,213)"
+                      ? "#2677e2"
                       : "lightgray",
                   },
                 ]}
@@ -495,8 +495,8 @@ export default function AddTravel() {
               type="primary"
               onPress={() => setPlayTimeVisible(false)}
               style={{
-                backgroundColor: "rgb(29,177,213)",
-                borderColor: "rgb(29,177,213)",
+                backgroundColor: "#2677e2",
+                borderColor: "#2677e2",
               }}>
               关闭
             </Button>
@@ -521,10 +521,10 @@ export default function AddTravel() {
                   styles.modalBtn,
                   {
                     backgroundColor: moneyInputValue
-                      ? "rgb(29,177,213)"
+                      ? "#2677e2"
                       : "lightgray",
                     borderColor: moneyInputValue
-                      ? "rgb(29,177,213)"
+                      ? "#2677e2"
                       : "lightgray",
                   },
                 ]}
@@ -546,8 +546,8 @@ export default function AddTravel() {
               type="primary"
               onPress={() => setMoneyVisible(false)}
               style={{
-                backgroundColor: "rgb(29,177,213)",
-                borderColor: "rgb(29,177,213)",
+                backgroundColor: "#2677e2",
+                borderColor: "#2677e2",
               }}>
               关闭
             </Button>
@@ -562,7 +562,7 @@ export default function AddTravel() {
           source={require("../../../assets/images/addTravel.png")}
           style={{ width: 200, height: 160, marginTop: 50 }}
         />
-        <Text style={{ fontSize: 16 }}>登录以添加游记</Text>
+        <Text style={{ fontSize: 16, marginTop:10}}>登录以添加游记</Text>
         <Button
           style={styles.btn_login}
           onPress={() => navigation.navigate("Login")}>
@@ -709,7 +709,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     backgroundColor: "white",
     borderColor: "#2677e2",
-    marginTop: 200,
+    marginTop: 210,
     position: "absolute",
     top: 50,
   },

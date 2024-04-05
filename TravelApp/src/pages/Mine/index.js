@@ -9,7 +9,7 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   ImageBackground,
-  RefreshControl 
+  RefreshControl,
 } from "react-native";
 import MyHome from "../../components/MyHome";
 import MyTravelList from "../../components/MyTravelList";
@@ -33,50 +33,43 @@ import { UserContext } from "../../contexts/UserContext";
 import MyTravels from "../MyTravels";
 import { getAllTravelNote } from "../../apis/user";
 
-
-
 export default function Mine() {
-  
   // 下拉更新
   const [travelsData, setTravelsData] = useState([]);
-   // 导入context里的全局数据
-  const { id, publish, deleteCount,token,userInfo} = useContext(UserContext);
+  // 导入context里的全局数据
+  const { id, publish, deleteCount, token, userInfo } = useContext(UserContext);
+  // const { id, publish, deleteCount,userInfo} = useContext(UserContext);
+  // const token = true;
   const [refreshing, setRefreshing] = useState(false);
   useEffect(() => {
     if (id) {
-      getAllTravelNote({_id: id}) // 将 id 作为参数传递给 API 函数
+      getAllTravelNote({ _id: id }) // 将 id 作为参数传递给 API 函数
         .then((responseData) => {
           setTravelsData(responseData.article);
-          console.log(travelsData)
-          // console.log(travelsData.article)
         })
         .catch((error) => {
-          console.error('获取游记数据时发生错误：', error);
-          
+          console.error("获取游记数据时发生错误：", error);
         });
     }
-  }, [id,publish,deleteCount]); 
+  }, [id, publish, deleteCount]);
 
   const onRefresh = () => {
     setRefreshing(true);
     // 这里执行刷新数据的逻辑
-    getAllTravelNote({_id: id}) // 将 id 作为参数传递给 API 函数
-        .then((responseData) => {
-          setTravelsData(responseData.article);
-          console.log(travelsData)
-          // console.log(travelsData.article)
-        })
-        .catch((error) => {
-          console.error('获取游记数据时发生错误：', error);
-          
-        });
+    getAllTravelNote({ _id: id }) // 将 id 作为参数传递给 API 函数
+      .then((responseData) => {
+        setTravelsData(responseData.article);
+        console.log(travelsData);
+        // console.log(travelsData.article)
+      })
+      .catch((error) => {
+        console.error("获取游记数据时发生错误：", error);
+      });
     setTimeout(() => setRefreshing(false), 2000);
   };
 
   const navigation = useNavigation();
   const [selected, setSelected] = useState("left");
-
-  // const token = true;
 
   // 控制组件显示
   const [showComponent, setShowComponent] = useState("travelList");
@@ -95,24 +88,22 @@ export default function Mine() {
 
   if (!token) {
     return (
-      <View style={styles.container}>
-        {/* 没有登录的时候显示 */}
-        <ImageBackground
-          source={require("../../../assets/images/headerbg.png")} // 替换成你的背景图片路径
-         
-          style={styles.noLoginHeader}>
-          <View style={{ paddingTop: 30 }}>
-            {/* 放一些小图标 */}
-            <View style={styles.headerIcon}>
-              <ViewfinderCircleIcon size={25} strokeWidth={1.5} color="white" />
-              <Cog6ToothIcon
-                size={25}
-                strokeWidth={1.5}
-                color="white"
-                onPress={() => navigation.navigate("Login")}
-              />
-            </View>
-            <Text style={styles.noLoginText}>登录携程，开启旅程</Text>
+      <ImageBackground
+        source={require("../../../assets/images/headerbg.png")} // 替换成你的背景图片路径
+        style={styles.noLoginHeader}>
+        <View style={{ paddingTop: 30, alignItems: "center" }}>
+          <Card style={styles.loginCard}>
+            <Image
+              source={require("../../../assets/images/logo.png")}
+              style={{
+                marginTop: 10,
+                width: 100,
+                height: 100,
+                alignSelf: "center",
+                borderRadius: 50,
+              }}
+            />
+            <Text style={styles.noLoginText}>你的快乐旅游记</Text>
             <View style={styles.changeBtn}>
               <Button
                 type="primary"
@@ -120,30 +111,18 @@ export default function Mine() {
                 style={styles.loginLeftBtn}>
                 登录/注册
               </Button>
-              <Button
-                type="primary"
-                onPress={() => navigation.navigate("")}
-                style={styles.loginRightBtn}>
-                手机号查单
-              </Button>
             </View>
-
-            {/* 静态展示的页面，点击都会到登录页面 */}
-            <View onPress={() => navigation.navigate("Login")}></View>
-          </View>
-        </ImageBackground>
-      </View>
+          </Card>
+        </View>
+      </ImageBackground>
     );
   } else {
     return (
-      <View style={styles.container}>
+      <View>
         <ScrollView
           refreshControl={
-          <RefreshControl
-          refreshing={refreshing}
-          onRefresh={onRefresh}
-      />}
-          >
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }>
           {/* 放一些小图标，不一定要有功能 */}
           <ImageBackground
             source={require("../../../assets/images/minebg.png")}
@@ -166,7 +145,9 @@ export default function Mine() {
                   <Image
                     style={styles.avatar}
                     // source={require("../../../assets/images/startAvatar.png")}
-                    source={{ uri: `data:image/jpeg;base64,${userInfo.Avatar}` }} // base64
+                    source={{
+                      uri: `data:image/jpeg;base64,${userInfo.Avatar}`,
+                    }} // base64
                   />
                 </TouchableOpacity>
                 <View>
@@ -260,11 +241,14 @@ export default function Mine() {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   headerIcon: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 30,
-    top:15,
+    top: 15,
   },
   headerCard: {
     padding: 10,
@@ -284,22 +268,22 @@ const styles = StyleSheet.create({
     borderRadius: 40,
   },
   listCard: {
-    height: 1000,
     borderRadius: 10,
     borderWidth: 0.5,
-    borderColor: "rgba(0,0,0,0)", // 可以设置边框颜色
+    // borderColor: "rgba(0,0,0,0)", // 可以设置边框颜色
+    backgroundColor: "rgba(255,255,255,0.1)",
   },
   changeBtn: {
     marginTop: 20,
     flexDirection: "row",
     justifyContent: "center",
+    marginBottom: 10,
   },
   loginLeftBtn: {
     height: 40,
     color: "white",
     width: 150,
-    backgroundColor: "#fe7e01",
-    marginRight: 20,
+    backgroundColor: "rgba(10, 53, 139,.7)",
     borderRadius: 10,
     borderWidth: 0.5,
     borderColor: "rgba(0,0,0,0)", // 可以设置边框颜色
@@ -314,11 +298,11 @@ const styles = StyleSheet.create({
     borderColor: "rgb(255,255,255)", // 可以设置边框颜色
   },
   noLoginHeader: {
-    height: 240,
+    flex: 1,
     paddingStart: 10,
     paddingEnd: 10,
-    backgroundSize: "cover", // 保证图片铺满整个视图
     backgroundPosition: "center", // 图片居中显示
+    resizeMode: "cover", // 保持图像的宽高比并在视图中尽可能完整显示图像
   },
   loginHeader: {
     height: 240,
@@ -330,7 +314,7 @@ const styles = StyleSheet.create({
   },
   noLoginText: {
     marginTop: 20,
-    color: "white",
+    color: "rgba(10, 53, 139,.7)",
     fontSize: 25,
     fontWeight: "bold",
     textAlign: "center",
@@ -340,6 +324,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     margin: 10,
+    backgroundColor: "rgb(255,255,255)",
+    height: 40,
+    borderRadius: 10,
   },
   selectTouch: {
     justifyContent: "center",
@@ -363,5 +350,12 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.5)",
     padding: 20,
     borderRadius: 10,
+  },
+  loginCard: {
+    width: "90%",
+    marginTop: 200,
+    borderRadius: 20,
+    borderWidth: 0,
+    backgroundColor: "rgba(255,255,255,.5)",
   },
 });
