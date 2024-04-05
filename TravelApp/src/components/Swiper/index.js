@@ -23,7 +23,8 @@ export default function SwiperComponent ({item}) {
     {pic.map((picitem,index) => (
       <Image
         key={index}
-        source={{uri: picitem}}
+        // source={{uri: picitem}}
+        source={{ uri: `data:image/jpeg;base64,${picitem}` }} 
         style={styles.imagecontainer}
         resizeMode="cover"
         />

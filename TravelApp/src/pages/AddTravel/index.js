@@ -66,6 +66,8 @@ export default function AddTravel() {
   const [checked, setChecked] = useState(false); // 是否同意发布规则
   const [imageList, setImageList] = useState([]); // 移动端展示的图片
 
+  const { incrementPublishCount } = useContext(UserContext);
+
   useState(() => {
     console.log("AddTravel页面");
   }, []);
@@ -120,8 +122,10 @@ export default function AddTravel() {
       let res = await fetchAddTravel(data);
       // console.log(res.data);
       if (res.data.code === 200) {
+        incrementPublishCount()
         Toast.info("发布成功", 1);
-
+        
+        
         setTimeout(() => {
           navigation.navigate("MyTravels");
           // 清除所有内容
@@ -339,7 +343,7 @@ export default function AddTravel() {
             </Checkbox>
           </View>
           <View style={[styles.innerBox, { height: 35 }]}>
-            <Button
+            <Button 
               onPress={submitTravelNote}
               style={styles.submit}
               type="primary">

@@ -9,6 +9,7 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   ImageBackground,
+  RefreshControl 
 } from "react-native";
 import MyHome from "../../components/MyHome";
 import MyTravelList from "../../components/MyTravelList";
@@ -29,8 +30,52 @@ import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Register from "../Register";
 import { UserContext } from "../../contexts/UserContext";
+import MyTravels from "../MyTravels";
+import { getAllTravelNote } from "../../apis/user";
+
+
 
 export default function Mine() {
+  
+  // 下拉更新
+  const [travelsData, setTravelsData] = useState([]);
+  const { id, publish, deleteCount,} = useContext(UserContext);
+  const [refreshing, setRefreshing] = useState(false);
+  useEffect(() => {
+    if (id) {
+      getAllTravelNote({_id: id}) // 将 id 作为参数传递给 API 函数
+        .then((responseData) => {
+          setTravelsData(responseData.article);
+          console.log(travelsData)
+          // console.log(travelsData.article)
+        })
+        .catch((error) => {
+          console.error('获取游记数据时发生错误：', error);
+          
+        });
+    }
+  }, [id,publish,deleteCount]); 
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    // 这里执行刷新数据的逻辑
+    getAllTravelNote({_id: id}) // 将 id 作为参数传递给 API 函数
+        .then((responseData) => {
+          setTravelsData(responseData.article);
+          console.log(travelsData)
+          // console.log(travelsData.article)
+        })
+        .catch((error) => {
+          console.error('获取游记数据时发生错误：', error);
+          
+        });
+    setTimeout(() => setRefreshing(false), 2000);
+  };
+
+
+
+
+
   const user = {
     userName: "ww",
   };
@@ -98,7 +143,13 @@ export default function Mine() {
   } else {
     return (
       <View style={styles.container}>
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+          <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+      />}
+          >
           {/* 放一些小图标，不一定要有功能 */}
           <ImageBackground
             source={require("../../../assets/images/minebg.png")}
@@ -204,7 +255,7 @@ export default function Mine() {
             <View>
               {/* 根据状态变量显示对应的组件 */}
               {showComponent === "home" && <MyHome />}
-              {showComponent === "travelList" && <MyTravelList />}
+              {showComponent === "travelList" && <MyTravels />}
             </View>
           </Card>
         </ScrollView>

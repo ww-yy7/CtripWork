@@ -1,10 +1,12 @@
-import { useState, useEffect } from "react";
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Alert } from "react-native";
+import { useState, useEffect, useContext } from "react";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Alert, RefreshControl } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from 'expo-linear-gradient'
 import { TrashIcon, PencilSquareIcon } from "react-native-heroicons/outline";
 // import { travelsdefaultData } from "../../constants";
 import { getAllTravelNote } from "../../apis/user";
+import { UserContext } from "../../contexts/UserContext";
+import { deleteTravelNote } from "../../apis/user";
 
 
 
@@ -12,43 +14,74 @@ export default function MyTravels() {
    
   
   const [travelsData, setTravelsData] = useState([]);
-
-
+  const { token, id, publish, deleteCount,incrementDeleteCount,} = useContext(UserContext);
+  const [refreshing, setRefreshing] = useState(false);
+  
   useEffect(() => {
-    getAllTravelNote()
-      .then((travelNotes) => {
-        setTravelsData(travelNotes);
-      })
-      .catch((error) => {
-        console.error('获取游记数据时发生错误：', error);
-      });
+    if (id) {
+      getAllTravelNote({_id: id}) // 将 id 作为参数传递给 API 函数
+        .then((responseData) => {
+          setTravelsData(responseData.article);
+          console.log(travelsData)
+          // console.log(travelsData.article)
+        })
+        .catch((error) => {
+          console.error('获取游记数据时发生错误：', error);
+          
+        });
+    }
+  }, [id,publish,deleteCount]); // 将 token 添加到依赖数组中，这样每当 token 变化时都会重新获取游记数据
 
-  },[]);
 
-  // 定义删除游记的函数
-  const deleteMyTravel = (idToDelete) => {
-    // 过滤出要删除的游记后，更新全局状态
-    setTravelsData(currentTravelsData => currentTravelsData.filter(item => item.articleId !== idToDelete));
+
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    // 这里执行刷新数据的逻辑
+    getAllTravelNote({_id: id}) // 将 id 作为参数传递给 API 函数
+        .then((responseData) => {
+          setTravelsData(responseData.article);
+          console.log(travelsData)
+          // console.log(travelsData.article)
+        })
+        .catch((error) => {
+          console.error('获取游记数据时发生错误：', error);
+          
+        });
+    setTimeout(() => setRefreshing(false), 2000);
   };
+  
+
+  const deleteMyTravel = async (idToDelete) => {
+        try {
+          await deleteTravelNote(idToDelete); // 先调用接口删除游记
+          incrementDeleteCount()
+          setTravelsData(currentTravelsData =>
+            currentTravelsData.filter(item => item.articleId !== idToDelete)
+          ); // 接口调用成功后，过滤并更新全局状态
+        } catch (error) {
+          console.error('删除游记失败:', error.message || error);
+        }
+      };
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView 
+    refreshControl={
+      <RefreshControl
+        refreshing={refreshing}
+        onRefresh={onRefresh}
+      />}
+      style={styles.container}
+      >
     <View style={styles.cardcontainer}>
-      {/* {
-        travelsData.length > 0 && travelsData.filter(item => item.username === 'Zach').map((item, index) => (
-            <TravelsCard key={index} item={item} onDelete={deleteMyTravel}/>
-          ))
-      } */}
       {
         // 首先遍历 travelsData
-        travelsData.length > 0 && travelsData.filter(item => item.username === 'Zach').map((item, itemIndex) => {
-          // 然后对于每个 item，遍历其 article 属性
-          return item.article.map((articleItem, articleIndex) => {
+        travelsData.length > 0 && travelsData.map((item, index) => {
             // 为每篇文章创建 TravelsCard 组件
             return (
-              <TravelsCard item={articleItem} key={`${itemIndex}-${articleIndex}`} />
+              <TravelsCard item={item} key={item.articleId || index}  onDelete={deleteMyTravel}/>
             );
-          });
+          
         })
       }
     </View>
@@ -88,7 +121,8 @@ const TravelsCard = ({item, onDelete})=> {
         style={styles.imageview}
        >
         <Image
-          source={item.picture}
+          // source={item.picture}
+          source={{ uri: `data:image/jpeg;base64,${item.picture}` }} 
           style={{width: 170, height: 230, borderTopLeftRadius: 10, borderTopRightRadius: 10, position: 'absolute'}} />
         
         {/* 线性渐变处理，美化样式 */}
@@ -110,12 +144,6 @@ const TravelsCard = ({item, onDelete})=> {
         
        </TouchableOpacity>
 
-        {/* <View style={styles.states}>
-          <Text>审核中</Text>
-          <TouchableOpacity onPress={()=>{confirmDelete(item.articleId)}}>
-            <TrashIcon size={15} color="gray"></TrashIcon>
-          </TouchableOpacity>
-        </View> */}
         <View style={styles.states}>
         {(() => {
           switch (item.state) {
@@ -170,20 +198,21 @@ const TravelsCard = ({item, onDelete})=> {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     backgroundColor: '#FAFAFA',
-    paddingEnd: 14,
-    paddingStart: 14,
+    paddingEnd: 12,
+    paddingStart: 12,
+    // height:800
   },
   cardcontainer: {
     marginLeft: 8,
     marginRight: 8,
-    marginTop:10,
     // width:350,
     flexDirection: 'row',
     justifyContent: 'space-between',
     flexWrap: 'wrap',
-    top:50
+    top:10,
+    
   },
   imageview: {
     width: 160,  //固定宽度可兼容iphone15和iphone15promax
@@ -252,5 +281,3 @@ const styles = StyleSheet.create({
     bottom: 20,
   },
 })
-
-

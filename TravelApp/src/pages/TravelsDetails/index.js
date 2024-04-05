@@ -68,7 +68,7 @@ export default function TravelsDetails(props){
           <View style={styles.duration} className="flex-row space-x-2 items-start">
               <ClockIcon size={25} color="skyblue" />
               <View className="flex space-y-2">
-                  <Text style={{fontSize: 13}} className="font-bold text-neutral-700">{item.duration}</Text>
+                  <Text style={{fontSize: 13}} className="font-bold text-neutral-700">{item.playTime}</Text>
                   <Text className="text-neutral-600 tracking-wide">游玩天数</Text>
               </View>
           </View>
@@ -77,7 +77,7 @@ export default function TravelsDetails(props){
             <Text style={{fontSize: 25, color: theme.text}}>¥</Text>
             <View>
               <Text style={{fontSize: 13, color: theme.text}}>
-                  {item?.price}
+                  {item?.money}
               </Text>
               <Text>花费</Text>
             </View>

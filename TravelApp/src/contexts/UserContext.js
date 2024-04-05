@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import React, { useState, createContext } from "react";
+import React, { useState, useEffect, createContext } from "react";
+import { getAllTravelNote } from "../apis/user";
 
 export const UserContext = createContext({});
 
@@ -7,7 +8,19 @@ function UserProvider({ children }) {
   const [token, setToken] = useState("");
   const [id, setID] = useState("");
   const [userInfo, setUserInfo] = useState({});
+  const [publish, setPublish] = useState(0); // 点击发布时，按钮变更，为了发布后页面更新
+  const [deleteCount, setDeleteCount] = useState(0)
 
+
+  // 函数用于增加发布次数
+  const incrementPublishCount = () => {
+    setPublish(prevCount => prevCount + 1);
+  };
+  // 函数用于增加删除次数
+  const incrementDeleteCount = () => {
+    setDeleteCount(prevCount => prevCount + 1);
+  }
+  
   // 将 id 存储在本地缓存中
   const saveIDToStorage = async (idValue) => {
     try {
@@ -54,10 +67,15 @@ function UserProvider({ children }) {
         id, // 用户ID
         token,
         userInfo,
+        publish, // 也可以提供当前发布次数的状态
+        deleteCount,
         saveUserInfoToStorage,
         saveTokenToStorage,
         clearuserInfo,
         saveIDToStorage,
+        incrementPublishCount, // 通过context提供这个函数
+        incrementDeleteCount,
+        // getmytravels,
       }}>
       {children}
     </UserContext.Provider>

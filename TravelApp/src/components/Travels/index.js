@@ -33,10 +33,12 @@ export default function Travels() {
         travelsData.map((item, itemIndex) => {
           // 然后对于每个 item，遍历其 article 属性
           return item.article.map((articleItem, articleIndex) => {
+            if (articleItem.state === '已通过'){
             // 为每篇文章创建 TravelsCard 组件
             return (
               <TravelsCard item={articleItem} key={`${itemIndex}-${articleIndex}`} />
             );
+          }
           });
         })
       }
@@ -59,8 +61,8 @@ const TravelsCard = ({item})=> {
        >
         <Image
           suppressHydrationWarning={true}  // 消除source的警告
-          // source={item.picture}
-          source={{ uri: `data:image/jpeg;base64,${item.picture}` }} // base64
+          source={item.picture}
+          // source={{ uri: `data:image/jpeg;base64,${item.picture}` }} // base64
           style={{width: 170, height: 230, borderRadius: 25, position: 'absolute'}} />
         
         {/* 线性渐变处理，美化样式 */}

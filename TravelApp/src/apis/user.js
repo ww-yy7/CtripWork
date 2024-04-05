@@ -73,3 +73,26 @@ export function searchTravelNote(searchInfo) {
     throw error;
   });
 }
+
+// 封装删除游记的函数
+export function deleteTravelNote(articleId) {
+  return request({
+    url: '/users/deleteTravelNote', // 你的后端接口路径
+    method: 'DELETE', // 请求方法（根据你的接口应为 DELETE）
+    data: { articleId }, // 将文章ID作为请求体数据
+  })
+  .then((response) => {
+    if (response.data.code === 200) {
+      // 删除成功，返回结果
+      return response.data.resultList;
+    } else {
+      // 删除失败，抛出错误
+      throw new Error(response.data.msg);
+    }
+  })
+  .catch((error) => {
+    // 处理请求失败的情况
+    console.error('删除游记失败:', error.message || error);
+    throw error;
+  });
+}
