@@ -39,7 +39,8 @@ export default function Mine() {
   
   // 下拉更新
   const [travelsData, setTravelsData] = useState([]);
-  const { id, publish, deleteCount,} = useContext(UserContext);
+   // 导入context里的全局数据
+  const { id, publish, deleteCount,token,userInfo} = useContext(UserContext);
   const [refreshing, setRefreshing] = useState(false);
   useEffect(() => {
     if (id) {
@@ -72,17 +73,9 @@ export default function Mine() {
     setTimeout(() => setRefreshing(false), 2000);
   };
 
-
-
-
-
-  const user = {
-    userName: "ww",
-  };
   const navigation = useNavigation();
   const [selected, setSelected] = useState("left");
-  // 导入context里的全局数据
-  const { token } = useContext(UserContext);
+
   // const token = true;
 
   // 控制组件显示
@@ -106,6 +99,7 @@ export default function Mine() {
         {/* 没有登录的时候显示 */}
         <ImageBackground
           source={require("../../../assets/images/headerbg.png")} // 替换成你的背景图片路径
+         
           style={styles.noLoginHeader}>
           <View style={{ paddingTop: 30 }}>
             {/* 放一些小图标 */}
@@ -171,14 +165,15 @@ export default function Mine() {
                 <TouchableOpacity onPress={touchAvatar}>
                   <Image
                     style={styles.avatar}
-                    source={require("../../../assets/images/startAvatar.png")}
+                    // source={require("../../../assets/images/startAvatar.png")}
+                    source={{ uri: `data:image/jpeg;base64,${userInfo.Avatar}` }} // base64
                   />
                 </TouchableOpacity>
                 <View>
                   {/* 用户名 */}
                   <View style={{ flexDirection: "row", alignItems: "center" }}>
                     <Text style={{ fontSize: 20, marginLeft: 20 }}>
-                      {user.userName}
+                      {userInfo.nickName}
                     </Text>
                     <Image
                       source={require("../../../assets/images/vip.png")}

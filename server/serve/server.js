@@ -124,12 +124,28 @@ async function createUserInfo(newInfoObj) {
     );
   });
 }
+// 更新用户信息
+function updateUserInfo(_id,{ Avatar, nickName,sex, age, email, address, phone, introduction }) {
+  return new Promise((resolve, reject) => {
+    UserInfo.updateOne(
+      { _id: ObjectId(_id) }, // 根据用户的 _id 来查找用户
+      { $set: { Avatar, nickName,sex, age, email, address, phone, introduction } }, // 使用 $set 操作符更新匹配的第一个元素
+      function (err, doc) {
+        if (!err) {
+          resolve(doc);
+        } else {
+          reject(err);
+        }
+      }
+    );
+  });
+}
 
 // ----------------------------游记处理----------------------------
 
 // 新增游记
 function createArticle(newNoteObj) {
-  console.log(newNoteObj, "newNoteObj");
+  console.log(newNoteObj, "newNoteObj11122");
   const articleId = newNoteObj._id + Date.now();
   return new Promise((resolve, reject) => {
     UserInfo.updateOne(
@@ -279,8 +295,8 @@ function searchArticle(search) {
       const searchResult = approvedArticles.filter((article) => {
         if (
           article.title.includes(search) ||
-          article.content.includes(search)
-          // article.nickName.includes(search) // 昵称这个暂时先不搞，他不在article里面
+          article.content.includes(search)||
+          article.user.includes(search) // 昵称这个暂时先不搞，他不在article里面
         ) {
           return true;
         }
@@ -405,6 +421,7 @@ module.exports = {
   deleteArticle_manage,
   addDeleteArticleList,
   searchArticle,
+  updateUserInfo,
   UserInfo,
   deleteArticleList,
 };

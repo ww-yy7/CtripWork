@@ -96,3 +96,13 @@ export function deleteTravelNote(articleId) {
     throw error;
   });
 }
+
+// 更新用户个人信息
+export function updateUserInfo(data) {
+  // console.log(data, "data");
+  return request({
+    url: `/users/updateUserInfo`,
+    method: "PUT",
+    data,
+  });
+}

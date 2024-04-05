@@ -6,6 +6,7 @@ import Register from "../pages/Register";
 import SearchScreen from "../pages/Serch";
 import Setting from "../pages/Setting";
 import EditProfile from "../pages/EditProfile";
+import LoginAgreement from "../pages/Agreement/LoginAgreement";
 
 const Stack = createNativeStackNavigator();
 
@@ -64,6 +65,13 @@ export default function Routes() {
         component={EditProfile}
         options={{
           headerTitle: "修改简介",
+        }}
+      />
+       <Stack.Screen
+        name="LoginAgreement"
+        component={LoginAgreement}
+        options={{
+          headerTitle: "用户登录协议",
         }}
       />
     </Stack.Navigator>

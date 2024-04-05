@@ -37,11 +37,9 @@ import { UserContext } from "../../contexts/UserContext";
 import { useContext } from "react";
 
 export default function AddTravel() {
-  const { id:_id,userInfo:{nickName} }= useContext(UserContext);
+  const { id:_id,userInfo:{nickName},token }= useContext(UserContext);
   // console.log(nickName,'nickName');
   const navigation = useNavigation();
-
-  const [token, setToken] = useState("tempToken");
 
   const [titleValue, setTitleValue] = useState("");
   const [profileValue, setProfileValue] = useState("");

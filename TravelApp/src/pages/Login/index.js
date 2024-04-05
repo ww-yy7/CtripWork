@@ -31,7 +31,8 @@ export default function Login() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false); //设置小眼睛图标的显示状态
   const [checked, setChecked] = useState(false); // 是否同意发布规则
 
-  const { saveTokenToStorage, saveIDToStorage,saveUserInfoToStorage } = useContext(UserContext);
+  const { saveTokenToStorage, saveIDToStorage, saveUserInfoToStorage } =
+    useContext(UserContext);
   // 切换密码框的显示状态
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
@@ -54,7 +55,7 @@ export default function Login() {
     // 校验用户名是否存在
     else {
       let res = await checkUsername(usernameValue);
-      console.log(res.data.code, "code");
+      // console.log(res.data.code, "code");
       if (res.data.code === 400) {
         // 用户名存在
         return true;
@@ -75,8 +76,13 @@ export default function Login() {
       return true; // 密码正确
     }
   };
+
   // 登录按钮的点击事件
   const loginBtn = async () => {
+    if (!checked) {
+      Toast.info("请同意服务协议", 1);
+      return;
+    }
     // 校验用户名是否符合要求
     const isUsernameValid = validateUsername();
     if (!isUsernameValid) {
@@ -95,25 +101,81 @@ export default function Login() {
       };
       // 登录请求，里面加以下事件,获取整个用户信息，并将token存入localStrorage，用async和await
       let res = await fetchLogin(data);
-      console.log(res.data.userInfo, "userInfo");
       if (res.data.code === 200) {
         // 将token和—_ID存入localStorage
-        saveTokenToStorage(res.data.token);
-        saveIDToStorage(res.data.userInfo._id);
-        const { Avatar, nickName, sex, age,email,address,phone,introduction } = res.data.userInfo;
-        console.log({ Avatar, nickName, sex, age,email,address,phone,introduction },'userInfo');
-        saveUserInfoToStorage({ Avatar, nickName, sex, age,email,address,phone,introduction })
+        await saveTokenToStorage(res.data.token);
+        await saveTokenToStorage(res.data.token);
+        await saveIDToStorage(res.data.userInfo._id);
+        const {
+          Avatar,
+          nickName,
+          sex,
+          age,
+          email,
+          address,
+          phone,
+          introduction,
+        } = res.data.userInfo;
+        // console.log(
+        //   { Avatar, nickName, sex, age, email, address, phone, introduction },
+        //   "userInfo"
+        // );
+        await saveUserInfoToStorage({
+          Avatar,
+          nickName,
+          sex,
+          age,
+          email,
+          address,
+          phone,
+          introduction,
+        });
+        navigation.navigate("Mine");
       } else {
         Toast.info("密码错误", 1);
         return;
       }
     }
-    if (!checked) {
-      Toast.info("请同意服务协议", 1);
-    } else {
-      navigation.navigate("Mine");
-    }
   };
+  // // 登录按钮的点击事件
+  // const loginBtn = async () => {
+  //   // 校验用户名是否符合要求
+  //   const isUsernameValid = validateUsername();
+  //   if (!isUsernameValid) {
+  //     Toast.info("用户名不符合要求", 1);
+  //     return; // 如果用户名不符合要求，不执行后续注册逻辑
+  //   }
+  //   // 校验密码是否符合要求
+  //   const isPasswordValid = validatePassword();
+  //   if (!isPasswordValid) {
+  //     Toast.info("密码不符合要求", 1);
+  //     return; // 如果密码不符合要求，不执行后续注册逻辑
+  //   } else {
+  //     const data = {
+  //       username: usernameValue,
+  //       password: passwordValue,
+  //     };
+  //     // 登录请求，里面加以下事件,获取整个用户信息，并将token存入localStrorage，用async和await
+  //     let res = await fetchLogin(data);
+  //     console.log(res.data.userInfo, "userInfo");
+  //     if (res.data.code === 200) {
+  //       // 将token和—_ID存入localStorage
+  //       saveTokenToStorage(res.data.token);
+  //       saveIDToStorage(res.data.userInfo._id);
+  //       const { Avatar, nickName, sex, age,email,address,phone,introduction } = res.data.userInfo;
+  //       console.log({ Avatar, nickName, sex, age,email,address,phone,introduction },'userInfo');
+  //       saveUserInfoToStorage({ Avatar, nickName, sex, age,email,address,phone,introduction })
+  //     } else {
+  //       Toast.info("密码错误", 1);
+  //       return;
+  //     }
+  //   }
+  //   if (!checked) {
+  //     Toast.info("请同意服务协议", 1);
+  //   } else {
+  //     navigation.navigate("Mine");
+  //   }
+  // };
 
   return (
     <Provider>
@@ -186,8 +248,11 @@ export default function Login() {
               style={{ color: "#fff" }}
               onChange={() => setChecked(!checked)}
               checked={checked}></Checkbox>
-            <Text style={{ color: "#fff", marginLeft: -10 }}>
-              阅读并同意携程的《服务协议》和《个人信息保护指南》
+            <Text style={{ color: "#fff", marginLeft: -10,fontSize:12 }}>
+              阅读并同意乐游记的 
+              <TouchableOpacity onPress={()=>{navigation.navigate('LoginAgreement')}}>
+          <Text style={{ textDecorationLine: 'underline' ,color: "#fff",fontSize:11 }}>《用户登录协议》</Text>
+        </TouchableOpacity>
             </Text>
           </View>
         </View>
@@ -233,6 +298,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 40,
     fontSize: 16,
+    color: "#fff",
   },
   linkText: {
     color: "#fff",
