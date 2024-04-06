@@ -5,7 +5,7 @@ import Mine from "../pages/Mine";
 import MyTravels from "../pages/MyTravels";
 import AddTravel from "../pages/AddTravel";
 import TravelsDetails from "../pages/TravelsDetails";
-import LikeTravesls from "../pages/LikeTravels"
+import LikeTravels from "../pages/LikeTravels";
 import Message from "../pages/Message"
 
 import {
@@ -42,8 +42,8 @@ const BottomTabs = () => {
       />
 
       <Tab.Screen
-        name="MyTravels"
-        component={MyTravels}
+        name="likeTravels"
+        component={LikeTravels}
         options={{
           headerShown: false, 
           tabBarLabel: "推荐",

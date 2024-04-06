@@ -172,7 +172,8 @@ const TravelsCard = ({item})=> {
        >
         <Image
           suppressHydrationWarning={true}  // 消除source的警告
-          source={item.picture}
+          // source={item.picture}
+          source={{ uri: `data:image/jpeg;base64,${item.picture[0]}` }} // base64
           style={{width: 170, height: 230, borderRadius: 25, position: 'absolute'}} />
         
         {/* 线性渐变处理，美化样式 */}
@@ -189,7 +190,7 @@ const TravelsCard = ({item})=> {
         </View>
             
         <Text style={styles.texttitle}>{item.title}</Text>
-        <Text style={styles.text}>{item.shortDescription}</Text>
+        <Text style={styles.text}>{item.profile}</Text>
         
        </TouchableOpacity>
        

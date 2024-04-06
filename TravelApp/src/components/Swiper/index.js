@@ -2,8 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { View, Image, StyleSheet } from 'react-native';
 import Swiper from 'react-native-swiper';
-import { travelsdefaultData } from '../../constants';
-import { getAllTravelNote } from '../../apis/user';
+
 
 
 

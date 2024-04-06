@@ -7,7 +7,6 @@ import CartProvider from "./src/contexts/CartContext";
 import { AppLoading } from "expo";
 import * as Font from "expo-font";
 import { useEffect, useState } from "react";
-import { TravelsDataProvider } from "./src/contexts/TravelsContext";
 
 import UserProvider from "./src/contexts/UserContext";
 
