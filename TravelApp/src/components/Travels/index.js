@@ -5,18 +5,19 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { useNavigation } from '@react-navigation/native'
 import { useState, useEffect } from "react";
 import { getAllTravelNote } from "../../apis/user";
-
-
+// 瀑布流组件引入
+import WaterfallFlow from 'react-native-waterfall-flow'
 
 
 export default function Travels() {
 
   const [travelsData, setTravelsData] = useState([]);
-  
+
   useEffect(() => {
     getAllTravelNote()
       .then((travelNotes) => {
         setTravelsData(travelNotes);
+        console.log(travelNotes.length, 'travelNotes');
       })
       .catch((error) => {
         console.error('获取游记数据时发生错误：', error);
@@ -24,7 +25,7 @@ export default function Travels() {
 
   }, []);
 
-  
+  console.log(travelsData.length, 'travelsData.length');
   
   return (
     <View style={styles.container}>
@@ -53,16 +54,14 @@ const TravelsCard = ({item})=> {
   
 
   return(
-    
-
     <TouchableOpacity 
         onPress={() => navigation.navigate("TravelsDetails",{...item}) }
         style={styles.image}
        >
         <Image
           suppressHydrationWarning={true}  // 消除source的警告
-          source={item.picture}
-          // source={{ uri: `data:image/jpeg;base64,${item.picture}` }} // base64
+          // source={item.picture}
+          source={{ uri: `data:image/jpeg;base64,${item.picture}` }} // base64
           style={{width: 170, height: 230, borderRadius: 25, position: 'absolute'}} />
         
         {/* 线性渐变处理，美化样式 */}

@@ -28,8 +28,6 @@ export default function Home() {
 
         <SafeAreaView style={stlyes.container}>
             <ScrollView >
-                 
-            
             <View style={stlyes.top}>
                 <Text style={stlyes.title}>让我们一起探索！</Text>
                 <TouchableOpacity>
@@ -55,17 +53,13 @@ export default function Home() {
                 </View>
                 
             </View>
-
             <View>
                 <Categories />
             </View>
-
-            <View>
+            <View >
                 <Travels/>
             </View>
-
             </ScrollView>
-
         </SafeAreaView>
         
     )

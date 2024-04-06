@@ -125,11 +125,25 @@ async function createUserInfo(newInfoObj) {
   });
 }
 // 更新用户信息
-function updateUserInfo(_id,{ Avatar, nickName,sex, age, email, address, phone, introduction }) {
+function updateUserInfo(
+  _id,
+  { Avatar, nickName, sex, age, email, address, phone, introduction }
+) {
   return new Promise((resolve, reject) => {
     UserInfo.updateOne(
       { _id: ObjectId(_id) }, // 根据用户的 _id 来查找用户
-      { $set: { Avatar, nickName,sex, age, email, address, phone, introduction } }, // 使用 $set 操作符更新匹配的第一个元素
+      {
+        $set: {
+          Avatar,
+          nickName,
+          sex,
+          age,
+          email,
+          address,
+          phone,
+          introduction,
+        },
+      }, // 使用 $set 操作符更新匹配的第一个元素
       function (err, doc) {
         if (!err) {
           resolve(doc);
@@ -238,38 +252,38 @@ function updateArticle(infoObj) {
           console.log(oldArticle, "oldArticle");
           // console.log(article, "article");
           // console.log({ ...oldArticle, ...article }, "newArticle");
-
-          UserInfo.updateOne(
-            { "article.articleId": articleId }, // 查询条件：查找指定用户的指定游记
-            {
-              $set: {
-                "article.$": {
-                  ...oldArticle,
-                  ...article,
-                  user,
-                  articleId,
-                  comment,
-                  see,
-                  state,
-                  rejectReason,
-                  time,
-                },
-              },
-            }, // 使用 $set 操作符更新匹配的第一个元素
-            function (err, doc) {
-              if (!err) {
-                resolve(doc);
-              } else {
-                reject(err);
-              }
-            }
-          );
         } else {
           reject(err);
         }
       }
     );
     // console.log(user, "user"); // 这个user是undefined
+
+    UserInfo.updateOne(
+      { "article.articleId": articleId }, // 查询条件：查找指定用户的指定游记
+      {
+        $set: {
+          "article.$": {
+            ...oldArticle,
+            ...article,
+            user,
+            articleId,
+            comment,
+            see,
+            state,
+            rejectReason,
+            time,
+          },
+        },
+      }, // 使用 $set 操作符更新匹配的第一个元素
+      function (err, doc) {
+        if (!err) {
+          resolve(doc);
+        } else {
+          reject(err);
+        }
+      }
+    );
   });
 }
 // 根据文章title，部分内容或者用户昵称来模糊搜索游记
@@ -295,7 +309,7 @@ function searchArticle(search) {
       const searchResult = approvedArticles.filter((article) => {
         if (
           article.title.includes(search) ||
-          article.content.includes(search)||
+          article.content.includes(search) ||
           article.user.includes(search) // 昵称这个暂时先不搞，他不在article里面
         ) {
           return true;

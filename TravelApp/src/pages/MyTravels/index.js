@@ -155,7 +155,7 @@ const TravelsCard = ({ item, onDelete }) => {
             case "待审核": {
               // 这边也就是返回一个组件了
               const editHandler = () => {
-                navigation.navigate("addTravel", { ...item });
+                navigation.navigate("UpdateTravel", { ...item });
               }
               return (
                 <>

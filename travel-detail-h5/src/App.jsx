@@ -2,6 +2,7 @@ import "./App.css";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+
 function App() {
   // 获取页面url，拿到传入的articleId
   // const queryString = window.location.search;
@@ -31,7 +32,9 @@ function App() {
   return (
     <div className="App">
       {/* 照片处 */}
-      <div className="header"></div>
+      <div className="header">
+        <image src='../public/logo192.png'></image>
+      </div>
 
       {/* 游记标题 */}
     </div>

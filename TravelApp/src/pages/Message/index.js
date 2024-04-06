@@ -13,7 +13,13 @@ import {
 } from "react-native";
 import MyHome from "../../components/MyHome";
 import MyTravelList from "../../components/MyTravelList";
-import { Card, WhiteSpace, WingBlank, Button } from "@ant-design/react-native";
+import {
+  Card,
+  WhiteSpace,
+  WingBlank,
+  Button,
+  List,
+} from "@ant-design/react-native";
 import {
   Cog6ToothIcon,
   ViewfinderCircleIcon,
@@ -25,7 +31,10 @@ import { UserContext } from "../../contexts/UserContext";
 export default function Message() {
   const navigation = useNavigation();
   // 导入context里的全局数据
-  const { token } = useContext(UserContext);
+  const { token } = useContext(UserContext)
+  // const token = "123";
+  const Item = List.Item;
+  const Brief = Item.Brief;
   if (!token) {
     return (
       <View style={styles.container}>
@@ -77,6 +86,99 @@ export default function Message() {
             <MsgCard token={token} />
           </ImageBackground>
           {/* 登录成功的时候的页面，设想是有一个默认的消息页面，有时间的话把另外的页面跳转做一下 */}
+          <ScrollView
+            // style={{backgroundColor:"#fff"}}
+            automaticallyAdjustContentInsets={false}
+            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}>
+            <View>
+              <Item
+                thumb={
+                  <Image
+                    source={require("../../../assets/images/avatar.png")}
+                    style={{ width: 40, height: 40 ,marginRight: 10}}
+                  />
+                }
+                extra="内容内容"
+                multipleLine>
+                标题
+                <Brief>辅助文字内容</Brief>
+              </Item>
+              <Item
+                thumb={
+                  <Image
+                    source={require("../../../assets/images/avatar.png")}
+                    style={{ width: 40, height: 40 ,marginRight: 10}}
+                  />
+                }
+                extra="内容内容"
+                multipleLine>
+                标题
+                <Brief>辅助文字内容</Brief>
+              </Item>
+              <Item
+                thumb={
+                  <Image
+                    source={require("../../../assets/images/avatar.png")}
+                    style={{ width: 40, height: 40 ,marginRight: 10}}
+                  />
+                }
+                extra="内容内容"
+                multipleLine>
+                标题
+                <Brief>辅助文字内容</Brief>
+              </Item>
+              <WhiteSpace size="lg" />
+              <Item
+                thumb={
+                  <Image
+                    source={require("../../../assets/images/avatar.png")}
+                    style={{ width: 40, height: 40 ,marginRight: 10}}
+                  />
+                }
+                extra="内容内容"
+                multipleLine>
+                标题
+                <Brief>辅助文字内容</Brief>
+              </Item>
+              <Item
+                thumb={
+                  <Image
+                    source={require("../../../assets/images/avatar.png")}
+                    style={{ width: 40, height: 40 ,marginRight: 10}}
+                  />
+                }
+                extra="内容内容"
+                multipleLine>
+                标题
+                <Brief>辅助文字内容</Brief>
+              </Item>
+              <Item
+                thumb={
+                  <Image
+                    source={require("../../../assets/images/avatar.png")}
+                    style={{ width: 40, height: 40 ,marginRight: 10}}
+                  />
+                }
+                extra="内容内容"
+                multipleLine>
+                标题
+                <Brief>辅助文字内容</Brief>
+              </Item>
+              <Item
+                thumb={
+                  <Image
+                    source={require("../../../assets/images/avatar.png")}
+                    style={{ width: 40, height: 40 ,marginRight: 10}}
+                  />
+                }
+                extra="内容内容"
+                multipleLine>
+                标题
+                <Brief>辅助文字内容</Brief>
+              </Item>
+            </View>
+          </ScrollView>
         </View>
       </View>
     );

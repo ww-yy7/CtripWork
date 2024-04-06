@@ -38,6 +38,7 @@ export default function Mine() {
   const [travelsData, setTravelsData] = useState([]);
   // 导入context里的全局数据
   const { id, publish, deleteCount, token, userInfo, } = useContext(UserContext);
+  const {introduction} = userInfo;
   // const { id, publish, deleteCount,userInfo} = useContext(UserContext);
   // const token = true;
   const [refreshing, setRefreshing] = useState(false);
@@ -169,12 +170,10 @@ export default function Mine() {
                   marginTop: 10,
                   alignItems: "center",
                 }}
-                onPress={() => navigation.navigate("ModifyProfile")}>
+                onPress={() => navigation.navigate("ModifyProfile",{introduction})}>
                 <Text
                   style={{ fontSize: 12, color: "#9f9fa1", marginRight: 4 }}>
-                  {/* {userInfo ? userInfo.introduction : "这个人很懒，什么都没写"}
-                   */}
-                   这个人很懒，什么都没写
+                  {userInfo ? userInfo.introduction : "这个人很懒，什么都没写"}
                 </Text>
                 <PencilSquareIcon size={16} strokeWidth={1} color="#9f9fa1" />
               </TouchableOpacity>

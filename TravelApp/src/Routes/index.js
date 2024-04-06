@@ -9,6 +9,7 @@ import EditProfile from "../pages/EditProfile";
 import LoginAgreement from "../pages/Agreement/LoginAgreement";
 import Other from "../pages/Other";
 import ModifyProfile from "../pages/ModifyProfile";
+import UpdateTravel from "../pages/UpdateTravel";
 
 const Stack = createNativeStackNavigator();
 
@@ -88,6 +89,13 @@ export default function Routes() {
         component={ModifyProfile}
         options={{
           headerTitle: "修改个人简介",
+        }}
+      />
+      <Stack.Screen
+        name="UpdateTravel"
+        component={UpdateTravel}
+        options={{
+          headerTitle: "更新游记",
         }}
       />
     </Stack.Navigator>

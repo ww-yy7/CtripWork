@@ -34,6 +34,14 @@ export function AddTravel(data) {
     data,
   });
 }
+// 更新游记
+export function UpdateTravel(data) {
+  return request({
+    url: `/users/updateTravelNote`,
+    method: "PUT",
+    data,
+  });
+}
 
 // 封装获取游记数据的请求函数
 export function getAllTravelNote(params = {}) {
