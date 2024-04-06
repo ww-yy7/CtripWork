@@ -36,7 +36,7 @@ export default function Travels() {
         numColumns={2}
         renderItem={({ item, index, columnIndex }) => {
           return (
-            <View>
+            
              
               <TravelsCard
                 item={item}
@@ -47,7 +47,7 @@ export default function Travels() {
                 // }}
               />
                
-            </View>
+            
           );
         }}
       />
@@ -63,17 +63,13 @@ const TravelsCard = ({ item, columnIndex }) => {
     <TouchableOpacity
       onPress={() => navigation.navigate("TravelsDetails", { ...item })}
       style={{
-        width: 160, //固定宽度可兼容iphone15和iphone15promax
+        width: 170, //固定宽度可兼容iphone15和iphone15promax
         height: columnIndex === 0 ? 230 : 250,
         display: "flex",
-        justifyContent: "flex-end",
-        position: "relative",
-        paddingHorizontal: 4,
-        paddingTop: 6, // 能改变渐变色
-        paddingBottom: 0,
         marginBottom: 10,
         alignItems: "flex-start",
-      }}>
+      }
+      }>
       <Image
         suppressHydrationWarning={true} // 消除source的警告
         // source={item.picture}
@@ -111,32 +107,20 @@ const TravelsCard = ({ item, columnIndex }) => {
 const styles = StyleSheet.create({
   //整个游记卡片瀑布流组件
   container: {
-    marginLeft: 8,
-    marginRight: 20,
+    paddingLeft:8,
+    // paddingRight:8,
     // width:350,
     flexDirection: "row",
     justifyContent: "space-between",
-    flexWrap: "wrap",
-  },
-  image: {
-    width: 160, //固定宽度可兼容iphone15和iphone15promax
-    height: 230,
-    display: "flex",
-    justifyContent: "flex-end",
-    position: "relative",
-    paddingHorizontal: 4,
-    paddingTop: 6, // 能改变渐变色
-    paddingBottom: 0,
-    marginBottom: 10,
-    alignItems: "flex-start",
+    // flexWrap: "wrap",
   },
   lineargradient: {
-    position: "absolute",
     bottom: 0,
     width: 170,
-    height: "93%", // 渐变色高度
+    height: "100%", // 渐变色高度
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
+    
   },
 
   userinfo: {
@@ -156,7 +140,7 @@ const styles = StyleSheet.create({
 
   texttitle: {
     left: 10,
-    bottom: 30,
+    bottom: 40,
     color: "white",
     fontWeight: "bold",
     fontSize: 15,
@@ -167,6 +151,6 @@ const styles = StyleSheet.create({
     color: "white",
     // fontWeight: 'bold',
     fontSize: 10,
-    bottom: 20,
+    bottom: 35,
   },
 });

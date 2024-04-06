@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, Image, StyleSheet, SafeAreaView, TouchableOpacity, ScrollView, TextInput } from "react-native";
+import { View, Text, Image, StyleSheet, SafeAreaView, TouchableOpacity, ScrollView, TextInput, Share } from "react-native";
 import { ChevronLeftIcon, ShareIcon, MapPinIcon, ClockIcon, PencilIcon, PencilSquareIcon } from 'react-native-heroicons/outline';
 import {HeartIcon, StarIcon, } from "react-native-heroicons/solid";
 import { useNavigation } from "@react-navigation/native";
@@ -16,6 +16,28 @@ export default function TravelsDetails(props){
   const navigation = useNavigation()
   const [isFavourite, toggleFavourite] = useState(false);
   const [isCollect, toggleCollect] = useState(false);
+
+  const onShare = async (articleId) => {
+    // console.log("articleId", articleId);
+    try {
+      const result = await Share.share({
+        message:
+          "React Native | A framework for building native apps using React",
+        url: `http://10.100.173.187:51104?articleId=${articleId}`,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
 
   
 
@@ -34,7 +56,9 @@ export default function TravelsDetails(props){
         </TouchableOpacity>
         
         {/* 分享按钮 */}
-        <TouchableOpacity style={styles.righttouchableopacity}>
+        <TouchableOpacity 
+        onPress={onShare}
+        style={styles.righttouchableopacity}>
           <ShareIcon size={20} strokeWidth={4} color="white"/>
         </TouchableOpacity>
       </SafeAreaView>

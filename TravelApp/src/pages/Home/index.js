@@ -22,16 +22,21 @@ export default function Home() {
         setRefreshing(true);
         // 这里执行刷新首页数据（全部已通过游记）的逻辑
         getAllTravelNote()
-            .then((users) => {
+            getAllTravelNote().then((users) => {
                 // 使用 flatMap 提取每个用户的所有游记，合并成一个数组
-                const allArticles = users.flatMap(user => user.article);
+                const allArticles = users.flatMap((user) => user.article);
                 // console.log(allArticles)
                 // 对合并后的游记数组进行排序
-                const sortedArticles = allArticles.sort((a, b) => parseInt(b.time) - parseInt(a.time));
+                const sortedArticles = allArticles.sort(
+                  (a, b) => parseInt(b.time) - parseInt(a.time)
+                );
+                const filteredData = sortedArticles.filter(
+                  (article) => article.state === "已通过"
+                );
                 // console.log(b.time)
                 // 更新状态以存储排序后的游记数据
-                setTravelsData(sortedArticles);
-            })
+                setTravelsData(filteredData);
+              });
         setTimeout(() => setRefreshing(false), 2000);
       };
 
@@ -41,13 +46,14 @@ export default function Home() {
 
         <SafeAreaView 
           style={stlyes.container}>
-            <ScrollView 
+            {/* <ScrollView 
             refreshControl={
                 <RefreshControl
                 refreshing={refreshing}
                 onRefresh={onRefresh}
             />}
-            >
+            > */}
+            <View>
                  
             
             <View style={stlyes.top}>
@@ -81,7 +87,8 @@ export default function Home() {
             <View >
                 <Travels/>
             </View>
-            </ScrollView>
+            </View>
+            {/* </ScrollView> */}
         </SafeAreaView>
         
     )
