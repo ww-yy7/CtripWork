@@ -37,7 +37,7 @@ export default function Setting() {
     <ScrollView style={styles.container}>
      
       <View  style={{borderBottomWidth:0}}>
-        <Item style={styles.item} arrow="horizontal" onPress={() => {}}>
+        <Item style={styles.item} arrow="horizontal" onPress={() =>navigation.navigate('EditProfile')}>
           个人信息
         </Item>
         <Item style={styles.item} arrow="horizontal" onPress={() => {}}>

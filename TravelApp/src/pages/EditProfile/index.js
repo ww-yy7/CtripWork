@@ -1,20 +1,13 @@
-import React from "react";
-import {
-  Image,
-  ScrollView,
-  View,
-  StyleSheet,
-  Button,
-  TextInput,
-} from "react-native";
+import React,{ useState } from "react";
+import { Image, ScrollView, View, StyleSheet, TextInput,  TouchableOpacity } from "react-native";
 import {
   List,
   Text,
   WhiteSpace,
   Provider,
   DatePicker,
-  Radio,
-  Toast
+  Toast,
+  Button,
 } from "@ant-design/react-native";
 import { UserContext } from "../../contexts/UserContext";
 import { useContext } from "react";
@@ -25,7 +18,7 @@ import { updateUserInfo } from "../../apis/user";
 export default function EditProfile() {
   const Item = List.Item;
   const {
-    id:_id,
+    id: _id,
     userInfo: {
       Avatar,
       nickName,
@@ -39,14 +32,19 @@ export default function EditProfile() {
     saveUserInfoToStorage,
   } = useContext(UserContext);
   const navigation = useNavigation();
-  const [newAvatar, setNewAvatar] = React.useState(Avatar);
-  const [newNickName, setNewNickName] = React.useState(nickName);
-  const [newSex, setNewSex] = React.useState(sex);
-  const [newAge, setNewAge] = React.useState(age);
-  const [newEmail, setNewEmail] = React.useState(email);
-  const [newAddress, setNewAddress] = React.useState(address);
-  const [newPhone, setNewPhone] = React.useState(phone);
-  const [newIntroduction, setNewIntroduction] = React.useState(introduction);
+  const [newAvatar, setNewAvatar] = useState(Avatar);
+  const [newNickName, setNewNickName] = useState(nickName);
+  const [newAge, setNewAge] = useState(age);
+  const [newEmail, setNewEmail] = useState(email);
+  const [newAddress, setNewAddress] = useState(address);
+  const [newPhone, setNewPhone] = useState(phone);
+  // 选择性别
+  const [newSex, setNewSex] = useState(sex);
+  const [selectedImage, setSelectedImage] = useState(sex);
+  const handleImagePress = (imageName) => {
+    setSelectedImage(imageName === selectedImage ? null : imageName);
+    setNewSex(imageName === selectedImage ? null : imageName);
+  };
 
   // 选择图片
   const pickImage = async () => {
@@ -71,7 +69,7 @@ export default function EditProfile() {
     return `${year}-${month}-${day}`;
   };
 
-  const submitNewProfile = async() => {
+  const submitNewProfile = async () => {
     const userInfo = {
       Avatar: newAvatar,
       nickName: newNickName,
@@ -80,23 +78,19 @@ export default function EditProfile() {
       email: newEmail,
       address: newAddress,
       phone: newPhone,
-      introduction: newIntroduction,
-  }
-  // console.log(newProfile, "newProfile");
-  // TODO: 提交新的用户信息(1.将新的用户信息提交到后端 2.将新的用户信息保存到本地)
-  let result = await updateUserInfo({_id, userInfo});
-  console.log(result.data, "result");
-  if(result.data.code === 200){
-    await saveUserInfoToStorage(userInfo);
-    Toast.info("修改成功");
-    navigation.navigate("Mine");
-
-  }
-  else{
-    Toast.info("修改失败");
-  }
-}
-    
+      introduction, // 这个就从context里面读取了
+    };
+    // console.log(newProfile, "newProfile");
+    let result = await updateUserInfo({ _id, userInfo });
+    console.log(result.data, "result");
+    if (result.data.code === 200) {
+      await saveUserInfoToStorage(userInfo);
+      Toast.info("修改成功");
+      navigation.navigate("Mine");
+    } else {
+      Toast.info("修改失败");
+    }
+  };
 
   return (
     <ScrollView
@@ -110,10 +104,7 @@ export default function EditProfile() {
           onPress={pickImage}
           extra={
             <Image
-              // source={{
-              //   uri: "https://os.alipayobjects.com/rmsportal/mOoPurdIfmcuqtr.png",
-              // }}
-              source={{ uri: `data:image/jpeg;base64,${newAvatar}`}} // base64
+              source={{ uri: `data:image/jpeg;base64,${newAvatar}` }} // base64
               style={{ width: 29, height: 29, borderRadius: 50 }}
             />
           }>
@@ -122,7 +113,6 @@ export default function EditProfile() {
 
         <Item
           arrow="horizontal"
-          style={styles.listItem}
           extra={
             <TextInput
               value={newNickName}
@@ -137,22 +127,29 @@ export default function EditProfile() {
         <Item
           arrow="horizontal"
           extra={
-            <List style={{ borderColor: "red", borderWidth: 0 }}>
-              <Radio.Group
-                onChange={(e) => {
-                  setNewSex(e.target.value);
-                }}
-                value={newSex}
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-around",
-                  paddingVertical: 6,
-                  borderTopWidth: 0,
-                  borderColor: "red",
-                }}>
-                <Radio value={"1"}>男</Radio>
-                <Radio value={"0"}>女</Radio>
-              </Radio.Group>
+            <List>
+              <View style={{flexDirection:'row',borderWidth:0}}>
+                <TouchableOpacity onPress={() => handleImagePress("男")}>
+                  <Image
+                    source={
+                      selectedImage === "男"
+                        ? require("../../../assets/images/male2.png")
+                        : require("../../../assets/images/male1.png")
+                    }
+                    style={{ width: 40, height: 40 }}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => handleImagePress("女")}>
+                <Image
+                  source={
+                    selectedImage === "女"
+                      ? require("../../../assets/images/female2.png")
+                      : require("../../../assets/images/female1.png")
+                  }
+                  style={{ width: 40, height: 40 }}
+                />
+              </TouchableOpacity>
+              </View>
             </List>
           }>
           性别
@@ -167,7 +164,7 @@ export default function EditProfile() {
                 setNewAge(formatDate(date));
               }}
               format="YYYY-MM-DD"
-              style={{ height: 120 }}>
+              style={{ height: 142 }}>
               <List.Item arrow="horizontal">出生日期</List.Item>
             </DatePicker>
           </List>
@@ -186,8 +183,7 @@ export default function EditProfile() {
                 setNewEmail(email);
               }}
             />
-          }
-          >
+          }>
           邮件
         </Item>
         <Item
@@ -200,8 +196,7 @@ export default function EditProfile() {
                 setNewPhone(phone);
               }}
             />
-          }
-          >
+          }>
           电话
         </Item>
         <Item
@@ -214,8 +209,7 @@ export default function EditProfile() {
                 setNewAddress(address);
               }}
             />
-          }
-          >
+          }>
           地址
         </Item>
       </List>
@@ -225,30 +219,40 @@ export default function EditProfile() {
         <Item
           arrow="horizontal"
           extra={
-            <TextInput
-              value={newIntroduction}
-              style={{ width: 250,height:40,fontSize:16, textAlign: "right"}}
-              onChangeText={(introduction) => {
-                setNewIntroduction(introduction);
+            <Text
+              style={{
+                width: 250,
+                height: 40,
+                lineHeight: 40,
+                fontSize: 16,
+                textAlign: "right",
               }}
-            />
-          }
-          >
+              onPress={() => {
+                navigation.navigate("ModifyProfile", { introduction });
+              }}>
+              {introduction}
+            </Text>
+          }>
           自我介绍
         </Item>
       </List>
-      <Button title="保存" onPress={submitNewProfile} />
+      <Button onPress={submitNewProfile} style={styles.submitBtn}>
+        <Text style={styles.text}>保存</Text>
+      </Button>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  listItem: {
-    // height: 120,
-    fontSize: 16,
-    // backgroundColor: "red",
-    // borderBottomWidth: 0.5,
-    // borderBottomColor: "red",
-    borderBottomWidth: 0, // 移除底部边框
+  submitBtn: {
+    flexDirection: "row",
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "#2677e2",
+    marginTop: 10,
+  },
+  text: {
+    color: "white",
+    fontSize: 18,
   },
 });

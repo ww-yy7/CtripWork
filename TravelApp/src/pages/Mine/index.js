@@ -37,7 +37,7 @@ export default function Mine() {
   // 下拉更新
   const [travelsData, setTravelsData] = useState([]);
   // 导入context里的全局数据
-  const { id, publish, deleteCount, token, userInfo } = useContext(UserContext);
+  const { id, publish, deleteCount, token, userInfo, } = useContext(UserContext);
   // const { id, publish, deleteCount,userInfo} = useContext(UserContext);
   // const token = true;
   const [refreshing, setRefreshing] = useState(false);
@@ -144,7 +144,6 @@ export default function Mine() {
                 <TouchableOpacity onPress={touchAvatar}>
                   <Image
                     style={styles.avatar}
-                    // source={require("../../../assets/images/startAvatar.png")}
                     source={{
                       uri: `data:image/jpeg;base64,${userInfo.Avatar}`,
                     }} // base64
@@ -170,14 +169,15 @@ export default function Mine() {
                   marginTop: 10,
                   alignItems: "center",
                 }}
-                onPress={() => navigation.navigate("")}>
+                onPress={() => navigation.navigate("ModifyProfile")}>
                 <Text
                   style={{ fontSize: 12, color: "#9f9fa1", marginRight: 4 }}>
-                  简单的自我介绍，让你更受欢迎
+                  {/* {userInfo ? userInfo.introduction : "这个人很懒，什么都没写"}
+                   */}
+                   这个人很懒，什么都没写
                 </Text>
                 <PencilSquareIcon size={16} strokeWidth={1} color="#9f9fa1" />
               </TouchableOpacity>
-
               <Text
                 style={{
                   fontSize: 12,

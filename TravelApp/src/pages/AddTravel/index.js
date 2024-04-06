@@ -37,7 +37,12 @@ import { UserContext } from "../../contexts/UserContext";
 import { useContext } from "react";
 
 export default function AddTravel() {
-  const { id:_id,userInfo:{nickName},token }= useContext(UserContext);
+  const {
+    id: _id,
+    userInfo: { nickName },
+    token,
+    incrementPublishCount,
+  } = useContext(UserContext);
   // console.log(nickName,'nickName');
   const navigation = useNavigation();
 
@@ -63,8 +68,6 @@ export default function AddTravel() {
 
   const [checked, setChecked] = useState(false); // 是否同意发布规则
   const [imageList, setImageList] = useState([]); // 移动端展示的图片
-
-  const { incrementPublishCount } = useContext(UserContext);
 
   useState(() => {
     console.log("AddTravel页面");
@@ -104,10 +107,9 @@ export default function AddTravel() {
     } else if (!checked) {
       Toast.info("请同意发布规则", 1);
     } else {
-      
       const data = {
         _id, // 发布游记的用户ID
-        user:nickName,
+        user: nickName,
         title: escapeHtml(titleValue),
         profile: escapeHtml(profileValue),
         content: escapeHtml(contentValue),
@@ -120,10 +122,9 @@ export default function AddTravel() {
       let res = await fetchAddTravel(data);
       // console.log(res.data);
       if (res.data.code === 200) {
-        incrementPublishCount()
+        incrementPublishCount();
         Toast.info("发布成功", 1);
-        
-        
+
         setTimeout(() => {
           navigation.navigate("MyTravels");
           // 清除所有内容
@@ -341,7 +342,7 @@ export default function AddTravel() {
             </Checkbox>
           </View>
           <View style={[styles.innerBox, { height: 35 }]}>
-            <Button 
+            <Button
               onPress={submitTravelNote}
               style={styles.submit}
               type="primary">
@@ -367,12 +368,8 @@ export default function AddTravel() {
                 style={[
                   styles.modalBtn,
                   {
-                    backgroundColor: tagInputValue
-                      ? "#2677e2"
-                      : "lightgray",
-                    borderColor: tagInputValue
-                      ? "#2677e2"
-                      : "lightgray",
+                    backgroundColor: tagInputValue ? "#2677e2" : "lightgray",
+                    borderColor: tagInputValue ? "#2677e2" : "lightgray",
                   },
                 ]}
                 type="primary"
@@ -421,9 +418,7 @@ export default function AddTravel() {
                     backgroundColor: locationInputValue
                       ? "#2677e2"
                       : "lightgray",
-                    borderColor: locationInputValue
-                      ? "#2677e2"
-                      : "lightgray",
+                    borderColor: locationInputValue ? "#2677e2" : "lightgray",
                   },
                 ]}
                 type="primary"
@@ -472,9 +467,7 @@ export default function AddTravel() {
                     backgroundColor: playTimeInputValue
                       ? "#2677e2"
                       : "lightgray",
-                    borderColor: playTimeInputValue
-                      ? "#2677e2"
-                      : "lightgray",
+                    borderColor: playTimeInputValue ? "#2677e2" : "lightgray",
                   },
                 ]}
                 type="primary"
@@ -520,12 +513,8 @@ export default function AddTravel() {
                 style={[
                   styles.modalBtn,
                   {
-                    backgroundColor: moneyInputValue
-                      ? "#2677e2"
-                      : "lightgray",
-                    borderColor: moneyInputValue
-                      ? "#2677e2"
-                      : "lightgray",
+                    backgroundColor: moneyInputValue ? "#2677e2" : "lightgray",
+                    borderColor: moneyInputValue ? "#2677e2" : "lightgray",
                   },
                 ]}
                 type="primary"
@@ -562,7 +551,7 @@ export default function AddTravel() {
           source={require("../../../assets/images/addTravel.png")}
           style={{ width: 200, height: 160, marginTop: 50 }}
         />
-        <Text style={{ fontSize: 16, marginTop:10}}>登录以添加游记</Text>
+        <Text style={{ fontSize: 16, marginTop: 10 }}>登录以添加游记</Text>
         <Button
           style={styles.btn_login}
           onPress={() => navigation.navigate("Login")}>
