@@ -1,33 +1,53 @@
-import React from 'react'
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, ScrollView, Image, TextInput } from 'react-native'
-import { MagnifyingGlassIcon, BookOpenIcon, PlusCircleIcon, HomeIcon, HeartIcon,UserIcon} from 'react-native-heroicons/outline'
-// import { } from 'react-native-heroicons/solid'
+import React,{useState,useContext} from 'react'
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, ScrollView, Image, TextInput, RefreshControl  } from 'react-native'
+import { MagnifyingGlassIcon,} from 'react-native-heroicons/outline'
 import { useNavigation } from '@react-navigation/native'
-
 import Categories from '../../components/Categories'
 import Travels from '../../components/Travels'
-import SearchScreen from '../Serch'
-import { AlignRight } from 'react-native-feather'
+import { UserContext } from '../../contexts/UserContext'
+import { getAllTravelNote } from '../../apis/user'
+import a from '@ant-design/react-native/lib/modal/alert'
 
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import MyTravels from '../MyTravels'
-
-const Stack = createNativeStackNavigator();
-const Tab = createBottomTabNavigator();
 
 
 
 export default function Home() {
     
     const navigation = useNavigation();
+    const [refreshing, setRefreshing] = useState(false);
+    const {travelsData, setTravelsData} = useContext(UserContext);
+    
+    // 首页下拉更新
+    const onRefresh = () => {
+        setRefreshing(true);
+        // 这里执行刷新首页数据（全部已通过游记）的逻辑
+        getAllTravelNote()
+            .then((users) => {
+                // 使用 flatMap 提取每个用户的所有游记，合并成一个数组
+                const allArticles = users.flatMap(user => user.article);
+                // console.log(allArticles)
+                // 对合并后的游记数组进行排序
+                const sortedArticles = allArticles.sort((a, b) => parseInt(b.time) - parseInt(a.time));
+                // console.log(b.time)
+                // 更新状态以存储排序后的游记数据
+                setTravelsData(sortedArticles);
+            })
+        setTimeout(() => setRefreshing(false), 2000);
+      };
 
        
     return (
         
 
-        <SafeAreaView style={stlyes.container}>
-            <ScrollView >
+        <SafeAreaView 
+          style={stlyes.container}>
+            <ScrollView 
+            refreshControl={
+                <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+            />}
+            >
                  
             
             <View style={stlyes.top}>

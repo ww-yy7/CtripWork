@@ -3,7 +3,7 @@ import TravelsDetails from "../pages/TravelsDetails";
 import Login from "../pages/Login";
 import BottomTabs from "../navigator";
 import Register from "../pages/Register";
-import SearchScreen from "../pages/Serch";
+import SearchScreen from "../pages/Search";
 import Setting from "../pages/Setting";
 import EditProfile from "../pages/EditProfile";
 import LoginAgreement from "../pages/Agreement/LoginAgreement";

@@ -32,42 +32,36 @@ import Register from "../Register";
 import { UserContext } from "../../contexts/UserContext";
 import MyTravels from "../MyTravels";
 import { getAllTravelNote } from "../../apis/user";
+import TopUnLogin from "../../components/TopUnLogin";
+
+
 
 export default function Mine() {
-  // 下拉更新
-  const [travelsData, setTravelsData] = useState([]);
-  // 导入context里的全局数据
-  const { id, publish, deleteCount, token, userInfo, } = useContext(UserContext);
-  // const { id, publish, deleteCount,userInfo} = useContext(UserContext);
-  // const token = true;
+  
+ 
+  const { id, publish, deleteCount, mytravelsData, setMyTravelsData} = useContext(UserContext);
   const [refreshing, setRefreshing] = useState(false);
-  useEffect(() => {
-    if (id) {
-      getAllTravelNote({ _id: id }) // 将 id 作为参数传递给 API 函数
-        .then((responseData) => {
-          setTravelsData(responseData.article);
-        })
-        .catch((error) => {
-          console.error("获取游记数据时发生错误：", error);
-        });
-    }
-  }, [id, publish, deleteCount]);
-
+  
+  // 下拉更新
   const onRefresh = () => {
     setRefreshing(true);
-    // 这里执行刷新数据的逻辑
-    getAllTravelNote({ _id: id }) // 将 id 作为参数传递给 API 函数
-      .then((responseData) => {
-        setTravelsData(responseData.article);
-        console.log(travelsData);
-        // console.log(travelsData.article)
-      })
-      .catch((error) => {
-        console.error("获取游记数据时发生错误：", error);
-      });
+    getAllTravelNote({_id: id})
+        .then((users) => {
+            // 使用 flatMap 提取每个用户的所有游记，合并成一个数组
+            const allArticles = users.article;
+            // console.log(allArticles)
+            // 对合并后的游记数组进行排序
+            const sortedArticles = allArticles.sort((a, b) => parseInt(b.time) - parseInt(a.time));
+            // 更新状态以存储排序后的游记数据
+            setMyTravelsData(sortedArticles);
+        })
     setTimeout(() => setRefreshing(false), 2000);
   };
 
+
+  const user = {
+    userName: "ww",
+  };
   const navigation = useNavigation();
   const [selected, setSelected] = useState("left");
 
@@ -88,22 +82,24 @@ export default function Mine() {
 
   if (!token) {
     return (
-      <ImageBackground
-        source={require("../../../assets/images/headerbg.png")} // 替换成你的背景图片路径
-        style={styles.noLoginHeader}>
-        <View style={{ paddingTop: 30, alignItems: "center" }}>
-          <Card style={styles.loginCard}>
-            <Image
-              source={require("../../../assets/images/logo.png")}
-              style={{
-                marginTop: 10,
-                width: 100,
-                height: 100,
-                alignSelf: "center",
-                borderRadius: 50,
-              }}
-            />
-            <Text style={styles.noLoginText}>你的快乐旅游记</Text>
+      // <TopUnlogin></TopUnlogin>
+      <View style={styles.container}>
+        {/* 没有登录的时候显示 */}
+        <ImageBackground
+          source={require("../../../assets/images/headerbg.png")} // 替换成你的背景图片路径
+          style={styles.noLoginHeader}>
+          <View style={{ paddingTop: 30 }}>
+            {/* 放一些小图标 */}
+            <View style={styles.headerIcon}>
+              <ViewfinderCircleIcon size={25} strokeWidth={1.5} color="white" />
+              <Cog6ToothIcon
+                size={25}
+                strokeWidth={1.5}
+                color="white"
+                onPress={() => navigation.navigate("Login")}
+              />
+            </View>
+            <Text style={styles.noLoginText}>登录携程，开启旅程</Text>
             <View style={styles.changeBtn}>
               <Button
                 type="primary"
@@ -231,7 +227,7 @@ export default function Mine() {
             <View>
               {/* 根据状态变量显示对应的组件 */}
               {showComponent === "home" && <MyHome />}
-              {showComponent === "travelList" && <MyTravels />}
+              {showComponent === "travelList" && <MyTravels/>}
             </View>
           </Card>
         </ScrollView>

@@ -1,34 +1,47 @@
 import {View, TouchableOpacity, Image, Text, StyleSheet } from "react-native";
-import React from "react";
-import { travelsdefaultData } from "../../constants";
+import React,{useContext,useEffect} from "react";
 import { LinearGradient } from 'expo-linear-gradient'
 import { useNavigation } from '@react-navigation/native'
-import { useState, useEffect } from "react";
 import { getAllTravelNote } from "../../apis/user";
+import { UserContext } from "../../contexts/UserContext";
 
+import MasonryList from 'react-native-masonry-list';
 
 
 
 export default function Travels() {
 
-  const [travelsData, setTravelsData] = useState([]);
+  const {travelsData, setTravelsData} = useContext(UserContext);
   
   useEffect(() => {
     getAllTravelNote()
-      .then((travelNotes) => {
-        setTravelsData(travelNotes);
-      })
-      .catch((error) => {
-        console.error('获取游记数据时发生错误：', error);
-      });
+    .then((users) => {
+      // 使用 flatMap 提取每个用户的所有游记，合并成一个数组
+      const allArticles = users.flatMap(user => user.article);
+      // console.log(allArticles)
+      // 对合并后的游记数组进行排序
+      const sortedArticles = allArticles.sort((a, b) => parseInt(b.time) - parseInt(a.time));
+      // console.log(b.time)
+      // 更新状态以存储排序后的游记数据
+      setTravelsData(sortedArticles);
+    })
 
   }, []);
+  
 
+  // const extractApprovedArticles = (data) =>
+  //   data.flatMap(item => item.article.filter(articleItem => articleItem.state === '已通过'));
+
+  // const approvedArticles = extractApprovedArticles(travelsData);
+
+  // const renderItem = ({ item }) => (
+  //   <TravelsCard item={item} />
+  // );
   
   
   return (
     <View style={styles.container}>
-      {
+      {/* {
         // 首先遍历 travelsData
         travelsData.map((item, itemIndex) => {
           // 然后对于每个 item，遍历其 article 属性
@@ -41,9 +54,29 @@ export default function Travels() {
           }
           });
         })
+      } */}
+      {
+    travelsData.map((article, index) => {
+      if (article.state === '已通过') {
+        return <TravelsCard item={article} key={index} />;
       }
+    })
+  }
     </View>
   )
+
+  // return (
+  //       <View style={styles.container}>
+  //         <MasonryList
+  //           style={{height:1000}}
+  //           data={approvedArticles}
+  //           renderItem={renderItem}
+  //           numColumns={2} // 根据需要调整列数
+  //           columnWidth={500} // 调整列宽，减去两边的间距
+  //           keyExtractor={(item, index) => `article_${index}`}
+  //         />
+  //       </View>
+  //     );
 }
 
 
@@ -61,8 +94,8 @@ const TravelsCard = ({item})=> {
        >
         <Image
           suppressHydrationWarning={true}  // 消除source的警告
-          source={item.picture}
-          // source={{ uri: `data:image/jpeg;base64,${item.picture}` }} // base64
+          // source={item.picture}
+          source={{ uri: `data:image/jpeg;base64,${item.picture[0]}` }} // base64
           style={{width: 170, height: 230, borderRadius: 25, position: 'absolute'}} />
         
         {/* 线性渐变处理，美化样式 */}
@@ -80,7 +113,7 @@ const TravelsCard = ({item})=> {
         </View>
             
         <Text style={styles.texttitle}>{item.title}</Text>
-        <Text style={styles.text}>{item.shortDescription}</Text>
+        <Text style={styles.text}>{item.profile}</Text>
         
        </TouchableOpacity>
        

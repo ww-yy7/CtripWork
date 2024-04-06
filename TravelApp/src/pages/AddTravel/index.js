@@ -126,7 +126,7 @@ export default function AddTravel() {
         Toast.info("发布成功", 1);
 
         setTimeout(() => {
-          navigation.navigate("MyTravels");
+          navigation.navigate("Mine");
           // 清除所有内容
           setTitleValue("");
           setProfileValue("");
