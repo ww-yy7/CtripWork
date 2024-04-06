@@ -6,7 +6,7 @@ import { getAllTravelNote } from "../../apis/user";
 import { UserContext } from "../../contexts/UserContext";
 // 瀑布流组件引入
 import WaterfallFlow from 'react-native-waterfall-flow'
-import MasonryList from 'react-native-masonry-list';
+// import MasonryList from 'react-native-masonry-list';
 
 
 

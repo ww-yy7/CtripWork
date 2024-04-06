@@ -34,31 +34,35 @@ import MyTravels from "../MyTravels";
 import { getAllTravelNote } from "../../apis/user";
 import TopUnLogin from "../../components/TopUnLogin";
 
-
-
 export default function Mine() {
-  
- 
-  const { id, publish, deleteCount,token,userInfo,mytravelsData, setMyTravelsData} = useContext(UserContext);
-  const {introduction} = userInfo;
+  const {
+    id,
+    publish,
+    deleteCount,
+    token,
+    userInfo,
+    mytravelsData,
+    setMyTravelsData,
+  } = useContext(UserContext);
+  const { introduction } = userInfo;
   const [refreshing, setRefreshing] = useState(false);
-  
+
   // 下拉更新
   const onRefresh = () => {
     setRefreshing(true);
-    getAllTravelNote({_id: id})
-        .then((users) => {
-            // 使用 flatMap 提取每个用户的所有游记，合并成一个数组
-            const allArticles = users.article;
-            // console.log(allArticles)
-            // 对合并后的游记数组进行排序
-            const sortedArticles = allArticles.sort((a, b) => parseInt(b.time) - parseInt(a.time));
-            // 更新状态以存储排序后的游记数据
-            setMyTravelsData(sortedArticles);
-        })
+    getAllTravelNote({ _id: id }).then((users) => {
+      // 使用 flatMap 提取每个用户的所有游记，合并成一个数组
+      const allArticles = users.article;
+      // console.log(allArticles)
+      // 对合并后的游记数组进行排序
+      const sortedArticles = allArticles.sort(
+        (a, b) => parseInt(b.time) - parseInt(a.time)
+      );
+      // 更新状态以存储排序后的游记数据
+      setMyTravelsData(sortedArticles);
+    });
     setTimeout(() => setRefreshing(false), 2000);
   };
-
 
   const user = {
     userName: "ww",
@@ -89,29 +93,32 @@ export default function Mine() {
         <ImageBackground
           source={require("../../../assets/images/headerbg.png")} // 替换成你的背景图片路径
           style={styles.noLoginHeader}>
-          <View style={{ paddingTop: 30 }}>
-            {/* 放一些小图标 */}
-            <View style={styles.headerIcon}>
-              <ViewfinderCircleIcon size={25} strokeWidth={1.5} color="white" />
-              <Cog6ToothIcon
-                size={25}
-                strokeWidth={1.5}
-                color="white"
-                onPress={() => navigation.navigate("Login")}
+          <View style={{ paddingTop: 30, alignItems: "center" }}>
+            <Card style={styles.loginCard}>
+              <Image
+                source={require("../../../assets/images/logo.png")}
+                style={{
+                  marginTop: 10,
+                  width: 100,
+                  height: 100,
+                  alignSelf: "center",
+                  borderRadius: 50,
+                }}
               />
-            </View>
-            <Text style={styles.noLoginText}>登录携程，开启旅程</Text>
-            <View style={styles.changeBtn}>
-              <Button
-                type="primary"
-                onPress={() => navigation.navigate("Login")}
-                style={styles.loginLeftBtn}>
-                登录/注册
-              </Button>
-            </View>
-          </Card>
-        </View>
-      </ImageBackground>
+              {/* <View></View> */}
+              <Text style={styles.noLoginText}>你的快乐旅游记</Text>
+              <View style={styles.changeBtn}>
+                <Button
+                  type="primary"
+                  onPress={() => navigation.navigate("Login")}
+                  style={styles.loginLeftBtn}>
+                  登录/注册
+                </Button>
+              </View>
+            </Card>
+          </View>
+        </ImageBackground>
+      </View>
     );
   } else {
     return (
@@ -166,7 +173,9 @@ export default function Mine() {
                   marginTop: 10,
                   alignItems: "center",
                 }}
-                onPress={() => navigation.navigate("ModifyProfile",{introduction})}>
+                onPress={() =>
+                  navigation.navigate("ModifyProfile", { introduction })
+                }>
                 <Text
                   style={{ fontSize: 12, color: "#9f9fa1", marginRight: 4 }}>
                   {userInfo ? userInfo.introduction : "这个人很懒，什么都没写"}
@@ -226,7 +235,7 @@ export default function Mine() {
             <View>
               {/* 根据状态变量显示对应的组件 */}
               {showComponent === "home" && <MyHome />}
-              {showComponent === "travelList" && <MyTravels/>}
+              {showComponent === "travelList" && <MyTravels />}
             </View>
           </Card>
         </ScrollView>

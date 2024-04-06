@@ -176,7 +176,7 @@ const TravelsCard = ({ item, onDelete }) => {
                   <Text>审核中</Text>
                   {/* 编辑按钮 */}
                   <TouchableOpacity>
-                      <PencilSquareIcon size={15} color="gray" />
+                      <PencilSquareIcon onPress={editHandler} size={15} color="gray" />
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => confirmDelete(item.articleId)}>
