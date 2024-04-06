@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
   },
   lefttouchableopacity: {
     padding:8,
-    borderRadius: '50%',
+    borderRadius: 20,
     marginRight: 16,
     backgroundColor: 'rgba(255,255,255,0.5)'
   },
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
   },
   righttouchableopacity:{
     padding:8,
-    borderRadius: '50%',
+    borderRadius: 20,
     marginRight: 20,
     backgroundColor: 'rgba(255,255,255,0.5)'
   },
@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#eee', 
-    borderRadius: '100%',
+    borderRadius: 20,
     padding: 8,
     left:20,
     bottom:20,
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
   likeicon:{
     backgroundColor: 'rgba(255,255,255,0.5)',
     paddingHorizontal: 8,
-    borderRadius: '100%',
+    // borderRadius: '100%',
     marginRight: 16,
     bottom:19,
     left:20
@@ -264,7 +264,7 @@ const styles = StyleSheet.create({
   staricon:{
     backgroundColor: 'rgba(255,255,255,0.5)',
     paddingHorizontal: 8,
-    borderRadius: '100%',
+    // borderRadius: '100%',
     marginRight: 16,
     bottom:19,
     right:10,
@@ -273,11 +273,10 @@ const styles = StyleSheet.create({
   editicon:{
     backgroundColor: 'rgba(255,255,255,0.5)',
     // paddingHorizontal: 8,
-    borderRadius: '100%',
+    // borderRadius: '100%',
     // marginRight: 16,
     bottom:19,
     right:30,
   }
-
 })
 
