@@ -10,13 +10,13 @@ import "./App.css"; // 确保包含所有必要的样式
 
 function App() {
   // 获取页面url，拿到传入的articleId
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-  const articleId = urlParams.get("articleId");
+  // const queryString = window.location.search;
+  // const urlParams = new URLSearchParams(queryString);
+  // const articleId = urlParams.get("articleId");
 
   const [travelsData, setTravelsData] = useState([]);
 
-  // const articleId = "66125ba14473ff8205c32d611712479214007"; // 替换为你的实际 articleId
+  const articleId = "66125ba14473ff8205c32d611712482264940"; // 替换为你的实际 articleId
 
   useEffect(() => {
     async function fetchTravelNotes() {
@@ -52,9 +52,8 @@ function App() {
   else {
     return (
       <div className="App">
-        {/* <img src={`data:image/jpeg;base64,${img[0]}`} alt=""/> */}
         {/* 轮播图组件 */}
-        <div className="App-header">
+        <header className="App-header">
           {images.length === 1 && (
             <img
               src={`data:image/jpeg;base64,${images[0]}`}
@@ -75,8 +74,7 @@ function App() {
               ))}
             </Slider>
           )}
-        </div>
-
+        </header>
         <footer className="App-footer">
           {/* 页面内容 */}
           <div className="page-content">
@@ -98,18 +96,25 @@ function App() {
               )}
               {travelsData.article[0].position !== "" && (
                 <div>
-                  <span className="time-info">游玩天数</span>
+                  <span className="time-info">
+                    {travelsData.article[0].playTime}
+                  </span>
                   <span className="time-icon">⏰</span>
                 </div>
               )}
               {travelsData.article[0].position !== "" && (
                 <div>
-                  <span className="cost-info">花费</span>
+                  <span className="cost-info">
+                    {travelsData.article[0].money}
+                  </span>
                   <span className="cost-icon">🔥</span>
                 </div>
               )}
             </div>
-            <p className="description">{travelsData.article[0].content}</p>
+
+            <div className="description">
+              <div className="description">{travelsData.article[0].content}</div>
+            </div>
           </div>
           {/* 互动区 */}
 
