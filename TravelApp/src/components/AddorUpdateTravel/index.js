@@ -99,8 +99,8 @@ export default function AddorUpdateTravel({ userInfo }) {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true, // 是否允许编辑
-      aspect: [3, 4], // 裁剪比例
-      quality: 0.3, // 图片质量
+      aspect: [4, 3], // 裁剪比例
+      quality: 0.1, // 图片质量
       base64: true, // 是否返回base64
     });
 
