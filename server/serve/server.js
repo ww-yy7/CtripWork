@@ -15,6 +15,7 @@ const articleSchema = new Schema(
   {
     articleId: String,
     user: String, // 用户的nickName(用来模糊搜索)
+    Avatar: String, // 用户的头像(用来瀑布流上展示)
     title: String, //标题
     profile: String, //简介
     content: String, //内容
@@ -142,6 +143,8 @@ function updateUserInfo(
           address,
           phone,
           introduction,
+          "article.$[].user": nickName,
+          "article.$[].Avatar": Avatar
         },
       }, // 使用 $set 操作符更新匹配的第一个元素
       function (err, doc) {
@@ -151,6 +154,51 @@ function updateUserInfo(
           reject(err);
         }
       }
+
+
+      // async function (err, doc) {
+      //   if (!err) {
+      //     try {
+      //       // 更新用户信息成功后，更新用户下的每一篇文章中的 user 和 Avatar 字段
+      //       const result = await UserInfo.updateMany(
+      //         { "article.user": nickName }, 
+      //         {
+      //           $set: {
+      //             "article.$[elem].user": nickName,
+      //             "article.$[elem].Avatar": Avatar
+      //           }
+      //         },
+      //         { arrayFilters: [{ "elem.user": nickName }] } // 使用 arrayFilters 来匹配嵌套数组中的元素
+      //       );
+      //       console.log( result,"article里面数据更新情况");
+      //       resolve(doc);
+      //     } catch (error) {
+      //       reject(error);
+      //     }
+      //   } else {
+      //     reject(err);
+      //   }
+      // }
+
+      // UserInfo.updateOne(
+      //   { _id: ObjectId(_id) }, // 查询条件：根据用户的 _id 查找用户
+      //   {
+      //     $set: {
+      //       "article.$[].user": nickName,
+      //       "article.$[].Avatar": Avatar
+      //     }
+      //   },
+      //   function (err, doc) {
+      //     if (!err) {
+      //       resolve(doc);
+      //     } else {
+      //       reject(err);
+      //     }
+      //   }
+      // )
+      
+      
+
     );
   });
 }
@@ -159,7 +207,7 @@ function updateUserInfo(
 
 // 新增游记
 function createArticle(newNoteObj) {
-  console.log(newNoteObj, "newNoteObj11122");
+  console.log(newNoteObj, "newNoteObj");
   const articleId = newNoteObj._id + Date.now();
   return new Promise((resolve, reject) => {
     UserInfo.updateOne(
@@ -239,7 +287,7 @@ function updateArticle(infoObj) {
   const time = Date.now();
   const rejectReason = "";
   return new Promise((resolve, reject) => {
-    let user = "";
+    // let user = "";
     // 获取之前游记里面的数据
     UserInfo.findOne(
       { "article.articleId": articleId }, // 查询条件：查找指定用户的指定游记

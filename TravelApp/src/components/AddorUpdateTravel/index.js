@@ -8,6 +8,7 @@ import {
   Pressable,
   Image,
   TouchableOpacity,
+  Dimensions,
 } from "react-native";
 import { useState } from "react";
 import {
@@ -38,17 +39,12 @@ import { escapeHtml } from "../../apis/HtmlHandler";
 
 import { UserContext } from "../../contexts/UserContext";
 import { useContext } from "react";
+import PreviewImage from "../PreviewImage";
 
 export default function AddorUpdateTravel({ userInfo }) {
-  // console.log(userInfo, 'userInfo');
-  // // 判断是否是修改游记
-  // 修改
-  // const {articleId,title,profile,content,tags,picture,position,playTime,money} = userInfo;
-  // const { articleId } = userInfo; // 仅修改游记时使用
-  // console.log(articleId, "articleId");
   const {
     id: _id,
-    userInfo: { nickName },
+    userInfo: { nickName,Avatar },
     token,
     incrementPublishCount,
   } = useContext(UserContext);
@@ -63,6 +59,8 @@ export default function AddorUpdateTravel({ userInfo }) {
   const [contentValue, setContentValue] = useState(
     userInfo && userInfo.content ? userInfo.content : ""
   );
+
+  const [imgPreview, setImgPreview] = useState(false); // 图片预览
 
   const [tags, setTags] = useState(
     userInfo && userInfo.tags ? userInfo.tags : []
@@ -92,6 +90,25 @@ export default function AddorUpdateTravel({ userInfo }) {
   const [imageList, setImageList] = useState(
     userInfo && userInfo.picture ? userInfo.picture : []
   ); // 移动端展示的图片
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0); // 选中的图片索引
+
+
+  // 自定义vw vh函数
+  const screenWidth = Dimensions.get("window").width;
+  const screenHeight = Dimensions.get("window").height;
+  const vw = (percentageWidth) => {
+    return (screenWidth * percentageWidth) / 100;
+  };
+
+  const vh = (percentageHeight) => {
+    return (screenHeight * percentageHeight) / 100;
+  };
+  // 把图片转成 ImageViewer 组件需要的格式
+  const images = imageList.map((item) => ({
+    url: `data:image/jpeg;base64,${item}`,
+    width: 620,
+    height: 450,
+  }));
 
   // 选择图片
   const pickImage = async () => {
@@ -109,6 +126,11 @@ export default function AddorUpdateTravel({ userInfo }) {
       setImageList([...imageList, result.assets[0].base64]); // 这个是在手机上显示图片 存base64
       // setImageList([...imageList, result.assets[0].uri]);  //这个是在手机上显示图片 存uri地址
     }
+  };
+  // 在点击图片时触发的函数
+  const handleImageClick = (index) => {
+    setImgPreview(true); // 设置图片预览状态为 true
+    setSelectedImageIndex(index); // 设置选中的图片索引
   };
   // 删除图片
   const deleteOnePicture = (index) => {
@@ -130,10 +152,13 @@ export default function AddorUpdateTravel({ userInfo }) {
     } else {
       // 发布、更新游记
       if (userInfo) {
+        console.log(userInfo.user, "updateuserInfo");
         // 更新游记
         const res = await fetchUpdateTravel({
           articleId: userInfo.articleId,
           article: {
+            user: userInfo.user,
+            Avatar,
             title: titleValue,
             profile: profileValue,
             content: escapeHtml(contentValue),
@@ -158,6 +183,7 @@ export default function AddorUpdateTravel({ userInfo }) {
         const data = {
           _id, // 发布游记的用户ID
           user: nickName,
+          Avatar,
           title: escapeHtml(titleValue),
           profile: escapeHtml(profileValue),
           content: escapeHtml(contentValue),
@@ -218,17 +244,20 @@ export default function AddorUpdateTravel({ userInfo }) {
           {imageList.length > 0 &&
             imageList.map((item, index) => (
               <View key={index}>
-                <Image
-                  key={item}
-                  source={{ uri: `data:image/jpeg;base64,${item}` }} // base64
-                  style={{
-                    width: 100,
-                    height: 100,
-                    borderRadius: 5,
-                    marginLeft: 10,
-                    marginBottom: 10,
-                  }}
-                />
+                <TouchableOpacity onPress={() => handleImageClick(index)}>
+                  <Image
+                    key={item}
+                    source={{ uri: `data:image/jpeg;base64,${item}` }} // base64
+                    style={{
+                      width: vw(25),
+                      height: vw(25),
+                      borderRadius: 5,
+                      marginLeft: vw(3),
+                      marginBottom: 10,
+                    }}
+                  />
+                </TouchableOpacity>
+
                 <XMarkIcon
                   onPress={() => deleteOnePicture(index)}
                   style={styles.XMarkIcon}
@@ -247,6 +276,28 @@ export default function AddorUpdateTravel({ userInfo }) {
             </TouchableOpacity>
           )}
         </View>
+        {/* 图片预览 */}
+        <Provider>
+          <Modal
+            // popup
+            visible={imgPreview}
+            animationType="slide-up"
+            maskClosable
+            transparent
+            onClose={() => setImgPreview(false)}
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              width: vw(100),
+              height: vh(50),
+              // backgroundColor: 'rgb(211, 211, 211)',
+              position: "absolute",
+              top: vh(-35),
+              left: vw(-50),
+            }}>
+            <PreviewImage images={images} selectedImageIndex={selectedImageIndex} />
+          </Modal>
+        </Provider>
 
         <View style={[styles.container, { height: 560 }]}>
           <View style={[styles.innerBox, { height: 380 }]}>
@@ -406,7 +457,7 @@ export default function AddorUpdateTravel({ userInfo }) {
             popup
             visible={tagVisible}
             animationType="slide-up"
-            onClose={() => setVisible(false)}>
+            onClose={() => setTagVisible(false)}>
             <View style={styles.modalView}>
               <TextInput
                 style={styles.tagInput}
@@ -611,6 +662,17 @@ export default function AddorUpdateTravel({ userInfo }) {
     );
   }
 }
+
+  // 自定义vw vh函数
+  const screenWidth = Dimensions.get("window").width;
+  const screenHeight = Dimensions.get("window").height;
+  const vw = (percentageWidth) => {
+    return (screenWidth * percentageWidth) / 100;
+  };
+
+  const vh = (percentageHeight) => {
+    return (screenHeight * percentageHeight) / 100;
+  };
 
 const styles = StyleSheet.create({
   container: {

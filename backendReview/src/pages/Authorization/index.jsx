@@ -107,18 +107,25 @@ const Task = () => {
     showPreviewModal();
   };
   // 通过回调
-  const passHandler = async ({ key: articleId }, isPassed) => {
-    console.log(articleId, isPassed);
+  const passHandler = async ({ key: articleId },isPreview) => {
+    console.log(articleId);
     const state = "已通过";
     await changeArticleState({ articleId, state });
     getTravelNote(); // 重新获取游记列表，刷新页面
+    isPreview && handlePreviewOk()
   };
   // 拒绝回调
-  const rejectHandler = async (articleId, rejectReason) => {
+  const rejectHandler = async (articleId, rejectReason,isPreview) => {
     // console.log(articleId);
     const state = "未通过";
     await changeArticleState({ articleId, state, rejectReason });
     getTravelNote(); // 重新获取游记列表，刷新页面
+    if(isPreview){
+      console.log('isPreview');
+      handlePreviewOk()
+      handleRejectOk()
+    }
+
   };
   // 删除
   const deleteHandler = async ({ key: articleId }) => {
@@ -126,15 +133,17 @@ const Task = () => {
     await deleteTravelNote({ articleId });
     getTravelNote(); // 重新获取游记列表，刷新页面
   };
-  // 删除弹出框
+  // 拒绝弹出框（填写拒绝理由）
   const showRejectModal = ({ key: articleId }) => {
     console.log(articleId, "record");
     setArticleId(articleId);
 
     setIsRejectModalOpen(true);
   };
+  // 拒绝弹出框确认回调(填写完拒绝理由后点击确认)
   const handleRejectOk = () => {
     setIsRejectModalOpen(false);
+    handlePreviewOk()
     // setInputInfo('') // 清除选择框
     rejectHandler(articleId, inputInfo);
   };
@@ -238,10 +247,6 @@ const Task = () => {
             </Select>
           </Form.Item>
 
-          {/* <Form.Item label="日期" name="date">
-            <RangePicker locale={locale}></RangePicker>
-          </Form.Item> */}
-
           <Form.Item>
             <Button type="primary" htmlType="submit" style={{ marginLeft: 10 }}>
               筛选
@@ -275,6 +280,12 @@ const Task = () => {
           okText='确认'
           cancelText='取消'
           footer={[
+            <Button key="reject"  style={{background:'red',color:'white'}} onClick={() => showRejectModal({key:article.articleId},true)}>
+              拒绝
+            </Button>,
+            <Button key="pass" type="primary" onClick={() => passHandler({key:article.articleId},true)}>
+              通过
+            </Button>,
             <Button key="back" onClick={handlePreviewCancel}>
               关闭
             </Button>
