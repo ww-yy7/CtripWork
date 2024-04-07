@@ -123,7 +123,6 @@ const TravelsCard = ({ item, onDelete }) => {
         {
           text: '重新编辑',
           // style: 'cancel',
-          onPress: () => navigation.navigate("UpdateTravel", { ...item }),
         },
         // {
         //   text: '删除',

@@ -3,7 +3,6 @@ import { TextInput, View, FlatList, StyleSheet, Text,TouchableOpacity,Image, Scr
 import { LinearGradient } from 'expo-linear-gradient'
 import { useNavigation } from '@react-navigation/native';
 import { MagnifyingGlassIcon } from 'react-native-heroicons/outline'; // 引入放大镜图标组件
-
 import { searchTravelNote } from '../../apis/user';
 
 const SearchScreen = () => {
@@ -57,13 +56,13 @@ const SearchScreen = () => {
   const onChangeText = (text) => {
     setSearchText(text);
 
-    // 这里模拟模糊搜索逻辑，实际项目中需要对接API获取模糊匹配的结果
+    // 这里可以写搜索建议列表
     // 例如：setSuggestions(getSuggestionsByText(text))
   };
 
   const navigation = useNavigation();
 
-
+  
   return (
     <View style={styles.allcontainer}>
         

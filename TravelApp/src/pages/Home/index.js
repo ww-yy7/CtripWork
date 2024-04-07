@@ -1,4 +1,4 @@
-import React,{useState,useContext} from 'react'
+import React,{useState,useContext, useRef} from 'react'
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, ScrollView, Image, TextInput, RefreshControl  } from 'react-native'
 import { MagnifyingGlassIcon,} from 'react-native-heroicons/outline'
 import { useNavigation } from '@react-navigation/native'
@@ -6,56 +6,30 @@ import Categories from '../../components/Categories'
 import Travels from '../../components/Travels'
 import { UserContext } from '../../contexts/UserContext'
 import { getAllTravelNote } from '../../apis/user'
-import a from '@ant-design/react-native/lib/modal/alert'
-
+import { searchTravelNote } from '../../apis/user'
 
 
 
 export default function Home() {
     
     const navigation = useNavigation();
-    const [refreshing, setRefreshing] = useState(false);
-    const {travelsData, setTravelsData} = useContext(UserContext);
     
-    // 首页下拉更新
-    const onRefresh = () => {
-        setRefreshing(true);
-        // 这里执行刷新首页数据（全部已通过游记）的逻辑
-        getAllTravelNote()
-            getAllTravelNote().then((users) => {
-                // 使用 flatMap 提取每个用户的所有游记，合并成一个数组
-                const allArticles = users.flatMap((user) => user.article);
-                // console.log(allArticles)
-                // 对合并后的游记数组进行排序
-                const sortedArticles = allArticles.sort(
-                  (a, b) => parseInt(b.time) - parseInt(a.time)
-                );
-                const filteredData = sortedArticles.filter(
-                  (article) => article.state === "已通过"
-                );
-                // console.log(b.time)
-                // 更新状态以存储排序后的游记数据
-                setTravelsData(filteredData);
-              });
-        setTimeout(() => setRefreshing(false), 2000);
-      };
+    // 防止从搜索页返回后自动聚焦到搜索Input导致二次跳转
+    const inputRef = useRef(null);
 
+    const ToSearch = () => {
+        navigation.navigate("Search")
+        // 在跳转后取消焦点
+        inputRef.current?.blur();
+    };
+
+        
        
     return (
         
 
-        <SafeAreaView 
-          style={stlyes.container}>
-            {/* <ScrollView 
-            refreshControl={
-                <RefreshControl
-                refreshing={refreshing}
-                onRefresh={onRefresh}
-            />}
-            > */}
+        <SafeAreaView style={stlyes.container}>
             <View>
-                 
-            
             <View style={stlyes.top}>
                 <Text style={stlyes.title}>让我们一起探索！</Text>
                 <TouchableOpacity>
@@ -72,9 +46,10 @@ export default function Home() {
                     <TextInput
                       placeholder='搜索游记、用户...'
                       placeholderTextColor={'gray'}
-                    //   onFocus={() => navigation.navigate("Search")}
+                      ref={inputRef}
+                      onFocus={ToSearch}
                     //   value={searchText}
-                      onSubmitEditing={() => navigation.navigate("Search")}
+                    //   onSubmitEditing={() => navigation.navigate("Search")}
                       style={stlyes.input}
                       />
                     
@@ -88,7 +63,6 @@ export default function Home() {
                 <Travels/>
             </View>
             </View>
-            {/* </ScrollView> */}
         </SafeAreaView>
         
     )
