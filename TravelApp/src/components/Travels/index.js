@@ -1,5 +1,5 @@
-import { View, TouchableOpacity, Image, Text, StyleSheet } from "react-native";
-import React, { useContext, useEffect } from "react";
+import { View, TouchableOpacity, Image, Text, StyleSheet, SafeAreaView } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
 import { getAllTravelNote } from "../../apis/user";
@@ -9,10 +9,16 @@ import WaterfallFlow from "react-native-waterfall-flow";
 // import MasonryList from 'react-native-masonry-list';
 
 export default function Travels() {
-  const { travelsData, setTravelsData } = useContext(UserContext);
+  const { travelsData, setTravelsData} = useContext(UserContext);
+  const [refreshing, setRefreshing] = useState(false);
+  const [displayedData, setDisplayedData] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  
 
   useEffect(() => {
     getAllTravelNote().then((users) => {
+      
       // 使用 flatMap 提取每个用户的所有游记，合并成一个数组
       const allArticles = users.flatMap((user) => user.article);
       // console.log(allArticles)
@@ -26,18 +32,65 @@ export default function Travels() {
       // console.log(b.time)
       // 更新状态以存储排序后的游记数据
       setTravelsData(filteredData);
+
     });
   }, []);
 
+  // 瀑布流下拉更新
+  const onRefresh = () => {
+    setRefreshing(true);
+    // 这里执行刷新首页数据（全部已通过游记）的逻辑
+    getAllTravelNote()
+        getAllTravelNote().then((users) => {
+            // 使用 flatMap 提取每个用户的所有游记，合并成一个数组
+            const allArticles = users.flatMap((user) => user.article);
+            // console.log(allArticles)
+            // 对合并后的游记数组进行排序
+            const sortedArticles = allArticles.sort(
+              (a, b) => parseInt(b.time) - parseInt(a.time)
+            );
+            const filteredData = sortedArticles.filter(
+              (article) => article.state === "已通过"
+            );
+            // console.log(b.time)
+            // 更新状态以存储排序后的游记数据
+            setTravelsData(filteredData);
+          });
+    setTimeout(() => setRefreshing(false), 2000);
+  };
+
+  useEffect(() => {
+    // 初始化显示的数据
+    // setDisplayedData(travelsData.slice(0, 2));
+    const initialData = travelsData.slice(0, 4);
+    setDisplayedData(initialData);
+    setCurrentIndex(4);
+  }, [travelsData]);
+
+
+  const loadMore = () => {
+    const nextIndex = currentIndex + 4;
+    const newData = travelsData.slice(currentIndex, nextIndex);
+    setDisplayedData((prevData) => [...prevData, ...newData]);
+    setCurrentIndex(nextIndex);
+  };
+  
+
   return (
+    
+    
     <View style={styles.container}>
+      {/* <SafeAreaView > */}
       <WaterfallFlow
-        data={travelsData}
+        onRefresh={onRefresh}
+        refreshing={refreshing}
+        // data={travelsData}
+        data={displayedData}
+        onEndReached={loadMore}
+        onEndReachedThreshold={0.01}
         numColumns={2}
-        renderItem={({ item, index, columnIndex }) => {
+        renderItem={({ item, index, columnIndex}) => {
           return (
-            
-             
               <TravelsCard
                 item={item}
                 key={index}
@@ -51,7 +104,9 @@ export default function Travels() {
           );
         }}
       />
+      {/* </SafeAreaView> */}
     </View>
+    
   );
 }
 
@@ -59,6 +114,8 @@ const TravelsCard = ({ item, columnIndex }) => {
   const navigation = useNavigation();
   // console.log(columnIndex, "columnIndex");
   // console.log(item, "item");
+
+
   return (
     <TouchableOpacity
       onPress={() => navigation.navigate("TravelsDetails", { ...item })}
@@ -93,8 +150,8 @@ const TravelsCard = ({ item, columnIndex }) => {
       <View style={styles.userinfo}>
         <Text style={styles.title}>{item.user}</Text>
         <Image
-          source={require("../../../assets/images/avatar.png")}
-          style={{ height: 16, width: 16 }}
+          source={{uri: `data:image/jpeg;base64,${item.picture[0]}`}}
+          style={{ height: 16, width: 16 ,borderRadius: '100%'}}
         />
       </View>
 
@@ -108,11 +165,9 @@ const styles = StyleSheet.create({
   //整个游记卡片瀑布流组件
   container: {
     paddingLeft:8,
-    // paddingRight:8,
-    // width:350,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    // flexWrap: "wrap",
+    // flexDirection: "row",
+    // left:10,
+    height:510,  
   },
   lineargradient: {
     bottom: 0,
@@ -140,7 +195,7 @@ const styles = StyleSheet.create({
 
   texttitle: {
     left: 10,
-    bottom: 40,
+    bottom: 60,
     color: "white",
     fontWeight: "bold",
     fontSize: 15,
@@ -151,6 +206,6 @@ const styles = StyleSheet.create({
     color: "white",
     // fontWeight: 'bold',
     fontSize: 10,
-    bottom: 35,
+    bottom: 53,
   },
 });

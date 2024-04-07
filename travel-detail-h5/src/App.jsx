@@ -5,6 +5,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./App.css"; // 确保包含所有必要的样式
+import "./App.css"; // 确保包含所有必要的样式
 
 // 假设这是你的轮播图图片数组
 

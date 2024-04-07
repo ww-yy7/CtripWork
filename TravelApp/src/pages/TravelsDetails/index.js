@@ -104,7 +104,7 @@ export default function TravelsDetails(props) {
                   className="font-bold text-neutral-700">
                   {item.position}
                 </Text>
-                <Text className="text-neutral-600 tracking-wide">位置</Text>
+                <Text style={{fontSize:11 ,top:3}}>位置</Text>
               </View>
             </TouchableOpacity>
 
@@ -118,7 +118,7 @@ export default function TravelsDetails(props) {
                   className="font-bold text-neutral-700">
                   {item.playTime}
                 </Text>
-                <Text className="text-neutral-600 tracking-wide">游玩天数</Text>
+                <Text style={{fontSize:11 ,top:3}}>游玩天数</Text>
               </View>
             </View>
 
@@ -128,7 +128,7 @@ export default function TravelsDetails(props) {
                 <Text style={{ fontSize: 13, color: theme.text }}>
                   {item?.money}
                 </Text>
-                <Text>花费</Text>
+                <Text style={{fontSize:11 ,top:3}}>花费</Text>
               </View>
             </View>
           </View>
@@ -258,7 +258,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     margin: 5,
-    color: "#ccc",
+    color: '#bbb',
   },
 
   pdpview: {
@@ -309,7 +309,7 @@ const styles = StyleSheet.create({
   likeicon: {
     backgroundColor: "rgba(255,255,255,0.5)",
     paddingHorizontal: 8,
-    // borderRadius: '100%',
+    borderRadius: '100%',
     marginRight: 16,
     bottom: 19,
     left: 20,
@@ -317,7 +317,7 @@ const styles = StyleSheet.create({
   staricon: {
     backgroundColor: "rgba(255,255,255,0.5)",
     paddingHorizontal: 8,
-    // borderRadius: '100%',
+    borderRadius: '100%',
     marginRight: 16,
     bottom: 19,
     right: 10,
@@ -326,7 +326,7 @@ const styles = StyleSheet.create({
   editicon: {
     backgroundColor: "rgba(255,255,255,0.5)",
     // paddingHorizontal: 8,
-    // borderRadius: '100%',
+    borderRadius: '100%',
     // marginRight: 16,
     bottom: 19,
     right: 30,
