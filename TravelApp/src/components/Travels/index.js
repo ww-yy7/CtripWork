@@ -81,6 +81,7 @@ export default function Travels() {
     
     <View style={styles.container}>
       {/* <SafeAreaView > */}
+      
       <WaterfallFlow
         onRefresh={onRefresh}
         refreshing={refreshing}
@@ -102,6 +103,7 @@ export default function Travels() {
           );
         }}
       />
+      
       {/* </SafeAreaView> */}
     </View>
     
@@ -119,12 +121,14 @@ const TravelsCard = ({ item, columnIndex }) => {
       onPress={() => navigation.navigate("TravelsDetails", { ...item })}
       style={{
         width: 170, 
-        marginHorizontal:7,
+        marginHorizontal:6,
+        // marginLeft:7,
+        // marginRight:7,
+        // left:7,
         marginTop:10,
         height: columnIndex === 0 ? 230 : 250,
-        display: "flex",
-        marginBottom: 0,
-        alignItems: "flex-start",
+        // display: "flex",
+        
       }
       }>
       <Image
@@ -164,8 +168,9 @@ const TravelsCard = ({ item, columnIndex }) => {
 const styles = StyleSheet.create({
   //整个游记卡片瀑布流组件
   container: {
-    flexDirection: "row",
-    alignItems:'center',
+    // justifyContent:'space-between',
+    // alignItems:'center',
+    // flexDirection:'row',
     height:510,  
   },
   lineargradient: {

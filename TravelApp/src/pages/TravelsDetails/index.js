@@ -66,7 +66,7 @@ export default function TravelsDetails(props) {
     try {
       const result = await Share.share({
         message: `${item.title}`,
-        url: `http://10.100.197.143:5000?articleId=${item.articleId}`,
+        url: `http://10.100.133.18:5010?articleId=${item.articleId}`,
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
