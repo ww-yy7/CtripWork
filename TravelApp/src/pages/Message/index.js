@@ -1,38 +1,25 @@
-import { useState, useContext } from "react";
+import { useContext } from "react";
 import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   Image,
   ScrollView,
-  TouchableHighlight,
   TouchableOpacity,
   ImageBackground,
-  TouchableNativeFeedbackBase,
 } from "react-native";
-import MyHome from "../../components/MyHome";
-import MyTravelList from "../../components/MyTravelList";
 import {
-  Card,
   WhiteSpace,
-  WingBlank,
   Button,
   List,
 } from "@ant-design/react-native";
-import {
-  Cog6ToothIcon,
-  ViewfinderCircleIcon,
-  PencilSquareIcon,
-} from "react-native-heroicons/outline";
 import { useNavigation } from "@react-navigation/native";
 import MsgCard from "../../components/MsgCard";
 import { UserContext } from "../../contexts/UserContext";
 export default function Message() {
   const navigation = useNavigation();
   // 导入context里的全局数据
-  // const { token } = useContext(UserContext);
-  const token = "123";
+  const { token } = useContext(UserContext);
   const Item = List.Item;
   const Brief = Item.Brief;
   if (!token) {
@@ -43,7 +30,7 @@ export default function Message() {
           <ImageBackground
             source={require("../../../assets/message/msgbg.jpg")} // 替换成你的背景图片路径
             style={styles.noLoginHeader}>
-            <Text style={styles.headermsg}>消息</Text>
+            <Text style={styles.headermsg1}>消息</Text>
             <TouchableOpacity
               activeOpacity={1}
               onPress={
@@ -152,7 +139,7 @@ export default function Message() {
                   />
                 }
                 multipleLine>
-                推荐官小w
+                推荐官小智
                 <Brief style={{ fontSize: 12, marginTop: 5, marginBottom: 5 }}>华东理工大学的春日美好，点击就看！</Brief>
               </Item>
               <Item
@@ -164,8 +151,8 @@ export default function Message() {
                   />
                 }
                 multipleLine>
-                标题
-                <Brief>辅助文字内容</Brief>
+                万万
+                <Brief style={{ fontSize: 12, marginTop: 5, marginBottom: 5 }}>想要去迪士尼吗？戳我看攻略！</Brief>
               </Item>
               <Item
                 style={{ paddingTop: 5 }}
@@ -176,8 +163,8 @@ export default function Message() {
                   />
                 }
                 multipleLine>
-                标题
-                <Brief>辅助文字内容</Brief>
+                热心市民应先生
+                <Brief style={{ fontSize: 12, marginTop: 5, marginBottom: 5 }}>热辣滚烫的早市，你去过了吗？</Brief>
               </Item>
               <Item
                 style={{ paddingTop: 5 }}
@@ -188,8 +175,8 @@ export default function Message() {
                   />
                 }
                 multipleLine>
-                标题
-                <Brief>辅助文字内容</Brief>
+                小梦
+                <Brief style={{ fontSize: 12, marginTop: 5, marginBottom: 5 }}>来一场说走就走的旅行吧，去追梦!</Brief>
               </Item>
             </View>
           </ScrollView>
@@ -211,6 +198,13 @@ const styles = StyleSheet.create({
 
   headermsg: {
     color: "#fff",
+    fontSize: 20,
+    fontWeight: "bold",
+    marginTop: 10,
+    marginBottom: 20,
+  },
+  headermsg1: {
+    color: "#000",
     fontSize: 20,
     fontWeight: "bold",
     marginTop: 10,

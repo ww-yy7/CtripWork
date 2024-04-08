@@ -95,7 +95,7 @@ export default function Login() {
       Toast.info("密码不符合要求", 1);
       return; // 如果密码不符合要求，不执行后续注册逻辑
     } else {
-      Toast.info("登录成功", 5);
+     
       const data = {
         username: usernameValue,
         password: passwordValue,
@@ -131,6 +131,7 @@ export default function Login() {
           phone,
           introduction,
         });
+        Toast.info("登录成功", 5);
         navigation.navigate("Mine");
       } else {
         Toast.info("密码错误", 1);

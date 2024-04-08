@@ -184,7 +184,9 @@ export default function AddorUpdateTravel({ userInfo }) {
         if (res.data.code === 200) {
           incrementPublishCount();
           Toast.info("更新成功", 1);
-          navigation.navigate("Mine");
+          setTimeout(() => {
+            navigation.navigate("Mine");
+          }, 1000);
         } else {
           Toast.info("更新失败", 1);
         }

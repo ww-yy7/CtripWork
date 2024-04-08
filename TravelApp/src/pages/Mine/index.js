@@ -178,7 +178,7 @@ export default function Mine() {
                 }>
                 <Text
                   style={{ fontSize: 12, color: "#9f9fa1", marginRight: 4 }}>
-                  {userInfo ? userInfo.introduction : "这个人很懒，什么都没写"}
+                  {userInfo.introduction ? userInfo.introduction : "这个人很懒，什么都没写~~~"}
                 </Text>
                 <PencilSquareIcon size={16} strokeWidth={1} color="#9f9fa1" />
               </TouchableOpacity>

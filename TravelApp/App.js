@@ -2,7 +2,6 @@ import { StatusBar } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 
 import Routes from "./src/Routes";
-import CartProvider from "./src/contexts/CartContext";
 
 import { AppLoading } from "expo";
 import * as Font from "expo-font";

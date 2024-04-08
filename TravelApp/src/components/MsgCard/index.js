@@ -1,31 +1,20 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-  Image,
-  StyleSheet,
-  TouchableHighlight,
-  TouchableWithoutFeedback,
-} from "react-native";
-import { Card, WhiteSpace, WingBlank, Button } from "@ant-design/react-native";
-import {
-  Cog6ToothIcon,
-  ViewfinderCircleIcon,
-  PencilSquareIcon,
-} from "react-native-heroicons/outline";
+import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
+import { Card } from "@ant-design/react-native";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 
 export default function MsgCard({ token }) {
   const navigation = useNavigation();
   return (
-
-    <View >
+    <View>
       <Card style={styles.headerCard}>
         {/* 三个图标,横着平均分布 */}
-        <TouchableHighlight
-          onPress={token ? () => navigation.navigate("Mine") : null}>
+        <TouchableOpacity
+          onPress={
+            !token
+              ? () => navigation.navigate("Login")
+              : () => navigation.navigate("Other")
+          }>
           <View style={styles.msgIcon}>
             <Image
               source={require("../../../assets/message/travelPlan.png")}
@@ -33,9 +22,9 @@ export default function MsgCard({ token }) {
             />
             <Text style={{ marginTop: 5 }}>旅行计划</Text>
           </View>
-        </TouchableHighlight>
-        <TouchableHighlight
-          onPress={token ? () => navigation.navigate("") : null}>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={!token ? () => navigation.navigate("Login") : null}>
           <View style={styles.msgIcon}>
             <Image
               source={require("../../../assets/message/hudongMsg.png")}
@@ -43,9 +32,9 @@ export default function MsgCard({ token }) {
             />
             <Text style={{ marginTop: 5 }}>互动消息</Text>
           </View>
-        </TouchableHighlight>
-        <TouchableHighlight
-          onPress={token ? () => navigation.navigate("") : null}>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={!token ? () => navigation.navigate("Login") : null}>
           <View style={styles.msgIcon}>
             <Image
               source={require("../../../assets/message/account.png")}
@@ -53,7 +42,7 @@ export default function MsgCard({ token }) {
             />
             <Text style={{ marginTop: 5 }}>系统消息</Text>
           </View>
-        </TouchableHighlight>
+        </TouchableOpacity>
       </Card>
     </View>
   );

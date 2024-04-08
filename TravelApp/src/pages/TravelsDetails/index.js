@@ -144,7 +144,9 @@ return (
       {/* 标题用户&位置时间预算&游记正文 */}
       <View style={styles.contentcontainer}>
         <ScrollView
-          showsVerticalScrollIndicator={false}
+                  automaticallyAdjustContentInsets={false}
+                  showsHorizontalScrollIndicator={false}
+                  showsVerticalScrollIndicator={false}
           style={styles.scrollview}>
           {/* 标题用户行 */}
           <View style={styles.titleanduserview}>
@@ -201,24 +203,24 @@ return (
 
           {/* 游记正文 */}
           <Text style={styles.description}>{unescapeHtml(item?.content)}</Text>
-          <Text style={{
-            fontSize:10,
-            color:'grey',
-            position:'relative',
-            top:20
-          }}>
-            {/* 发布于{item?.time} */}
-            发布于{' '}
-            {new Date(item.time * 1).toLocaleString('zh-CN', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-              hour: 'numeric',
-              minute: 'numeric',
-            })}
-            </Text>
-        </ScrollView>
-      </View>
+          <View style={{height:30}}>
+            <Text style={{
+              fontSize:10,
+              color:'grey',
+              position:'relative',
+              top:20
+            }}>
+              {/* 发布于{item?.time} */}
+              发布于{' '}
+              {new Date(item.time * 1).toLocaleString('zh-CN', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+              })}
+              </Text>
+          </View>
 
       {/* 评论 点赞 收藏 */}
       <View style={styles.clcview}>
@@ -243,7 +245,7 @@ return (
           style={styles.likeicon}
           onPress={() => toggleFavourite(!isFavourite)}>
           <HeartIcon
-            size={28}
+            size={30}
             stroke={isFavourite ? "red" : "black"}
             strokeWidth={1.5}
             color={isFavourite ? "red" : "white"}
@@ -254,7 +256,7 @@ return (
           style={styles.staricon}
           onPress={() => toggleCollect(!isCollect)}>
           <StarIcon
-            size={28}
+            size={30}
             stroke={isCollect ? "orange" : "black"}
             strokeWidth={1.5}
             color={isCollect ? "orange" : "white"}
@@ -266,9 +268,35 @@ return (
           style={styles.commentIcon}
           // onPress={()=> toggleCollect(!isCollect)}
         >
-          <ChatBubbleOvalLeftEllipsisIcon size={28} stroke={"black"} strokeWidth={1.5} />
+          <ChatBubbleOvalLeftEllipsisIcon size={30} stroke={"black"} strokeWidth={1.5} />
         </TouchableOpacity>
       </View>
+
+          {/* 评论区 */}
+          <View style={{marginTop:-15}}>
+            <View><Text style={{ fontSize: 16, fontWeight: "bold" }}>评论区</Text></View>
+            {articleData?.comment?.map((comment, index) => (
+              <View key={index} style={{ flexDirection: "row", marginTop: 10 }}>
+                <Image
+                  source={{ uri: `data:image/jpeg;base64,${comment.commentAvatar}` }}
+                  style={{ height: 30, width: 30, borderRadius: 30 }}
+                />
+                <View style={{ marginLeft: 10 }}>
+                  <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+                    {comment.nickName}
+                  </Text>
+                  <Text style={{ fontSize: 14 }}>{comment.content}</Text>
+                </View>
+              </View>
+            ))}
+          </View>
+
+          <View style={{height:50}}></View>
+        </ScrollView>
+      </View>
+      
+      <View style={{height:50}}></View>
+
     </View>
   </Provider>
 );
@@ -310,7 +338,7 @@ const styles = StyleSheet.create({
     flexDirection: "row", // 默认值，为了明确表示为flex布局
     justifyContent: "space-between",
     backgroundColor: "white", // bg-white 对应 background-color
-    height: "41%",
+    height: "50%",
     marginTop: -40,
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
@@ -319,7 +347,7 @@ const styles = StyleSheet.create({
   scrollview: {
     flexDirection: "column", // 假设是垂直方向的空间间隔
     marginBottom: 5,
-    height: 413,
+    height: 390,
   },
   titleanduserview: {
     flexDirection: "row", // flex-row 对应 flexDirection: 'row'
@@ -330,7 +358,6 @@ const styles = StyleSheet.create({
   texttitle: {
     fontWeight: "bold", // font-bold 对应 fontWeight
     flexGrow: 1, // flex-1 对应 flexGrow
-    // color: "",
     fontSize: 25,
   },
   userinfo: {
@@ -380,6 +407,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     backgroundColor: "white",
     height: "10%",
+    marginTop: 20,
+    marginLeft: -20,
   },
   commentview: {
     flexDirection: "row",
@@ -389,7 +418,7 @@ const styles = StyleSheet.create({
     padding: 8,
     left: 20,
     bottom: 20,
-    width: "55%",
+    width: "65%",
     paddingLeft: 10,
   },
   likeicon: {
