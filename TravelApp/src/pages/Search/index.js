@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { TextInput, View, FlatList, StyleSheet, Text,TouchableOpacity,Image, ScrollView } from 'react-native';
+import { TextInput, View, FlatList, StyleSheet, Text,TouchableOpacity,Image, ScrollView, Alert } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient'
 import { useNavigation } from '@react-navigation/native';
 import { MagnifyingGlassIcon } from 'react-native-heroicons/outline'; // 引入放大镜图标组件
 import { searchTravelNote } from '../../apis/user';
+import {Toast} from "@ant-design/react-native"
 
 const SearchScreen = () => {
   const [searchText, setSearchText] = useState('');
@@ -19,16 +20,40 @@ const SearchScreen = () => {
 
 
   // 处理搜索操作
-  const handleSearch = async () => {
-    try {
-      const searchResults = await searchTravelNote(searchText);
-      setResults(searchResults); // 更新状态以显示搜索结果
-      // console.log(results);
-      addToHistory(searchText)
+  // const handleSearch = async () => {
+  //   try {
+  //     const searchResults = await searchTravelNote(searchText);
+  //     setResults(searchResults); // 更新状态以显示搜索结果
+  //     // console.log(results);
+  //     addToHistory(searchText)
 
-    } catch (error) {
-      console.error('搜索失败:', error);
+  //   } catch (error) {
+  //     console.error('搜索失败:', error);
+  //   }
+  // };
+
+  const handleSearch = async () => {
+    // 首先，去除searchText两边的空格
+    const trimmedSearchText = searchText.trim();
+  
+    // 检查修剪后的searchText是否为空
+    if (trimmedSearchText) {
+      try {
+        const searchResults = await searchTravelNote(trimmedSearchText);
+        setResults(searchResults); // 更新状态以显示搜索结果
+        addToHistory(trimmedSearchText);
+  
+      } catch (error) {
+        console.error('搜索失败:', error);
+      }
+    }else{
+      // console.log('请输入搜索');
+      // 显示一个Toast消息提示
+      // Toast.info("请输入搜索内容～", 1);
+      Alert.alert('请输入您要搜索的内容～')
+      
     }
+    // 如果searchText为空或仅包含空格，这里不执行任何操作
   };
 
    // 添加搜索历史记录
@@ -185,7 +210,7 @@ const TravelsCard = ({item})=> {
 
         <View style={styles.userinfo}>
             <Text style={styles.title}>{item.user}</Text>          
-            <Image source={require('../../../assets/images/avatar.png')} style={{height: 16, width: 16}} />      
+            <Image source={{ uri: `data:image/jpeg;base64,${item.Avatar}` }} style={{height: 16, width: 16, borderRadius:30}} />      
         </View>
             
         <Text style={styles.texttitle}>{item.title}</Text>

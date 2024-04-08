@@ -6,6 +6,7 @@ import { getAllTravelNote } from "../../apis/user";
 import { UserContext } from "../../contexts/UserContext";
 // 瀑布流组件引入
 import WaterfallFlow from "react-native-waterfall-flow";
+import { unescapeHtml } from "../../apis/HtmlHandler";
 // import MasonryList from 'react-native-masonry-list';
 
 export default function Travels() {
@@ -78,7 +79,6 @@ export default function Travels() {
 
   return (
     
-    
     <View style={styles.container}>
       {/* <SafeAreaView > */}
       <WaterfallFlow
@@ -99,8 +99,6 @@ export default function Travels() {
                 //   height: columnIndex === 0 ? 230 :250,
                 // }}
               />
-               
-            
           );
         }}
       />
@@ -120,10 +118,12 @@ const TravelsCard = ({ item, columnIndex }) => {
     <TouchableOpacity
       onPress={() => navigation.navigate("TravelsDetails", { ...item })}
       style={{
-        width: 170, //固定宽度可兼容iphone15和iphone15promax
+        width: 170, 
+        marginHorizontal:7,
+        marginTop:10,
         height: columnIndex === 0 ? 230 : 250,
         display: "flex",
-        marginBottom: 10,
+        marginBottom: 0,
         alignItems: "flex-start",
       }
       }>
@@ -150,13 +150,13 @@ const TravelsCard = ({ item, columnIndex }) => {
       <View style={styles.userinfo}>
         <Text style={styles.title}>{item.user}</Text>
         <Image
-          source={{uri: `data:image/jpeg;base64,${item.picture[0]}`}}
-          style={{ height: 16, width: 16 ,borderRadius: '100%'}}
+          source={{uri: `data:image/jpeg;base64,${item.Avatar}`}}
+          style={{ height: 16, width: 16 ,borderRadius: 20}}
         />
       </View>
 
-      <Text style={styles.texttitle}>{item.title}</Text>
-      <Text style={styles.text}>{item.profile}</Text>
+      <Text style={styles.texttitle}>{unescapeHtml(item.title)}</Text>
+      <Text style={styles.text}>{unescapeHtml(item.profile)}</Text>
     </TouchableOpacity>
   );
 };
@@ -164,9 +164,8 @@ const TravelsCard = ({ item, columnIndex }) => {
 const styles = StyleSheet.create({
   //整个游记卡片瀑布流组件
   container: {
-    paddingLeft:8,
-    // flexDirection: "row",
-    // left:10,
+    flexDirection: "row",
+    alignItems:'center',
     height:510,  
   },
   lineargradient: {

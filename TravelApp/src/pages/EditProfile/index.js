@@ -30,6 +30,7 @@ export default function EditProfile() {
       introduction,
     },
     saveUserInfoToStorage,
+    incrementChangeAvatarCount,
   } = useContext(UserContext);
   const navigation = useNavigation();
   const [newAvatar, setNewAvatar] = useState(Avatar);
@@ -85,6 +86,7 @@ export default function EditProfile() {
     console.log(result.data, "result");
     if (result.data.code === 200) {
       await saveUserInfoToStorage(userInfo);
+      incrementChangeAvatarCount()
       Toast.info("修改成功");
       navigation.navigate("Mine");
     } else {

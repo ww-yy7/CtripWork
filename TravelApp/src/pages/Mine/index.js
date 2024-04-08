@@ -273,7 +273,7 @@ const styles = StyleSheet.create({
   },
   listCard: {
     borderRadius: 10,
-    borderWidth: 0.5,
+    borderWidth: 0,
     // borderColor: "rgba(0,0,0,0)", // 可以设置边框颜色
     backgroundColor: "rgba(255,255,255,0.1)",
   },

@@ -1,4 +1,4 @@
-import React,{useState,useContext, useRef} from 'react'
+import React,{useState,useContext, useRef, useEffect} from 'react'
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, ScrollView, Image, TextInput, RefreshControl  } from 'react-native'
 import { MagnifyingGlassIcon,} from 'react-native-heroicons/outline'
 import { useNavigation } from '@react-navigation/native'
@@ -6,13 +6,26 @@ import Categories from '../../components/Categories'
 import Travels from '../../components/Travels'
 import { UserContext } from '../../contexts/UserContext'
 import { getAllTravelNote } from '../../apis/user'
-import { searchTravelNote } from '../../apis/user'
+
 
 
 
 export default function Home() {
     
     const navigation = useNavigation();
+    const { token, id, changeAvatar} = useContext(UserContext);
+    const [userInfo,setUserInfo ]= useState({})
+
+    useEffect(() => {
+        if (id) {
+          getAllTravelNote({_id: id})
+            .then((users) => {
+                // 更新状态以存储用户数据
+                setUserInfo(users);
+                // console.log(userInfo);
+            })
+        }
+      }, [id,changeAvatar]); 
     
     // 防止从搜索页返回后自动聚焦到搜索Input导致二次跳转
     const inputRef = useRef(null);
@@ -22,18 +35,20 @@ export default function Home() {
         // 在跳转后取消焦点
         inputRef.current?.blur();
     };
-
         
        
     return (
-        
 
         <SafeAreaView style={stlyes.container}>
             <View>
             <View style={stlyes.top}>
                 <Text style={stlyes.title}>让我们一起探索！</Text>
                 <TouchableOpacity>
-                    <Image source={require('../../../assets/images/avatar.png')} style={{height: 40, width: 40}}></Image>
+                    <Image 
+                    // source={require('../../../assets/images/avatar.png')}
+                    source={token && userInfo && userInfo.Avatar ? { uri: `data:image/jpeg;base64,${userInfo.Avatar}` } : require('../../../assets/images/avatar.png')}
+                
+                    style={{height: 40, width: 40, borderRadius: 30}}/>
                 </TouchableOpacity>
 
             </View>

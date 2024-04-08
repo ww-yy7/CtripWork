@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Alert, RefreshControl, Modal } from "react-native";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Alert,Modal } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { TrashIcon, PencilSquareIcon } from "react-native-heroicons/outline";
@@ -7,11 +7,11 @@ import { TrashIcon, PencilSquareIcon } from "react-native-heroicons/outline";
 import { getAllTravelNote } from "../../apis/user";
 import { UserContext } from "../../contexts/UserContext";
 import { deleteTravelNote } from "../../apis/user";
+import { unescapeHtml } from "../../apis/HtmlHandler";
 
 export default function MyTravels() {
    
   const { token, id, publish, deleteCount,incrementDeleteCount,} = useContext(UserContext);
-  const [refreshing, setRefreshing] = useState(false);
   const {mytravelsData, setMyTravelsData } = useContext(UserContext);
   
   
@@ -30,23 +30,6 @@ export default function MyTravels() {
     }
   }, [id,publish,deleteCount]); // 将 token 添加到依赖数组中，这样每当 token 变化时都会重新获取游记数据
 
-
-  // const onRefresh = () => {
-  //   setRefreshing(true);
-  //   // 这里执行刷新数据的逻辑
-  //   getAllTravelNote({_id: id}) // 将 id 作为参数传递给 API 函数
-  //       .then((responseData) => {
-  //         setMyTravelsData(responseData.article);
-  //         console.log(mytravelsData)
-  //         // console.log(travelsData.article)
-  //       })
-  //       .catch((error) => {
-  //         console.error('获取游记数据时发生错误：', error);
-          
-  //       });
-  //   setTimeout(() => setRefreshing(false), 2000);
-  // };
-  
 
   const deleteMyTravel = async (idToDelete) => {
         try {
@@ -111,7 +94,12 @@ const TravelsCard = ({ item, onDelete }) => {
     );
   };
 
-  const RejectAlert = (id) => {
+  const RejectAlert = () => {
+    // 定义 editHandler 函数
+    const editHandler = () => {
+      navigation.navigate("UpdateTravel", { ...item });
+    };
+
     Alert.alert(
       '未通过',
       item.rejectReason,
@@ -122,7 +110,7 @@ const TravelsCard = ({ item, onDelete }) => {
         },
         {
           text: '重新编辑',
-          // style: 'cancel',
+          onPress: (editHandler),
         },
         // {
         //   text: '删除',
@@ -155,11 +143,11 @@ const TravelsCard = ({ item, onDelete }) => {
 
         <View style={styles.userinfo}>
             <Text style={styles.title}>{item.user}</Text>          
-            <Image source={require('../../../assets/images/avatar.png')} style={{height: 16, width: 16}} />      
+            <Image source={{ uri: `data:image/jpeg;base64,${item.Avatar}` }} style={{height: 16, width: 16, borderRadius:30}} />      
         </View>
 
-        <Text style={styles.texttitle}>{item.title}</Text>
-        <Text style={styles.text}>{item.profile}</Text>
+        <Text style={styles.texttitle}>{unescapeHtml(item.title)}</Text>
+        <Text style={styles.text}>{unescapeHtml(item.profile)}</Text>
         
        </TouchableOpacity>
 
@@ -186,6 +174,10 @@ const TravelsCard = ({ item, onDelete }) => {
               );
             }
             case "未通过":
+              // 返回编辑组件了
+              const editHandler = () => {
+                navigation.navigate("UpdateTravel", { ...item });
+              }
               return (
                 <>
                 <View>
@@ -198,34 +190,8 @@ const TravelsCard = ({ item, onDelete }) => {
                   </View>
                   
                   
-                  {/* <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={isModalVisible}
-                    onRequestClose={toggleModal}>
-                      <View style={{ 
-                        position: 'absolute',
-                        // backgroundColor: 'white', 
-                        left: '20%',
-                        top: '36%',
-                        height:'25%',
-                        backgroundColor: 'rgba(255,255,255,0.97)',                 
-                        alignItems: 'center',
-                        padding: 20, borderRadius: 10,width:'60%' }}>
-                      
-                      <Text style={{ fontSize: 18, fontWeight: 'bold' }}>未通过原因：</Text>
-                      <Text >{item.rejectReason}</Text>
-                      <TouchableOpacity onPress={toggleModal} style={{ alignItems: 'center', marginTop: 10 }}>
-                      <Text style={{ color: 'blue',top:110 }}>关闭</Text>
-                      </TouchableOpacity>
-                    </View>
-                  </Modal> */}
-                  
-                    
-                  
-
                   <TouchableOpacity >
-                      <PencilSquareIcon size={15} color="gray" />
+                      <PencilSquareIcon onPress={editHandler} size={15} color="gray" />
                   </TouchableOpacity>
                   
                   {/* 编辑按钮 */}
@@ -256,10 +222,10 @@ const TravelsCard = ({ item, onDelete }) => {
 const styles = StyleSheet.create({
   container: {
     // flex: 1,
-    backgroundColor: "#FAFAFA",
+    // backgroundColor: "#FAFAFA",
     paddingEnd: 12,
     paddingStart: 12,
-    // height:800
+    minHeight:550
   },
   cardcontainer: {
     marginLeft: 8,
