@@ -40,7 +40,7 @@ export default function Home() {
     return (
 
         <SafeAreaView style={stlyes.container}>
-            <View>
+            {/* <View> */}
             <View style={stlyes.top}>
                 <Text style={stlyes.title}>让我们一起探索！</Text>
                 <TouchableOpacity>
@@ -77,7 +77,7 @@ export default function Home() {
             <View >
                 <Travels/>
             </View>
-            </View>
+            {/* </View> */}
         </SafeAreaView>
         
     )

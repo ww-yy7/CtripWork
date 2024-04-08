@@ -45,11 +45,6 @@ export default function MyTravels() {
 
   return (
     <ScrollView 
-    // refreshControl={
-    //   <RefreshControl
-    //     refreshing={refreshing}
-    //     onRefresh={onRefresh}
-    //   />}
       style={styles.container}
       >
     <View style={styles.cardcontainer}>
@@ -74,7 +69,7 @@ const TravelsCard = ({ item, onDelete }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [rejectReason, setRejectReason] = useState('');
 
-  const toggleModal = () => setIsModalVisible(!isModalVisible);
+  // const toggleModal = () => setIsModalVisible(!isModalVisible);
   
   const confirmDelete = (id) => {
     Alert.alert(
@@ -164,7 +159,7 @@ const TravelsCard = ({ item, onDelete }) => {
                   <Text>审核中</Text>
                   {/* 编辑按钮 */}
                   <TouchableOpacity>
-                      <PencilSquareIcon onPress={editHandler} size={15} color="gray" />
+                      <PencilSquareIcon onPress={editHandler} size={15} color="gray" style={{left:33}}/>
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => confirmDelete(item.articleId)}>

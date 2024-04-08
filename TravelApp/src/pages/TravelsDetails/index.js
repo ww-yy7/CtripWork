@@ -66,7 +66,7 @@ export default function TravelsDetails(props) {
     try {
       const result = await Share.share({
         message: `${item.title}`,
-        url: `http://10.100.197.143:5000?articleId=${item.articleId}`,
+        url: `http://10.100.133.18:5010?articleId=${item.articleId}`,
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -319,7 +319,7 @@ const styles = StyleSheet.create({
   scrollview: {
     flexDirection: "column", // 假设是垂直方向的空间间隔
     marginBottom: 5,
-    height: 413,
+    // height: 330,
   },
   titleanduserview: {
     flexDirection: "row", // flex-row 对应 flexDirection: 'row'
@@ -380,6 +380,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     backgroundColor: "white",
     height: "10%",
+    // bottom:100,
   },
   commentview: {
     flexDirection: "row",
