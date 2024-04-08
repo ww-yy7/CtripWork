@@ -43,7 +43,7 @@ export function UpdateTravel(data) {
   });
 }
 
-// 封装获取游记数据的请求函数
+// 获取游记数据
 export function getAllTravelNote(params = {}) {
   return request.get('/users/getAllTravelNote', { params })
     .then((response) => {
@@ -59,7 +59,7 @@ export function getAllTravelNote(params = {}) {
     });
 }
 
-// 封装搜索游记的函数
+// 搜索游记(模糊搜索)
 export function searchTravelNote(searchInfo) {
   return request({
     url: '/users/searchTravelNote', // 你的后端接口路径
@@ -82,7 +82,7 @@ export function searchTravelNote(searchInfo) {
   });
 }
 
-// 封装删除游记的函数
+// 删除游记
 export function deleteTravelNote(articleId) {
   return request({
     url: '/users/deleteTravelNote', // 你的后端接口路径
@@ -110,6 +110,15 @@ export function updateUserInfo(data) {
   // console.log(data, "data");
   return request({
     url: `/users/updateUserInfo`,
+    method: "PUT",
+    data,
+  });
+}
+
+// 提交评论
+export function submitComment(data) {
+  return request({
+    url: `/users/commentTravelNote`,
     method: "PUT",
     data,
   });

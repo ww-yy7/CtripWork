@@ -1,31 +1,33 @@
 .App {
   text-align: center;
-  width: '100%';
+  width: 100%;
+  background-color: "rbga(2, 255, 255, 0.5)";
+  overflow-x:hidden;
 }
 
 .App-header {
-  background-color: #e7eaf0;
+  background-color: "rbga(255, 255, 255, 0.5)";
   /* display: flex; */
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
   /* font-size: calc(10px + 2vmin); */
-  color: white;
+  color: "rbga(255, 255, 255, 0.5)";
   width: 100%
   
 }
 
 .image{
-  max-height: 60vh;
   width: 100%; 
-  height: 50vh; 
   object-fit: contain; 
 }
 
 .page-content {
   text-align: left;
-  width: 80%;
+  width: 100%;
   margin: auto;
+  margin:20px
+
 }
 
 
@@ -42,23 +44,26 @@
 }
 
 .user-info {
-  position: absolute;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  right: 30px;
 }
 
 .location-info {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding:0 10px;
+  margin-top: 10px;
 }
 
 .App-footer {
-  padding: 20px;
+  padding: 10px;
   /* display: flex; */
   display: block;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 
 .comment-box {
@@ -68,10 +73,35 @@
 }
 
 .interaction-icons {
-  display: flex;
-  position: relative;
-  top: 50px;
+ 
+
   
+  /* padding: 20px; */
+ 
+  border-width: 2px;  
+  
+  
+}
+.footer {
+  position: fixed;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  left: 0;
+  bottom: 0;
+  background-color: rgba(71, 69, 69, 0.1);
+  border-radius: 30px;
+  color: white;
+  justify-content: space-between;
+  height: 40px;
+  width: auto;
+  margin:0 10px;
+  padding: 0 10px;
+  width: 90%;
+}
+ 
+.footer .content {
+  padding: 10px;
 }
 
 .interaction-icons > span {
@@ -92,9 +122,19 @@
 }
 .description {
   width: 100%;
-  height: 30vh;
+  height: auto;
   font-size: 1.2em;
-  margin: 10px;
-  border-width: 2;
-  border-color: #e7eaf0;
+  margin-top: 15px;
+}
+.tags{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  /* margin: 10px; */
+  margin-top: 20px;
+  /* background-color: red; */
+  padding:0 10px;
+  width: auto;
+  height: 40px;
+  align-items: center;
 }

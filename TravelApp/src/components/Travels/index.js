@@ -151,7 +151,7 @@ const TravelsCard = ({ item, columnIndex }) => {
         <Text style={styles.title}>{item.user}</Text>
         <Image
           source={{uri: `data:image/jpeg;base64,${item.picture[0]}`}}
-          style={{ height: 16, width: 16 ,borderRadius: '100%'}}
+          style={{ height: 16, width: 16 ,borderRadius: 16}}
         />
       </View>
 

@@ -10,6 +10,7 @@ let {
   updateArticle,
   searchArticle,
   updateUserInfo,
+  commentArticle,
   UserInfo,
 } = require("../serve/server");
 const bcrypt = require("bcrypt");
@@ -281,5 +282,27 @@ router.get("/searchTravelNote", function (req, res, next) {
       });
     });
 });
+
+// 评论游记
+router.put("/commentTravelNote", function (req, res, next) {
+  console.log(req.body, "commentTravelNote");
+  const { articleId, comment } = req.body;
+  commentArticle(articleId, comment)
+    .then((result) => {
+      res.json({
+        code: 200,
+        msg: "评论成功",
+        resultList: result,
+      });
+    })
+    .catch((err) => {
+      res.json({
+        code: 400,
+        msg: "评论失败",
+        reason: err,
+      });
+    });
+});
+
 
 module.exports = router;

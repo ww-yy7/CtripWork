@@ -35,9 +35,9 @@ const articleSchema = new Schema(
       {
         id: String,
         nickName: String,
+        commentAvatar: String,
         time: String,
         content: String,
-        avatar: String,
       },
     ],
   },
@@ -65,11 +65,11 @@ const deleteArticleSchema = new Schema({
   articleId: String,
   comment: [
     {
-      id: String,
+      _id: String,
       nickName: String,
       time: String,
       content: String,
-      avatar: String,
+      Avatar: String,
     },
   ],
   content: String,
@@ -154,51 +154,6 @@ function updateUserInfo(
           reject(err);
         }
       }
-
-
-      // async function (err, doc) {
-      //   if (!err) {
-      //     try {
-      //       // 更新用户信息成功后，更新用户下的每一篇文章中的 user 和 Avatar 字段
-      //       const result = await UserInfo.updateMany(
-      //         { "article.user": nickName }, 
-      //         {
-      //           $set: {
-      //             "article.$[elem].user": nickName,
-      //             "article.$[elem].Avatar": Avatar
-      //           }
-      //         },
-      //         { arrayFilters: [{ "elem.user": nickName }] } // 使用 arrayFilters 来匹配嵌套数组中的元素
-      //       );
-      //       console.log( result,"article里面数据更新情况");
-      //       resolve(doc);
-      //     } catch (error) {
-      //       reject(error);
-      //     }
-      //   } else {
-      //     reject(err);
-      //   }
-      // }
-
-      // UserInfo.updateOne(
-      //   { _id: ObjectId(_id) }, // 查询条件：根据用户的 _id 查找用户
-      //   {
-      //     $set: {
-      //       "article.$[].user": nickName,
-      //       "article.$[].Avatar": Avatar
-      //     }
-      //   },
-      //   function (err, doc) {
-      //     if (!err) {
-      //       resolve(doc);
-      //     } else {
-      //       reject(err);
-      //     }
-      //   }
-      // )
-      
-      
-
     );
   });
 }
@@ -358,7 +313,7 @@ function searchArticle(search) {
         if (
           article.title.includes(search) ||
           article.content.includes(search) ||
-          article.user.includes(search) // 昵称这个暂时先不搞，他不在article里面
+          article.user.includes(search) 
         ) {
           return true;
         }
@@ -369,6 +324,26 @@ function searchArticle(search) {
     });
   });
 }
+
+// 评论游记
+function commentArticle(articleId, comment) {
+  console.log(comment);
+  return new Promise((resolve, reject) => {
+    UserInfo.updateOne(
+      { "article.articleId": articleId }, // 查询条件：查找指定游记
+      { $push: { "article.$.comment": comment } }, // 使用 $push 操作符往匹配的第一个元素的 comment 数组里添加新的评论
+      function (err, doc) {
+        if (!err) {
+          resolve(doc);
+        } else {
+          reject(err);
+        }
+      }
+    );
+  });
+}
+
+
 
 // ----------------------------后台管理部分----------------------------
 // 通过不同的游记状态作筛选
@@ -484,6 +459,7 @@ module.exports = {
   addDeleteArticleList,
   searchArticle,
   updateUserInfo,
+  commentArticle,
   UserInfo,
   deleteArticleList,
 };

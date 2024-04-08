@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#eee', 
-    borderRadius: '100%', 
+    borderRadius: 20, 
     padding: 6,
     paddingLeft: 20, 
     paddingRight: 20,
@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
   historyItem: {
     borderWidth: 1, // 边框宽度
     borderColor: '#eee', // 边框颜色
-    borderRadius: '100%', // 边框圆角（可选）
+    borderRadius: 20, // 边框圆角（可选）
     paddingHorizontal: 8,
     paddingVertical: 2,
     margin:6,

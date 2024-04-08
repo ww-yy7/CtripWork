@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -18,27 +18,53 @@ import {
   PencilIcon,
   PencilSquareIcon,
 } from "react-native-heroicons/outline";
+import { Toast, Provider } from "@ant-design/react-native";
 import { HeartIcon, StarIcon } from "react-native-heroicons/solid";
 import { useNavigation } from "@react-navigation/native";
 import { theme } from "../../theme";
 import SwiperComponent from "../../components/Swiper";
 // import Swiper from "react-native-swiper";
 import { FastForward } from "react-native-feather";
+import { UserContext } from "../../contexts/UserContext";
+import { useContext } from "react";
+import { submitComment as fetchSubmitComment,getAllTravelNote } from "../../apis/user";
+
 
 export default function TravelsDetails(props) {
-  console.log("item:", props.route.params);
+  // console.log("item:", props.route.params,'item11'); // 每一篇游记数据
   const item = props.route.params;
   const navigation = useNavigation();
   const [isFavourite, toggleFavourite] = useState(false);
   const [isCollect, toggleCollect] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const [articleData, setArticleData] = useState(); // 游记数据（发请求得到的）
+  // 获取当前登录用户的信息
+  const {
+    id, // 用户id
+    userInfo: { nickName, Avatar: commentAvatar }, // 主要是用户个人简介，没有文章信息
+    token,
+    publish,
+    incrementPublishCount,
+  } = useContext(UserContext);
+
+  useEffect(() => {
+    async function getArticleData() {
+      let result = await getAllTravelNote(params={ articleId: item.articleId });
+      setArticleData(result.article[0])
+      // console.log(articleData.comment.length,'articleData.comment');
+    }
+    // 获取这一篇游记的数据
+    getArticleData();
+    // console.log(item.articleId, "item.articleId");
+
+  },[publish]);
 
   const onShare = async (item) => {
     // console.log("articleId", articleId);
     try {
       const result = await Share.share({
         message: `${item.title}`,
-        url: `http://10.100.197.143:7831?articleId=${item.articleId}`,
-        // url: `http://10.100.197.143:7864`,
+        url: `http://10.100.197.143:5000?articleId=${item.articleId}`,
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -54,7 +80,45 @@ export default function TravelsDetails(props) {
     }
   };
 
-  return (
+  // 提交评论
+  const submitComment = async () => {
+    if(!token) {
+      Toast.info("请先登录", 1);
+      setTimeout(() => {
+        navigation.navigate("Login");
+      }, 1000);
+      return;
+    }
+
+
+    
+    // 判断输入是否为空或者是空格
+    if (!inputValue.trim()) {
+      Toast.info("标签不能为空", 1);
+      setInputValue("");
+      return;
+    }
+    const data = {
+      articleId: item.articleId,
+      comment: {
+        id,
+        nickName,
+        commentAvatar,
+        time: Date.now(),
+        content: inputValue,
+      },
+    };
+    let result = await fetchSubmitComment(data);
+    if (result.data.code === 200) {
+      Toast.info("评论成功", 1);
+      incrementPublishCount() // 用来刷新评论列表(原本是用在新增游记的)
+      setInputValue("");
+    }
+  };
+
+
+return (
+  <Provider>
     <View>
       {/* <Image source={item.article[0].picture} style={styles.imagecontainer}/> */}
       <SwiperComponent item={item}></SwiperComponent>
@@ -104,7 +168,7 @@ export default function TravelsDetails(props) {
                   className="font-bold text-neutral-700">
                   {item.position}
                 </Text>
-                <Text style={{fontSize:11 ,top:3}}>位置</Text>
+                <Text className="text-neutral-600 tracking-wide">位置</Text>
               </View>
             </TouchableOpacity>
 
@@ -118,7 +182,7 @@ export default function TravelsDetails(props) {
                   className="font-bold text-neutral-700">
                   {item.playTime}
                 </Text>
-                <Text style={{fontSize:11 ,top:3}}>游玩天数</Text>
+                <Text className="text-neutral-600 tracking-wide">游玩天数</Text>
               </View>
             </View>
 
@@ -128,7 +192,7 @@ export default function TravelsDetails(props) {
                 <Text style={{ fontSize: 13, color: theme.text }}>
                   {item?.money}
                 </Text>
-                <Text style={{fontSize:11 ,top:3}}>花费</Text>
+                <Text>花费</Text>
               </View>
             </View>
           </View>
@@ -148,8 +212,11 @@ export default function TravelsDetails(props) {
             style={{ margin: 2 }}
           />
           <TextInput
-            placeholder="说点什么..."
+            value={inputValue}
+            onChangeText={(text) => setInputValue(text)}
+            placeholder="按下Enter键提交评论"
             placeholderTextColor={"gray"}
+            onSubmitEditing={submitComment}
             style={styles.input}
           />
         </View>
@@ -185,7 +252,8 @@ export default function TravelsDetails(props) {
         </TouchableOpacity>
       </View>
     </View>
-  );
+  </Provider>
+);
 }
 
 const styles = StyleSheet.create({
@@ -258,7 +326,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     margin: 5,
-    color: '#bbb',
+    color: "#ccc",
   },
 
   pdpview: {
@@ -309,7 +377,7 @@ const styles = StyleSheet.create({
   likeicon: {
     backgroundColor: "rgba(255,255,255,0.5)",
     paddingHorizontal: 8,
-    borderRadius: '100%',
+    // borderRadius: '100%',
     marginRight: 16,
     bottom: 19,
     left: 20,
@@ -317,7 +385,7 @@ const styles = StyleSheet.create({
   staricon: {
     backgroundColor: "rgba(255,255,255,0.5)",
     paddingHorizontal: 8,
-    borderRadius: '100%',
+    // borderRadius: '100%',
     marginRight: 16,
     bottom: 19,
     right: 10,
@@ -326,9 +394,14 @@ const styles = StyleSheet.create({
   editicon: {
     backgroundColor: "rgba(255,255,255,0.5)",
     // paddingHorizontal: 8,
-    borderRadius: '100%',
+    // borderRadius: '100%',
     // marginRight: 16,
     bottom: 19,
     right: 30,
+  },
+  input: {
+    width: "100%",
+    padding: 5,
+    fontSize: 15,
   },
 });

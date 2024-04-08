@@ -28,7 +28,7 @@ export default function MsgCard({ token }) {
           onPress={token ? () => navigation.navigate("Mine") : null}>
           <View style={styles.msgIcon}>
             <Image
-              source={require("../../../assets/images/travelPlan.png")}
+              source={require("../../../assets/message/travelPlan.png")}
               style={{ width: 50, height: 50 }}
             />
             <Text style={{ marginTop: 5 }}>旅行计划</Text>
@@ -38,7 +38,7 @@ export default function MsgCard({ token }) {
           onPress={token ? () => navigation.navigate("") : null}>
           <View style={styles.msgIcon}>
             <Image
-              source={require("../../../assets/images/hudongMsg.png")}
+              source={require("../../../assets/message/hudongMsg.png")}
               style={{ width: 50, height: 50 }}
             />
             <Text style={{ marginTop: 5 }}>互动消息</Text>
@@ -48,7 +48,7 @@ export default function MsgCard({ token }) {
           onPress={token ? () => navigation.navigate("") : null}>
           <View style={styles.msgIcon}>
             <Image
-              source={require("../../../assets/images/account.png")}
+              source={require("../../../assets/message/account.png")}
               style={{ width: 50, height: 50 }}
             />
             <Text style={{ marginTop: 5 }}>系统消息</Text>

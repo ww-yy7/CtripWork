@@ -41,10 +41,21 @@ import { UserContext } from "../../contexts/UserContext";
 import { useContext } from "react";
 import PreviewImage from "../PreviewImage";
 
+// 自定义vw vh函数
+const screenWidth = Dimensions.get("window").width;
+const screenHeight = Dimensions.get("window").height;
+const vw = (percentageWidth) => {
+  return (screenWidth * percentageWidth) / 100;
+};
+
+const vh = (percentageHeight) => {
+  return (screenHeight * percentageHeight) / 100;
+};
+
 export default function AddorUpdateTravel({ userInfo }) {
   const {
     id: _id,
-    userInfo: { nickName,Avatar },
+    userInfo: { nickName, Avatar },
     token,
     incrementPublishCount,
   } = useContext(UserContext);
@@ -92,22 +103,11 @@ export default function AddorUpdateTravel({ userInfo }) {
   ); // 移动端展示的图片
   const [selectedImageIndex, setSelectedImageIndex] = useState(0); // 选中的图片索引
 
-
-  // 自定义vw vh函数
-  const screenWidth = Dimensions.get("window").width;
-  const screenHeight = Dimensions.get("window").height;
-  const vw = (percentageWidth) => {
-    return (screenWidth * percentageWidth) / 100;
-  };
-
-  const vh = (percentageHeight) => {
-    return (screenHeight * percentageHeight) / 100;
-  };
   // 把图片转成 ImageViewer 组件需要的格式
   const images = imageList.map((item) => ({
     url: `data:image/jpeg;base64,${item}`,
-    width: 620,
-    height: 450,
+    width: vw(120),
+    height: vh(62),
   }));
 
   // 选择图片
@@ -117,7 +117,7 @@ export default function AddorUpdateTravel({ userInfo }) {
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true, // 是否允许编辑
       aspect: [4, 3], // 裁剪比例
-      quality: 0.1, // 图片质量
+      quality: 0.2, // 图片质量
       base64: true, // 是否返回base64
     });
 
@@ -149,7 +149,16 @@ export default function AddorUpdateTravel({ userInfo }) {
       Toast.info("内容不能为空", 1);
     } else if (!checked) {
       Toast.info("请同意发布规则", 1);
-    } else {
+    }else if(tags.length === 0){
+      Toast.info("请添加标签", 1);
+    }else if(!locationValue){
+      Toast.info("请添加地点", 1);
+    }else if(!playTime){
+      Toast.info("请添加游玩时间", 1);
+    }else if(!money){
+      Toast.info("请添加花费", 1);
+    }
+    else {
       // 发布、更新游记
       if (userInfo) {
         console.log(userInfo.user, "updateuserInfo");
@@ -248,20 +257,14 @@ export default function AddorUpdateTravel({ userInfo }) {
                   <Image
                     key={item}
                     source={{ uri: `data:image/jpeg;base64,${item}` }} // base64
-                    style={{
-                      width: vw(25),
-                      height: vw(25),
-                      borderRadius: 5,
-                      marginLeft: vw(3),
-                      marginBottom: 10,
-                    }}
+                    style={styles.imgBox}
                   />
                 </TouchableOpacity>
 
                 <XMarkIcon
                   onPress={() => deleteOnePicture(index)}
                   style={styles.XMarkIcon}
-                  size={16}
+                  size={25}
                   strokeWidth={3}
                   color="white"
                 />
@@ -285,22 +288,16 @@ export default function AddorUpdateTravel({ userInfo }) {
             maskClosable
             transparent
             onClose={() => setImgPreview(false)}
-            style={{
-              justifyContent: "center",
-              alignItems: "center",
-              width: vw(100),
-              height: vh(50),
-              // backgroundColor: 'rgb(211, 211, 211)',
-              position: "absolute",
-              top: vh(-35),
-              left: vw(-50),
-            }}>
-            <PreviewImage images={images} selectedImageIndex={selectedImageIndex} />
+            style={styles.prevModal}>
+            <PreviewImage
+              images={images}
+              selectedImageIndex={selectedImageIndex}
+            />
           </Modal>
         </Provider>
 
-        <View style={[styles.container, { height: 560 }]}>
-          <View style={[styles.innerBox, { height: 380 }]}>
+        <View style={[styles.container, { height: vh(68) }]}>
+          <View style={[styles.innerBox, { height: vh(44.8) }]}> 
             <TextInput
               style={styles.titleInput}
               onChangeText={(text) => setTitleValue(text)}
@@ -314,22 +311,24 @@ export default function AddorUpdateTravel({ userInfo }) {
               placeholder="填写文章简介"
             />
 
-            <ScrollView
-              style={{ flex: 1, height: 200 }}
-              automaticallyAdjustContentInsets={false}
-              showsHorizontalScrollIndicator={false}
-              showsVerticalScrollIndicator={false}>
-              <List>
-                <TextareaItem
-                  style={{ borderTopWidth: 0.5, borderColor: "lightgray" }} // 添加这行样式设置 // 添加这行样式设置，去掉下划线
-                  rows={8}
-                  placeholder="详细分享你的真实体验、实用攻略和一些小Tips并带上明确的推荐理由，更容易被推荐哦!"
-                  count={500}
-                  value={contentValue}
-                  onChange={(text) => setContentValue(text)}
-                />
-              </List>
-            </ScrollView>
+            {/* <View style={{height:vh(30)}}> */}
+              <ScrollView
+                style={styles.textareaFather}
+                automaticallyAdjustContentInsets={false}
+                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}>
+                <List>
+                  <TextareaItem
+                    style={styles.textarea} 
+                    rows={11}
+                    placeholder="详细分享你的真实体验、实用攻略和一些小Tips并带上明确的推荐理由，更容易被推荐哦!"
+                    count={500}
+                    value={contentValue}
+                    onChange={(text) => setContentValue(text)}
+                  />
+                </List>
+              </ScrollView>
+            {/* </View> */}
 
             <View style={styles.Alltags}>
               {tags.map((tag, index) => (
@@ -343,7 +342,7 @@ export default function AddorUpdateTravel({ userInfo }) {
             </View>
           </View>
 
-          <View style={[styles.innerBox, { height: 120 }]}>
+          <View style={[styles.innerBox, { height: vh(15) }]}>
             {/* 地点 */}
             {locationValue ? (
               <View style={[{ flexDirection: "row" }, styles.addLocation]}>
@@ -490,10 +489,7 @@ export default function AddorUpdateTravel({ userInfo }) {
             <Button
               type="primary"
               onPress={() => setTagVisible(false)}
-              style={{
-                backgroundColor: "#2677e2",
-                borderColor: "#2677e2",
-              }}>
+              style={styles.modalCloseBtn}>
               关闭
             </Button>
           </Modal>
@@ -539,10 +535,7 @@ export default function AddorUpdateTravel({ userInfo }) {
             <Button
               type="primary"
               onPress={() => setLocationVisible(false)}
-              style={{
-                backgroundColor: "#2677e2",
-                borderColor: "#2677e2",
-              }}>
+              style={styles.modalCloseBtn}>
               关闭
             </Button>
           </Modal>
@@ -588,10 +581,7 @@ export default function AddorUpdateTravel({ userInfo }) {
             <Button
               type="primary"
               onPress={() => setPlayTimeVisible(false)}
-              style={{
-                backgroundColor: "#2677e2",
-                borderColor: "#2677e2",
-              }}>
+              style={styles.modalCloseBtn}>
               关闭
             </Button>
           </Modal>
@@ -663,17 +653,6 @@ export default function AddorUpdateTravel({ userInfo }) {
   }
 }
 
-  // 自定义vw vh函数
-  const screenWidth = Dimensions.get("window").width;
-  const screenHeight = Dimensions.get("window").height;
-  const vw = (percentageWidth) => {
-    return (screenWidth * percentageWidth) / 100;
-  };
-
-  const vh = (percentageHeight) => {
-    return (screenHeight * percentageHeight) / 100;
-  };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -698,37 +677,49 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   imgBox: {
-    height: 100,
-    width: 100,
+    width: vw(25),
+    height: vw(25),
+    marginLeft: vw(2),
     backgroundColor: "rgb(247,248,250)",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 10,
+    marginBottom: vh(1),
     borderRadius: 5,
-    marginLeft: 10,
   },
   titleInput: {
-    height: 45,
+    height: vh(5),
     fontSize: 24,
     fontWeight: "500",
     borderColor: "lightgray",
     // borderWidth: 1,
     // borderRadius: 5,
     borderBottomWidth: 0.5,
-    marginBottom: 10,
-    marginLeft: 10,
+    marginBottom: vh(1),
+    marginLeft: vw(1),
   },
   profileInput: {
-    height: 30,
+    height: vh(2.5),
     fontSize: 18,
     borderColor: "lightgray",
-    marginBottom: 10,
-    marginLeft: 10,
+    marginBottom: vh(1),
+    marginLeft: vw(1),
+  },
+  textarea: {
+    borderColor: "lightgray",
+    fontSize: 18,
+    borderBottomWidth: 0.5,
+    marginLeft: vw(-1),
+  },
+  textareaFather: {
+    // height: vh(20),
+    borderColor: "lightgray",
+    borderBottomWidth: 0.5,
+    // marginBottom: vh(1),
   },
   Alltags: {
     flexDirection: "row",
     flexWrap: "wrap",
-    marginTop: 5,
+    // marginTop: vh(1),
   },
   tags: {
     marginLeft: 5,
@@ -750,15 +741,20 @@ const styles = StyleSheet.create({
     fontSize: 12,
     // borderRadius: 20,
   },
+  modalCloseBtn: {
+      backgroundColor: "#2677e2",
+      borderColor: "#2677e2",
+      height: vh(5),
+  },
   tagInput: {
-    height: 40,
-    width: "80%",
+    height: vh(4.8),
+    width: vw(78),
     borderColor: "lightgray",
     borderWidth: 1,
     // borderRadius: 5,
     // borderBottomWidth: 1,
     // marginBottom: 10,
-    marginLeft: -2,
+    marginLeft: vh(-0.7),
     borderRadius: 5,
   },
   modalView: {
@@ -768,9 +764,10 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   modalBtn: {
-    height: 40,
-    width: 70,
+    height: vh(4.8),
+    width: vw(18),
     borderRadius: 5,
+    marginRight: vw(-1),
     // backgroundColor: "lightgray",
     // borderColor: "lightgray",
   },
@@ -784,13 +781,13 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   addLocation: {
-    height: 30,
+    height: vh(4),
     flexDirection: "row",
     alignItems: "center",
   },
   submit: {
     width: "100%",
-    height: 40,
+    height: vh(5),
     borderRadius: 50,
     backgroundColor: "#2677e2",
     borderColor: "#2677e2",
@@ -799,7 +796,7 @@ const styles = StyleSheet.create({
   XMarkIcon: {
     position: "absolute",
     top: 0,
-    left: 10,
+    left: vw(3),
     backgroundColor: "rgba(0,0,0,0.5)",
     borderRadius: 5,
     color: "white",
@@ -813,5 +810,14 @@ const styles = StyleSheet.create({
     marginTop: 210,
     position: "absolute",
     top: 50,
+  },
+  prevModal: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: vw(100),
+    height: vh(50),
+    position: "absolute",
+    top: vh(-35),
+    left: vw(-50),
   },
 });
