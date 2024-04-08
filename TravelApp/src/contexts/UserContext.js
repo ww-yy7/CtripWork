@@ -10,8 +10,11 @@ function UserProvider({ children }) {
   const [userInfo, setUserInfo] = useState({});
   const [publish, setPublish] = useState(0); // 点击发布时，按钮变更，为了发布后页面更新
   const [deleteCount, setDeleteCount] = useState(0)
+  const [changeAvatar, setChangeAvatar] = useState(0);
   const [travelsData, setTravelsData] = useState([]); //全部游记数据
   const [mytravelsData, setMyTravelsData] = useState([]);  //我的游记数据
+  
+  
 
   // 函数用于增加发布次数
   const incrementPublishCount = () => {
@@ -21,6 +24,11 @@ function UserProvider({ children }) {
   const incrementDeleteCount = () => {
     setDeleteCount(prevCount => prevCount + 1);
   }
+  // 用于增加改变头像次数
+  const incrementChangeAvatarCount = () => {
+    setChangeAvatar(prevCount => prevCount + 1);
+  };
+
   // 将 id 存储在本地缓存中
   const saveIDToStorage = async (idValue) => {
     try {
@@ -70,6 +78,7 @@ function UserProvider({ children }) {
         publish, // 也可以提供当前发布次数的状态
         deleteCount,
         travelsData,
+        changeAvatar,
         mytravelsData,
         saveUserInfoToStorage,
         saveTokenToStorage,
@@ -77,6 +86,7 @@ function UserProvider({ children }) {
         saveIDToStorage,
         incrementPublishCount, // 通过context提供这个函数
         incrementDeleteCount,
+        incrementChangeAvatarCount,
         setMyTravelsData,
         setTravelsData
       }}>

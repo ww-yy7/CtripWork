@@ -17,12 +17,14 @@ import {
   ClockIcon,
   PencilIcon,
   PencilSquareIcon,
+  ChatBubbleOvalLeftEllipsisIcon
 } from "react-native-heroicons/outline";
 import { Toast, Provider } from "@ant-design/react-native";
 import { HeartIcon, StarIcon } from "react-native-heroicons/solid";
 import { useNavigation } from "@react-navigation/native";
 import { theme } from "../../theme";
 import SwiperComponent from "../../components/Swiper";
+import { unescapeHtml } from "../../apis/HtmlHandler";
 // import Swiper from "react-native-swiper";
 import { FastForward } from "react-native-feather";
 import { UserContext } from "../../contexts/UserContext";
@@ -146,12 +148,12 @@ return (
           style={styles.scrollview}>
           {/* 标题用户行 */}
           <View style={styles.titleanduserview}>
-            <Text style={styles.texttitle}>{item?.title}</Text>
+            <Text style={styles.texttitle}>{unescapeHtml(item?.title)}</Text>
             <View style={styles.userinfo}>
               <Text style={styles.username}>{item.user}</Text>
               <Image
-                source={require("../../../assets/images/avatar.png")}
-                style={{ height: 25, width: 25 }}
+                source={{ uri: `data:image/jpeg;base64,${item.Avatar}` }}
+                style={{ height: 25, width: 25, borderRadius:30 }}
               />
             </View>
           </View>
@@ -198,7 +200,23 @@ return (
           </View>
 
           {/* 游记正文 */}
-          <Text style={styles.description}>{item?.content}</Text>
+          <Text style={styles.description}>{unescapeHtml(item?.content)}</Text>
+          <Text style={{
+            fontSize:10,
+            color:'grey',
+            position:'relative',
+            top:20
+          }}>
+            {/* 发布于{item?.time} */}
+            发布于{' '}
+            {new Date(item.time * 1).toLocaleString('zh-CN', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+              hour: 'numeric',
+              minute: 'numeric',
+            })}
+            </Text>
         </ScrollView>
       </View>
 
@@ -243,12 +261,12 @@ return (
           />
         </TouchableOpacity>
 
-        {/* 编辑按钮，如果是当前用户自己的游记则显示 */}
+        {/* 评论按钮 */}
         <TouchableOpacity
-          style={styles.editicon}
+          style={styles.commentIcon}
           // onPress={()=> toggleCollect(!isCollect)}
         >
-          <PencilSquareIcon size={28} stroke={"black"} strokeWidth={1.5} />
+          <ChatBubbleOvalLeftEllipsisIcon size={28} stroke={"black"} strokeWidth={1.5} />
         </TouchableOpacity>
       </View>
     </View>
@@ -312,7 +330,7 @@ const styles = StyleSheet.create({
   texttitle: {
     fontWeight: "bold", // font-bold 对应 fontWeight
     flexGrow: 1, // flex-1 对应 flexGrow
-    color: "#aaa",
+    // color: "",
     fontSize: 25,
   },
   userinfo: {
@@ -326,7 +344,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     margin: 5,
-    color: "#ccc",
+    color: 'gold',
   },
 
   pdpview: {
@@ -352,7 +370,7 @@ const styles = StyleSheet.create({
   description: {
     // color: '#aaa',
     letterSpacing: 1,
-    marginTop: 16,
+    marginTop: 16,    
   },
 
   // 评论点赞区
@@ -391,7 +409,7 @@ const styles = StyleSheet.create({
     right: 10,
   },
 
-  editicon: {
+  commentIcon: {
     backgroundColor: "rgba(255,255,255,0.5)",
     // paddingHorizontal: 8,
     // borderRadius: '100%',

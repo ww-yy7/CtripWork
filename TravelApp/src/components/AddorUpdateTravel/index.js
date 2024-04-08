@@ -363,8 +363,8 @@ export default function AddorUpdateTravel({ userInfo }) {
                 <MapPinIcon
                   style={styles.locationIcon}
                   size={18}
-                  strokeWidth={3}
-                  color="gray"
+                  strokeWidth={2}
+                  color="black"
                 />
                 <Text
                   style={styles.location}
@@ -393,8 +393,8 @@ export default function AddorUpdateTravel({ userInfo }) {
                 <ClockIcon
                   style={styles.locationIcon}
                   size={18}
-                  strokeWidth={3}
-                  color="gray"
+                  strokeWidth={2}
+                  color="black"
                 />
                 <Text
                   style={styles.location}
@@ -423,8 +423,8 @@ export default function AddorUpdateTravel({ userInfo }) {
                 <CurrencyYenIcon
                   style={styles.locationIcon}
                   size={18}
-                  strokeWidth={3}
-                  color="gray"
+                  strokeWidth={2}
+                  color="black"
                 />
                 <Text
                   style={styles.location}
@@ -760,6 +760,7 @@ const styles = StyleSheet.create({
   modalView: {
     flexDirection: "row",
     justifyContent: "space-between",
+    // justifyContent: "center",
     alignItems: "center",
     padding: 10,
   },

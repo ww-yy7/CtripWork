@@ -9,16 +9,30 @@ import LikeTravels from "../pages/LikeTravels";
 import Message from "../pages/Message"
 
 import {
-  BookOpenIcon,
-  HomeIcon,
-  HeartIcon,
-  UserIcon,
-  ChatBubbleBottomCenterTextIcon
+  // HomeIcon,
+  // HeartIcon,
+  // UserIcon,
+  // ChatBubbleBottomCenterTextIcon
 } from "react-native-heroicons/outline";
 import {
-
     PlusCircleIcon,
   } from "react-native-heroicons/solid";
+
+import {
+  HomeIcon as OutlineHomeIcon,  // 从outline版本中引入HomeIcon并重命名为OutlineHomeIcon
+  HeartIcon as OutlineHeartIcon,
+  UserIcon as OutlineUserIcon,
+  ChatBubbleBottomCenterTextIcon
+} from "react-native-heroicons/outline";
+
+import {
+    HomeIcon as SolidHomeIcon,  // 从solid版本中引入HomeIcon并重命名为SolidHomeIcon
+    HeartIcon as SolidHeartIcon,
+    UserIcon as SolidUserIcon,
+    ChatBubbleBottomCenterTextIcon as SolidChatBubbleBottomCenterTextIcon,
+    // PlusCircleIcon,
+  } from "react-native-heroicons/solid";
+
 
 const BottomTabs = () => {
   return (
@@ -30,12 +44,15 @@ const BottomTabs = () => {
           headerShown: false,
           tabBarLabel: "首页",
           tabBarActiveTintColor: "#2677e2",
+          // tabBarActiveTintColor: "black",
           tabBarInactiveTintColor: "grey",
           tabBarIcon: ({ focused }) => {
             if (focused) {
-              return <HomeIcon color="#2677e2"></HomeIcon>;
+              // return <HomeIcon color="#2677e2"></HomeIcon>;
+              return <SolidHomeIcon color="#2677e2"></SolidHomeIcon>
             } else {
-              return <HomeIcon color="grey"></HomeIcon>;
+              // return <HomeIcon color="grey"></HomeIcon>;
+              return <OutlineHomeIcon color="gray"></OutlineHomeIcon>
             }
           },
         }}
@@ -51,9 +68,11 @@ const BottomTabs = () => {
           tabBarInactiveTintColor: "grey",
           tabBarIcon: ({ focused }) => {
             if (focused) {
-              return <HeartIcon color="#2677e2" ></HeartIcon>;
+              // return <HeartIcon color="#2677e2" ></HeartIcon>;
+              return <SolidHeartIcon color="#2677e2"></SolidHeartIcon>
             } else {
-              return <HeartIcon color="grey"></HeartIcon>;
+              // return <HeartIcon color="grey"></HeartIcon>;
+              return <OutlineHeartIcon color="grey"></OutlineHeartIcon>
             }
           },
         }}
@@ -83,10 +102,12 @@ const BottomTabs = () => {
           headerShown: false,
           tabBarLabel: "消息",
           tabBarActiveTintColor: "#2677e2",
+          // tabBarActiveTintColor: "grey",
           tabBarInactiveTintColor: "grey",
           tabBarIcon: ({ focused }) => {
             if (focused) {
-              return <ChatBubbleBottomCenterTextIcon color="#2677e2"></ChatBubbleBottomCenterTextIcon>;
+              // return <ChatBubbleBottomCenterTextIcon color="#2677e2"></ChatBubbleBottomCenterTextIcon>;
+              return <SolidChatBubbleBottomCenterTextIcon color="#2677e2"></SolidChatBubbleBottomCenterTextIcon>
             } else {
               return <ChatBubbleBottomCenterTextIcon color="grey"></ChatBubbleBottomCenterTextIcon>;
             }
@@ -103,9 +124,11 @@ const BottomTabs = () => {
           tabBarInactiveTintColor: "grey",
           tabBarIcon: ({ focused }) => {
             if (focused) {
-              return <UserIcon  color="#2677e2"></UserIcon>;
+              // return <UserIcon  color="#2677e2"></UserIcon>;
+              return <SolidUserIcon color="#2677e2"></SolidUserIcon>
             } else {
-              return <UserIcon color="grey"></UserIcon>;
+              // return <UserIcon color="grey"></UserIcon>;
+              return <OutlineUserIcon color="grey"></OutlineUserIcon>
             }
           },
         }}
