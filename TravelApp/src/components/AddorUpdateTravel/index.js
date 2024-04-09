@@ -214,7 +214,8 @@ export default function AddorUpdateTravel({ userInfo }) {
           Toast.info("发布成功", 1);
 
           setTimeout(() => {
-            navigation.navigate("Mine");
+            // navigation.navigate("Mine");
+            navigation.navigate("Mine", { showComponent: 'travelList' });
             // 清除所有内容
             setTitleValue("");
             setProfileValue("");

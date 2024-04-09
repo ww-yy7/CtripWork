@@ -36,32 +36,36 @@ export default function Home() {
   // 防止从搜索页返回后自动聚焦到搜索Input导致二次跳转
   const inputRef = useRef(null);
 
-  const ToSearch = () => {
-    navigation.navigate("Search");
-    // 在跳转后取消焦点
-    inputRef.current?.blur();
-  };
+    const ToSearch = () => {
+        navigation.navigate("Search")
+        // 在跳转后取消焦点
+        inputRef.current?.blur();
+    };
 
-  return (
-    <SafeAreaView style={stlyes.container}>
-      {/* <View> */}
-      <View style={stlyes.top}>
-        <Text style={stlyes.title}>让我们一起探索！</Text>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("Mine");
-          }}>
-          <Image
-            // source={require('../../../assets/images/avatar.png')}
-            source={
-              token && userInfo && userInfo.Avatar
-                ? { uri: `data:image/jpeg;base64,${userInfo.Avatar}` }
-                : require("../../../assets/images/avatar.png")
-            }
-            style={{ height: 40, width: 40, borderRadius: 30 }}
-          />
-        </TouchableOpacity>
-      </View>
+    const handleAvatarlink = () =>{
+        if(token){
+            navigation.navigate("EditProfile")
+        }else{
+            navigation.navigate("Mine")
+        }
+    }
+        
+       
+    return (
+
+        <SafeAreaView style={stlyes.container}>
+            {/* <View> */}
+            <View style={stlyes.top}>
+                <Text style={stlyes.title}>让我们一起探索！</Text>
+                <TouchableOpacity onPress={handleAvatarlink}>
+                    <Image 
+                    // source={require('../../../assets/images/avatar.png')}
+                    source={token && userInfo && userInfo.Avatar ? { uri: `data:image/jpeg;base64,${userInfo.Avatar}` } : require('../../../assets/images/avatar.png')}
+                
+                    style={{height: 40, width: 40, borderRadius: 30}}/>
+                </TouchableOpacity>
+
+            </View>
 
       <View>
         <View style={stlyes.serchandinput}>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
   ScrollView,
   TextInput,
   Share,
+  KeyboardAvoidingView,
 } from "react-native";
 import {
   ChevronLeftIcon,
@@ -16,7 +17,8 @@ import {
   MapPinIcon,
   ClockIcon,
   PencilIcon,
-  ChatBubbleOvalLeftEllipsisIcon,
+  CurrencyYenIcon,
+  ChatBubbleOvalLeftEllipsisIcon
 } from "react-native-heroicons/outline";
 import { Toast, Provider } from "@ant-design/react-native";
 import { HeartIcon, StarIcon } from "react-native-heroicons/solid";
@@ -118,11 +120,26 @@ export default function TravelsDetails(props) {
     }
   };
 
-  return (
-    <Provider>
-      <View>
-        {/* <Image source={item.article[0].picture} style={styles.imagecontainer}/> */}
-        <SwiperComponent item={item}></SwiperComponent>
+  // 创建一个引用点，以便可以滚动到这个位置
+  const targetLocationRef = useRef(null);
+
+  const scrollToLocation = () => {
+    // 使用targetLocationRef.current.measure方法获取元素的位置信息
+    targetLocationRef.current.measure((x, y, width, height, pageX, pageY) => {
+      // 使用scrollTo方法滚动到指定位置
+      scrollViewRef.current.scrollTo({ x: 0, y: pageY, animated: true });
+    });
+  };
+
+  // 创建ScrollView的引用
+  const scrollViewRef = useRef();
+
+
+return (
+  <Provider>
+    <View>
+      {/* <Image source={item.article[0].picture} style={styles.imagecontainer}/> */}
+      <SwiperComponent item={item}></SwiperComponent>
 
         <SafeAreaView style={styles.safeareaview}>
           {/* 返回按钮 */}
@@ -140,179 +157,176 @@ export default function TravelsDetails(props) {
           </TouchableOpacity>
         </SafeAreaView>
 
-        {/* 标题用户&位置时间预算&游记正文 */}
-        <View style={styles.contentcontainer}>
-          <ScrollView
-            automaticallyAdjustContentInsets={false}
-            showsHorizontalScrollIndicator={false}
-            showsVerticalScrollIndicator={false}
-            style={styles.scrollview}>
-            {/* 标题用户行 */}
-            <View style={styles.titleanduserview}>
-              <Text style={styles.texttitle}>{unescapeHtml(item?.title)}</Text>
-              <View style={styles.userinfo}>
-                <Text style={styles.username}>{item.user}</Text>
-                <Image
-                  source={{ uri: `data:image/jpeg;base64,${item.Avatar}` }}
-                  style={{ height: 25, width: 25, borderRadius: 30 }}
-                />
+      {/* 标题用户&位置时间预算&游记正文 */}
+      <View style={styles.contentcontainer}>
+        <ScrollView
+          // automaticallyAdjustContentInsets={false}
+          showsHorizontalScrollIndicator={false}
+          // showsVerticalScrollIndicator={false}
+          ref={scrollViewRef}
+          style={styles.scrollview}>
+          {/* 标题用户行 */}
+          <View style={styles.titleanduserview}>
+            <Text style={styles.texttitle}>{unescapeHtml(item?.title)}</Text>
+            <View style={styles.userinfo}>
+              <Text style={styles.username}>{item.user}</Text>
+              <Image
+                source={{ uri: `data:image/jpeg;base64,${item.Avatar}` }}
+                style={{ height: 25, width: 25, borderRadius:30 }}
+              />
+            </View>
+          </View>
+
+          {/* 位置时间预算行 */}
+          <View style={styles.pdpview}>
+            <TouchableOpacity
+              style={styles.position}
+              className="flex-row space-x-2 items-start">
+              <MapPinIcon size={25} color="#f87171" top={5} />
+              <View className="flex space-y-2">
+                <Text
+                  style={{ fontSize: 16,color:"#f87171" }}
+                  className="font-bold text-neutral-700">
+                  {item.position}
+                </Text>
+                <Text style={{fontSize:10,left:2}}>位置</Text>
+              </View>
+            </TouchableOpacity>
+
+            <View
+              style={styles.duration}
+              className="flex-row space-x-2 items-start">
+              <ClockIcon size={25} color="skyblue" top={4} margin={2}/>
+              <View className="flex space-y-2">
+                <Text
+                  style={{ fontSize: 16,color:'skyblue' }}
+                  className="font-bold text-neutral-700">
+                  {item.playTime}
+                </Text>
+                <Text style={{fontSize:10,left:2}}>游玩时间</Text>
               </View>
             </View>
 
-            {/* 位置时间预算行 */}
-            <View style={styles.pdpview}>
-              <TouchableOpacity
-                style={styles.position}
-                className="flex-row space-x-2 items-start">
-                <MapPinIcon size={25} color="#f87171" />
-                <View className="flex space-y-2">
-                  <Text
-                    style={{ fontSize: 13 }}
-                    className="font-bold text-neutral-700">
-                    {item.position}
-                  </Text>
-                  <Text className="text-neutral-600 tracking-wide">位置</Text>
-                </View>
-              </TouchableOpacity>
-
-              <View
-                style={styles.duration}
-                className="flex-row space-x-2 items-start">
-                <ClockIcon size={25} color="skyblue" />
-                <View className="flex space-y-2">
-                  <Text
-                    style={{ fontSize: 13 }}
-                    className="font-bold text-neutral-700">
-                    {item.playTime}
-                  </Text>
-                  <Text className="text-neutral-600 tracking-wide">
-                    游玩天数
-                  </Text>
-                </View>
-              </View>
-
-              <View style={styles.price}>
-                <Text style={{ fontSize: 25, color: theme.text }}>¥</Text>
-                <View>
-                  <Text style={{ fontSize: 13, color: theme.text }}>
-                    {item?.money}
-                  </Text>
-                  <Text>花费</Text>
-                </View>
-              </View>
-            </View>
-
-            {/* 游记正文 */}
-            <Text style={styles.description}>
-              {unescapeHtml(item?.content)}
-            </Text>
-            <View style={{ height: 30 }}>
-              <Text
-                style={{
-                  fontSize: 10,
-                  color: "grey",
-                  position: "relative",
-                  top: 20,
-                }}>
-                {/* 发布于{item?.time} */}
-                发布于{" "}
-                {new Date(item.time * 1).toLocaleString("zh-CN", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                  hour: "numeric",
-                  minute: "numeric",
-                })}
-              </Text>
-            </View>
-
-            {/* 评论 点赞 收藏 */}
-            <View style={styles.clcview}>
-              <View style={styles.commentview}>
-                <PencilIcon
-                  size={13}
-                  strokeWidth={1}
-                  color="gray"
-                  style={{ margin: 2 }}
-                />
-                <TextInput
-                  value={inputValue}
-                  onChangeText={(text) => setInputValue(text)}
-                  placeholder="按下Enter键提交评论"
-                  placeholderTextColor={"gray"}
-                  onSubmitEditing={submitComment}
-                  style={styles.input}
-                />
-              </View>
-
-              <TouchableOpacity
-                style={styles.likeicon}
-                onPress={() => toggleFavourite(!isFavourite)}>
-                <HeartIcon
-                  size={30}
-                  stroke={isFavourite ? "red" : "black"}
-                  strokeWidth={1.5}
-                  color={isFavourite ? "red" : "white"}
-                />
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={styles.staricon}
-                onPress={() => toggleCollect(!isCollect)}>
-                <StarIcon
-                  size={30}
-                  stroke={isCollect ? "orange" : "black"}
-                  strokeWidth={1.5}
-                  color={isCollect ? "orange" : "white"}
-                />
-              </TouchableOpacity>
-
-              {/* 评论按钮 */}
-              <TouchableOpacity
-                style={styles.commentIcon}
-                // onPress={()=> toggleCollect(!isCollect)}
-              >
-                <ChatBubbleOvalLeftEllipsisIcon
-                  size={30}
-                  stroke={"black"}
-                  strokeWidth={1.5}
-                />
-              </TouchableOpacity>
-            </View>
-
-            {/* 评论区 */}
-            <View>
+            <View style={styles.price}>
+              <CurrencyYenIcon size={25} color= {theme.text} top={5} margin={1}></CurrencyYenIcon>
               <View>
-                <Text style={{ fontSize: 16, fontWeight: "bold" }}>评论区</Text>
+                <Text style={{ fontSize: 16, color: theme.text }}>
+                  {item?.money}
+                </Text>
+                <Text style={{ fontSize: 10, left:2}}>花费</Text>
               </View>
-              {articleData?.comment?.map((comment, index) => (
-                <View
-                  key={index}
-                  style={{ flexDirection: "row", marginTop: 10 }}>
-                  <Image
-                    source={{
-                      uri: `data:image/jpeg;base64,${comment.commentAvatar}`,
-                    }}
-                    style={{ height: 30, width: 30, borderRadius: 30 }}
-                  />
-                  <View style={{ marginLeft: 10 }}>
-                    <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-                      {comment.nickName}
-                    </Text>
-                    <Text style={{ fontSize: 14 }}>{comment.content}</Text>
-                  </View>
-                </View>
-              ))}
             </View>
+          </View>
 
-            <View style={{ height: 50 }}></View>
+          {/* 游记正文 */}
+          <Text style={styles.description}>{unescapeHtml(item?.content)}</Text>
+          
+            <Text style={{
+              fontSize:10,
+              color:'grey',
+              position:'relative',
+              top:20
+            }}>
+              {/* 发布于{item?.time} */}
+              发布于{' '}
+              {new Date(item.time * 1).toLocaleString('zh-CN', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+              })}
+              </Text>
+         
+          {/* 评论区 */}
+          <View style={{marginTop:50}} >
+            <View ><Text ref={targetLocationRef} style={{ fontSize: 16, fontWeight: "bold" }}>评论区</Text></View>
+            {articleData?.comment?.map((comment, index) => (
+              <View key={index} style={{ flexDirection: "row", marginTop: 15, width:'90%' }}>
+                <Image
+                  source={{ uri: `data:image/jpeg;base64,${comment.commentAvatar}` }}
+                  style={{ height: 30, width: 30, borderRadius: 30 }}
+                />
+                <View style={{ marginLeft: 10 }}>
+                  <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+                    {comment.nickName}
+                  </Text>
+                  <Text style={{ fontSize: 14 }}>{comment.content}</Text>
+                </View>
+              </View>
+            ))}
+          </View>
+
+          <View style={{height:30}}></View>
+
           </ScrollView>
-        </View>
-
-        <View style={{ height: 50 }}></View>
       </View>
-    </Provider>
-  );
+
+      {/* 评论 点赞 收藏 */}
+      <KeyboardAvoidingView
+      behavior="position"
+      >
+      <View style={styles.clcview}>
+        {/* 评论框 */}
+        <View style={styles.commentview}>
+          <PencilIcon
+            size={13}
+            strokeWidth={1}
+            color="gray"
+            style={{ margin: 2 }}
+          />
+          <TextInput
+            value={inputValue}
+            onChangeText={(text) => setInputValue(text)}
+            placeholder="按下Enter键提交评论"
+            placeholderTextColor={"gray"}
+            onSubmitEditing={submitComment}
+            style={styles.input}
+          />
+        </View>
+        
+        {/* 点赞按钮 */}
+        <TouchableOpacity
+          style={styles.likeicon}
+          onPress={() => toggleFavourite(!isFavourite)}>
+          <HeartIcon
+            size={30}
+            stroke={isFavourite ? "red" : "black"}
+            strokeWidth={1.5}
+            color={isFavourite ? "red" : "white"}
+          />
+        </TouchableOpacity>
+        
+        {/* 收藏按钮 */}
+        <TouchableOpacity
+          style={styles.staricon}
+          onPress={() => toggleCollect(!isCollect)}>
+          <StarIcon
+            size={30}
+            stroke={isCollect ? "orange" : "black"}
+            strokeWidth={1.5}
+            color={isCollect ? "orange" : "white"}
+          />
+        </TouchableOpacity>
+
+        {/* 评论按钮 */}
+        <TouchableOpacity
+          style={styles.commentIcon}
+          onPress={scrollToLocation}
+        >
+          <ChatBubbleOvalLeftEllipsisIcon size={30} stroke={"black"} strokeWidth={1.5} />
+        </TouchableOpacity>
+      </View>
+      </KeyboardAvoidingView>
+
+          
+        
+      
+      {/* <View style={{height:60}}></View> */}
+
+    </View>
+  </Provider>
+);
 }
 
 const styles = StyleSheet.create({
@@ -351,16 +365,16 @@ const styles = StyleSheet.create({
     flexDirection: "row", // 默认值，为了明确表示为flex布局
     justifyContent: "space-between",
     backgroundColor: "white", // bg-white 对应 background-color
-    height: "50%",
+    height: "41%",
     marginTop: -40,
-    borderTopLeftRadius: 40,
-    borderTopRightRadius: 40,
+    borderTopLeftRadius: 37,
+    borderTopRightRadius: 37,
     // top: 40
   },
   scrollview: {
     flexDirection: "column", // 假设是垂直方向的空间间隔
     marginBottom: 5,
-    height: 390,
+    // height: 390,
   },
   titleanduserview: {
     flexDirection: "row", // flex-row 对应 flexDirection: 'row'
@@ -390,15 +404,14 @@ const styles = StyleSheet.create({
   pdpview: {
     flexDirection: "row",
     justifyContent: "space-between",
-    top: 10,
-    marginVertical: 15,
+    top: 8,
+    marginVertical: 25,
     paddingHorizontal: 10,
 
     right: 5,
   },
   position: {
     flexDirection: "row",
-    paddingHorizontal: 0,
   },
   duration: {
     flexDirection: "row",
@@ -410,7 +423,14 @@ const styles = StyleSheet.create({
   description: {
     // color: '#aaa',
     letterSpacing: 1,
-    marginTop: 16,
+    marginTop: 16,   
+    marginLeft: 3,
+    // letterSpacing:1,
+    // lineHeight:28,
+    // fontSize:14,
+    lineHeight:25,
+    fontSize:13,
+     
   },
 
   // 评论点赞区
@@ -419,9 +439,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     backgroundColor: "white",
-    height: "10%",
-    marginTop: 20,
-    marginLeft: -20,
+    height: 77,
+    borderRadius:3,
+   
   },
   commentview: {
     flexDirection: "row",
@@ -430,8 +450,8 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 8,
     left: 20,
-    bottom: 20,
-    width: "65%",
+    bottom: 18,
+    width: "55%",
     paddingLeft: 10,
   },
   likeicon: {
@@ -439,7 +459,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     // borderRadius: '100%',
     marginRight: 16,
-    bottom: 19,
+    bottom: 17,
     left: 20,
   },
   staricon: {
@@ -447,7 +467,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     // borderRadius: '100%',
     marginRight: 16,
-    bottom: 19,
+    bottom: 17,
     right: 10,
   },
 
@@ -456,11 +476,11 @@ const styles = StyleSheet.create({
     // paddingHorizontal: 8,
     // borderRadius: '100%',
     // marginRight: 16,
-    bottom: 19,
+    bottom: 17,
     right: 30,
   },
   input: {
-    width: "100%",
+    width: "90%",
     padding: 5,
     fontSize: 15,
   },
