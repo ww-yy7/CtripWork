@@ -14,23 +14,10 @@ const SearchScreen = () => {
 
 
   // 使用 useEffect 监听 results 的变化
-  useEffect(() => {
-    console.log(results);
-  }, [results]); // results 作为依赖项
-
-
-  // 处理搜索操作
-  // const handleSearch = async () => {
-  //   try {
-  //     const searchResults = await searchTravelNote(searchText);
-  //     setResults(searchResults); // 更新状态以显示搜索结果
-  //     // console.log(results);
-  //     addToHistory(searchText)
-
-  //   } catch (error) {
-  //     console.error('搜索失败:', error);
-  //   }
-  // };
+  // useEffect(() => {
+  //   console.log(results);
+  // }, [results]); 
+  
 
   const handleSearch = async () => {
     // 首先，去除searchText两边的空格

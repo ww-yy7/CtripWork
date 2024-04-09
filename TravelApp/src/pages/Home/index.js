@@ -82,9 +82,9 @@ export default function Home() {
           />
         </View>
       </View>
-      <View>
+      {/* <View>
         <Categories />
-      </View>
+      </View> */}
       <View>
         <HomeSwiper />
       </View>

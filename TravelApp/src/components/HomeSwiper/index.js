@@ -34,6 +34,8 @@ export default function HomeSwiper() {
 const styles = StyleSheet.create({
   swiper: {
     backgroundColor: "white",
+    paddingHorizontal:6,
+    marginVertical: 15,
     flexGrow: 1,
     width: "100%",
     height: 100,
@@ -45,6 +47,7 @@ const styles = StyleSheet.create({
   },
   imagecontainer: {
     backgroundColor: "white",
+
     flexGrow: 1,
     width: "100%",
     height: 100,

@@ -70,7 +70,7 @@ export default function TravelsDetails(props) {
     try {
       const result = await Share.share({
         message: `${item.title}`,
-        url: `http://10.100.133.18:5010?articleId=${item.articleId}`,
+        url: `http://10.100.212.230:5010?articleId=${item.articleId}`,
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -341,7 +341,8 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 20,
     marginRight: 16,
-    backgroundColor: "rgba(255,255,255,0.5)",
+    // backgroundColor: "rgba(255,255,255,0.5)",
+    backgroundColor: "rgba(0,0,0,0.6)",
   },
   safeareaview: {
     flexDirection: "row",
@@ -356,7 +357,8 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 20,
     marginRight: 20,
-    backgroundColor: "rgba(255,255,255,0.5)",
+    // backgroundColor: "rgba(255,255,255,0.5)",
+    backgroundColor: "rgba(0,0,0,0.6)",
   },
   // 内容区
   contentcontainer: {
