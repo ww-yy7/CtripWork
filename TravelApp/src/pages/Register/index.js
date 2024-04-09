@@ -206,12 +206,36 @@ export default function Register() {
           </View>
           <View style={styles.checkBox}>
             <Checkbox
-              style={{ color: "#fff" }}
+              style={{ color: "#fff" ,}}
               onChange={() => setChecked(!checked)}
               checked={checked}></Checkbox>
-            <Text style={{ color: "#fff", marginLeft: -10 }}>
-              阅读并同意乐游记的《用户注册协议》
-            </Text>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+              }}>
+              <Text
+                style={{
+                  color: "#fff",
+                  marginLeft: -10,
+                  fontSize: 12,
+                }}>
+                阅读并同意
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("LoginAgreement");
+                }}>
+                <Text
+                  style={{
+                    textDecorationLine: "underline",
+                    color: "#fff",
+                    fontSize: 12,
+                  }}>
+                  《乐游记平台使用服务协议》
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </ImageBackground>

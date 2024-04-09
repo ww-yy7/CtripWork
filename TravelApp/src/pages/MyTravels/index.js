@@ -1,64 +1,101 @@
 import { useState, useEffect, useContext } from "react";
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Alert,Modal } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+  Alert,
+  Modal,
+  Dimensions,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { TrashIcon, PencilSquareIcon } from "react-native-heroicons/outline";
-// import { travelsdefaultData } from "../../constants";
 import { getAllTravelNote } from "../../apis/user";
 import { UserContext } from "../../contexts/UserContext";
 import { deleteTravelNote } from "../../apis/user";
 import { unescapeHtml } from "../../apis/HtmlHandler";
 
+// 自定义vw vh函数
+const screenWidth = Dimensions.get("window").width;
+const screenHeight = Dimensions.get("window").height;
+const vw = (percentageWidth) => {
+  return (screenWidth * percentageWidth) / 100;
+};
+
+const vh = (percentageHeight) => {
+  return (screenHeight * percentageHeight) / 100;
+};
+
 export default function MyTravels() {
-   
-  const { token, id, publish, deleteCount,incrementDeleteCount,} = useContext(UserContext);
-  const {mytravelsData, setMyTravelsData } = useContext(UserContext);
-  
-  
+  const navigation=useNavigation()
+  const { token, id, publish, deleteCount, incrementDeleteCount } =
+    useContext(UserContext);
+  const { mytravelsData, setMyTravelsData } = useContext(UserContext);
+
   useEffect(() => {
     if (id) {
-      getAllTravelNote({_id: id})
-        .then((users) => {
-            // 使用 flatMap 提取每个用户的所有游记，合并成一个数组
-            const allArticles = users.article;
-            // console.log(allArticles)
-            // 对合并后的游记数组进行排序
-            const sortedArticles = allArticles.sort((a, b) => parseInt(b.time) - parseInt(a.time));
-            // 更新状态以存储排序后的游记数据
-            setMyTravelsData(sortedArticles);
-        })
+      getAllTravelNote({ _id: id }).then((users) => {
+        // 使用 flatMap 提取每个用户的所有游记，合并成一个数组
+        const allArticles = users.article;
+        // console.log(allArticles)
+        // 对合并后的游记数组进行排序
+        const sortedArticles = allArticles.sort(
+          (a, b) => parseInt(b.time) - parseInt(a.time)
+        );
+        // 更新状态以存储排序后的游记数据
+        setMyTravelsData(sortedArticles);
+      });
     }
-  }, [id,publish,deleteCount]); // 将 token 添加到依赖数组中，这样每当 token 变化时都会重新获取游记数据
-
+  }, [id, publish, deleteCount]); // 将 token 添加到依赖数组中，这样每当 token 变化时都会重新获取游记数据
 
   const deleteMyTravel = async (idToDelete) => {
-        try {
-          await deleteTravelNote(idToDelete); // 先调用接口删除游记
-          incrementDeleteCount()
-          setMyTravelsData(currentTravelsData =>
-            currentTravelsData.filter(item => item.articleId !== idToDelete)
-          ); // 接口调用成功后，过滤并更新全局状态
-        } catch (error) {
-          console.error('删除游记失败:', error.message || error);
-        }
-      };
+    try {
+      await deleteTravelNote(idToDelete); // 先调用接口删除游记
+      incrementDeleteCount();
+      setMyTravelsData((currentTravelsData) =>
+        currentTravelsData.filter((item) => item.articleId !== idToDelete)
+      ); // 接口调用成功后，过滤并更新全局状态
+    } catch (error) {
+      console.error("删除游记失败:", error.message || error);
+    }
+  };
 
   return (
-    <ScrollView 
-      style={styles.container}
-      >
-    <View style={styles.cardcontainer}>
-      {
-        // 首先遍历 travelsData
-        mytravelsData.length > 0 && mytravelsData.map((item, index) => {
-            // 为每篇文章创建 TravelsCard 组件
-            return (
-              <TravelsCard item={item} key={item.articleId || index}  onDelete={deleteMyTravel}/>
-            );
-          
-        })
-      }
-    </View>
+    <ScrollView style={styles.container}>
+      {/* 如果游记数量为0，显示一张图片 */}
+      <View>
+      {mytravelsData.length === 0 && (
+        <TouchableOpacity onPress={()=>{navigation.navigate('AddTravel')}}>
+        <Image
+          source={require("../../../assets/images/mine_1.jpg")}
+          style={{
+            width: vw(100),
+            height: vh(12),
+            alignSelf: "center",
+          }}
+        />
+        </TouchableOpacity>
+      )}
+      </View>
+      <View style={styles.cardcontainer}>
+        {
+          // 首先遍历 travelsData
+          mytravelsData.length > 0 &&
+            mytravelsData.map((item, index) => {
+              // 为每篇文章创建 TravelsCard 组件
+              return (
+                <TravelsCard
+                  item={item}
+                  key={item.articleId || index}
+                  onDelete={deleteMyTravel}
+                />
+              );
+            })
+        }
+      </View>
     </ScrollView>
   );
 }
@@ -67,10 +104,10 @@ const TravelsCard = ({ item, onDelete }) => {
   // 这里的item是我点击的那个游记的数据
   const navigation = useNavigation();
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [rejectReason, setRejectReason] = useState('');
+  const [rejectReason, setRejectReason] = useState("");
 
   // const toggleModal = () => setIsModalVisible(!isModalVisible);
-  
+
   const confirmDelete = (id) => {
     Alert.alert(
       "确认删除",
@@ -96,38 +133,43 @@ const TravelsCard = ({ item, onDelete }) => {
     };
 
     Alert.alert(
-      '未通过',
+      "未通过",
       item.rejectReason,
       [
         {
-          text:'取消',
-          style: 'cancel',
+          text: "取消",
+          style: "cancel",
         },
         {
-          text: '重新编辑',
-          onPress: (editHandler),
+          text: "重新编辑",
+          onPress: editHandler,
         },
         // {
         //   text: '删除',
         //   onPress: () => confirmDelete(id),
         // },
       ],
-      { cancelable: false },
+      { cancelable: false }
     );
   };
-  
 
-  return(
-    
+  return (
     <View>
       <TouchableOpacity
         onPress={() => navigation.navigate("TravelsDetails", { ...item })}
         style={styles.imageview}>
         <Image
           // source={item.picture[0]}
-          source={{ uri: `data:image/jpeg;base64,${item.picture[0]}` }} 
-          style={{width: 170, height: 230, borderTopLeftRadius: 10, borderTopRightRadius: 10, position: 'absolute'}} />
-        
+          source={{ uri: `data:image/jpeg;base64,${item.picture[0]}` }}
+          style={{
+            width: 170,
+            height: 230,
+            borderTopLeftRadius: 10,
+            borderTopRightRadius: 10,
+            position: "absolute",
+          }}
+        />
+
         {/* 线性渐变处理，美化样式 */}
         <LinearGradient
           colors={["transparent", "rgba(0,0,0,0.8)"]}
@@ -137,14 +179,16 @@ const TravelsCard = ({ item, onDelete }) => {
         />
 
         <View style={styles.userinfo}>
-            <Text style={styles.title}>{item.user}</Text>          
-            <Image source={{ uri: `data:image/jpeg;base64,${item.Avatar}` }} style={{height: 16, width: 16, borderRadius:30}} />      
+          <Text style={styles.title}>{item.user}</Text>
+          <Image
+            source={{ uri: `data:image/jpeg;base64,${item.Avatar}` }}
+            style={{ height: 16, width: 16, borderRadius: 30 }}
+          />
         </View>
 
         <Text style={styles.texttitle}>{unescapeHtml(item.title)}</Text>
         <Text style={styles.text}>{unescapeHtml(item.profile)}</Text>
-        
-       </TouchableOpacity>
+      </TouchableOpacity>
 
       <View style={styles.states}>
         {(() => {
@@ -153,13 +197,18 @@ const TravelsCard = ({ item, onDelete }) => {
               // 这边也就是返回一个组件了
               const editHandler = () => {
                 navigation.navigate("UpdateTravel", { ...item });
-              }
+              };
               return (
                 <>
                   <Text>审核中</Text>
                   {/* 编辑按钮 */}
                   <TouchableOpacity>
-                      <PencilSquareIcon onPress={editHandler} size={15} color="gray" style={{left:33}}/>
+                    <PencilSquareIcon
+                      onPress={editHandler}
+                      size={15}
+                      color="gray"
+                      style={{ left: 33 }}
+                    />
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => confirmDelete(item.articleId)}>
@@ -172,25 +221,28 @@ const TravelsCard = ({ item, onDelete }) => {
               // 返回编辑组件了
               const editHandler = () => {
                 navigation.navigate("UpdateTravel", { ...item });
-              }
+              };
               return (
                 <>
-                <View>
-                <TouchableOpacity 
-                // onPress={toggleModal}
-                onPress={RejectAlert}
-                >
-                    <Text style={{color:'red'}}>未通过(查看原因)</Text>
-                  </TouchableOpacity>
+                  <View>
+                    <TouchableOpacity
+                      // onPress={toggleModal}
+                      onPress={RejectAlert}>
+                      <Text style={{ color: "red" }}>未通过(查看原因)</Text>
+                    </TouchableOpacity>
                   </View>
-                  
-                  
-                  <TouchableOpacity >
-                      <PencilSquareIcon onPress={editHandler} size={15} color="gray" />
+
+                  <TouchableOpacity>
+                    <PencilSquareIcon
+                      onPress={editHandler}
+                      size={15}
+                      color="gray"
+                    />
                   </TouchableOpacity>
-                  
+
                   {/* 编辑按钮 */}
-                  <TouchableOpacity onPress={() => confirmDelete(item.articleId)}>
+                  <TouchableOpacity
+                    onPress={() => confirmDelete(item.articleId)}>
                     <TrashIcon size={15} color="gray" />
                   </TouchableOpacity>
                 </>
@@ -198,8 +250,9 @@ const TravelsCard = ({ item, onDelete }) => {
             case "已通过":
               return (
                 <>
-                  <Text style={{color:'green'}}>已通过</Text>
-                  <TouchableOpacity onPress={() => confirmDelete(item.articleId)}>
+                  <Text style={{ color: "green" }}>已通过</Text>
+                  <TouchableOpacity
+                    onPress={() => confirmDelete(item.articleId)}>
                     <TrashIcon size={15} color="gray" />
                   </TouchableOpacity>
                   {/* 已通过则不可编辑，这里不显示编辑按钮 */}
@@ -220,7 +273,7 @@ const styles = StyleSheet.create({
     // backgroundColor: "#FAFAFA",
     paddingEnd: 12,
     paddingStart: 12,
-    minHeight:550
+    minHeight: 550,
   },
   cardcontainer: {
     marginLeft: 8,

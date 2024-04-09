@@ -20,6 +20,7 @@ import {
   Modal,
   Toast,
   Checkbox,
+  DatePickerView,
 } from "@ant-design/react-native";
 import {
   MapPinIcon,
@@ -40,6 +41,7 @@ import { escapeHtml } from "../../apis/HtmlHandler";
 import { UserContext } from "../../contexts/UserContext";
 import { useContext } from "react";
 import PreviewImage from "../PreviewImage";
+import dayjs from "dayjs";
 
 // 自定义vw vh函数
 const screenWidth = Dimensions.get("window").width;
@@ -241,12 +243,12 @@ export default function AddorUpdateTravel({ userInfo }) {
         <View style={styles.tips}>
           <BellIcon
             size={16}
-            strokeWidth={3}
-            color="gray"
+            strokeWidth={2}
+            color="#2080f0"
             style={{ marginLeft: 10 }}
           />
-          <Text style={{ color: "grey" }}>
-            发文方向tips:旅行、探店、风景、美食...
+          <Text style={{ color: "grey",marginLeft:5}}>
+            发布游记tips:旅行、探店、风景、美食......
           </Text>
         </View>
 
@@ -276,7 +278,7 @@ export default function AddorUpdateTravel({ userInfo }) {
             <TouchableOpacity onPress={pickImage}>
               <View style={styles.imgBox}>
                 <CameraIcon size={40} strokeWidth={1} color="gray" />
-                <Text>上传图片/视频</Text>
+                <Text>上传图片</Text>
               </View>
             </TouchableOpacity>
           )}
@@ -284,7 +286,6 @@ export default function AddorUpdateTravel({ userInfo }) {
         {/* 图片预览 */}
         <Provider>
           <Modal
-            // popup
             visible={imgPreview}
             animationType="slide-up"
             maskClosable
@@ -310,7 +311,7 @@ export default function AddorUpdateTravel({ userInfo }) {
               style={styles.profileInput}
               onChangeText={(text) => setProfileValue(text)}
               value={profileValue}
-              placeholder="填写文章简介"
+              placeholder="填写游记简介"
             />
 
             {/* <View style={{height:vh(30)}}> */}
@@ -319,7 +320,7 @@ export default function AddorUpdateTravel({ userInfo }) {
                 automaticallyAdjustContentInsets={false}
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}>
-                <List>
+                <View>
                   <TextareaItem
                     style={styles.textarea} 
                     rows={11}
@@ -328,7 +329,7 @@ export default function AddorUpdateTravel({ userInfo }) {
                     value={contentValue}
                     onChange={(text) => setContentValue(text)}
                   />
-                </List>
+                </View>
               </ScrollView>
             {/* </View> */}
 
@@ -351,8 +352,8 @@ export default function AddorUpdateTravel({ userInfo }) {
                 <MapPinIcon
                   style={styles.locationIcon}
                   size={16}
-                  strokeWidth={3}
-                  color="gray"
+                  strokeWidth={2}
+                  color="#33b4ff"
                 />
                 <Text
                   style={styles.location}
@@ -366,7 +367,7 @@ export default function AddorUpdateTravel({ userInfo }) {
                   style={styles.locationIcon}
                   size={18}
                   strokeWidth={2}
-                  color="black"
+                  color="gray"
                 />
                 <Text
                   style={styles.location}
@@ -381,8 +382,8 @@ export default function AddorUpdateTravel({ userInfo }) {
                 <ClockIcon
                   style={styles.locationIcon}
                   size={16}
-                  strokeWidth={3}
-                  color="gray"
+                  strokeWidth={2}
+                  color="#880015"
                 />
                 <Text
                   style={styles.location}
@@ -396,7 +397,7 @@ export default function AddorUpdateTravel({ userInfo }) {
                   style={styles.locationIcon}
                   size={18}
                   strokeWidth={2}
-                  color="black"
+                  color="gray"
                 />
                 <Text
                   style={styles.location}
@@ -411,8 +412,8 @@ export default function AddorUpdateTravel({ userInfo }) {
                 <CurrencyYenIcon
                   style={styles.locationIcon}
                   size={18}
-                  strokeWidth={3}
-                  color="gray"
+                  strokeWidth={2}
+                  color="#FFD700"
                 />
                 <Text
                   style={styles.location}
@@ -426,7 +427,7 @@ export default function AddorUpdateTravel({ userInfo }) {
                   style={styles.locationIcon}
                   size={18}
                   strokeWidth={2}
-                  color="black"
+                  color="gray"
                 />
                 <Text
                   style={styles.location}
@@ -440,7 +441,7 @@ export default function AddorUpdateTravel({ userInfo }) {
               style={{ marginLeft: 5, marginTop: 5 }}
               onChange={() => setChecked(!checked)}
               checked={checked}>
-              同意《携程社区发布规则》
+              同意《乐游记平台使用服务协议》
             </Checkbox>
           </View>
           <View style={[styles.innerBox, { height: 35 }]}>
@@ -455,7 +456,7 @@ export default function AddorUpdateTravel({ userInfo }) {
         {/* 添加标签的弹出框 */}
         <Provider>
           <Modal
-            popup
+           transparent
             visible={tagVisible}
             animationType="slide-up"
             onClose={() => setTagVisible(false)}>
@@ -499,7 +500,7 @@ export default function AddorUpdateTravel({ userInfo }) {
         {/* 添加地点的弹出框 */}
         <Provider>
           <Modal
-            popup
+           transparent
             visible={locationVisible}
             animationType="slide-up"
             onClose={() => setLocationVisible(false)}>
@@ -544,54 +545,31 @@ export default function AddorUpdateTravel({ userInfo }) {
         </Provider>
         {/* 添加游玩时间的弹出框 */}
         <Provider>
-          <Modal
-            popup
-            visible={playTimeVisible}
-            animationType="slide-up"
-            onClose={() => setPlayTimeVisible(false)}>
-            <View style={styles.modalView}>
-              <TextInput
-                style={styles.tagInput}
-                onChangeText={(text) => setPlayTimeInputValue(text)}
+            <Modal
+              transparent
+              visible={playTimeVisible}
+              animationType="slide-up"
+              onClose={() => setPlayTimeVisible(false)}>
+              
+              <DatePickerView
                 value={playTimeInputValue}
-                placeholder="填写游玩时间"
+                onChange={(val) => {
+                  setPlayTimeInputValue(val);
+                  setPlayTime(dayjs(val).format("YYYY-MM-DD")); // 转换成年月日形式
+                }}
               />
               <Button
-                style={[
-                  styles.modalBtn,
-                  {
-                    backgroundColor: playTimeInputValue
-                      ? "#2677e2"
-                      : "lightgray",
-                    borderColor: playTimeInputValue ? "#2677e2" : "lightgray",
-                  },
-                ]}
                 type="primary"
-                onPress={() => {
-                  if (playTimeInputValue) {
-                    setPlayTime(playTimeInputValue);
-                    setPlayTimeInputValue("");
-                    setPlayTimeVisible(false);
-                  } else {
-                    Toast.info("游玩时间不能为空", 1);
-                  }
-                }}>
-                添加
+                onPress={() => setPlayTimeVisible(false)}
+                style={styles.modalCloseBtn}>
+                关闭
               </Button>
-            </View>
-
-            <Button
-              type="primary"
-              onPress={() => setPlayTimeVisible(false)}
-              style={styles.modalCloseBtn}>
-              关闭
-            </Button>
-          </Modal>
-        </Provider>
+            </Modal>
+          </Provider>
         {/* 添加花费的弹出框 */}
         <Provider>
           <Modal
-            popup
+           transparent
             visible={moneyVisible}
             animationType="slide-up"
             onClose={() => setMoneyVisible(false)}>
@@ -690,32 +668,30 @@ const styles = StyleSheet.create({
   },
   titleInput: {
     height: vh(5),
-    fontSize: 24,
-    fontWeight: "500",
+    fontSize: 20,
     borderColor: "lightgray",
-    // borderWidth: 1,
-    // borderRadius: 5,
     borderBottomWidth: 0.5,
     marginBottom: vh(1),
     marginLeft: vw(1),
   },
   profileInput: {
     height: vh(2.5),
-    fontSize: 18,
+    fontSize: 16,
     borderColor: "lightgray",
     marginBottom: vh(1),
     marginLeft: vw(1),
   },
   textarea: {
     borderColor: "lightgray",
-    fontSize: 18,
+    fontSize: 16,
     borderBottomWidth: 0.5,
     marginLeft: vw(-1),
   },
   textareaFather: {
     // height: vh(20),
     borderColor: "lightgray",
-    borderBottomWidth: 0.5,
+    borderTopWidth: 0.5,
+    // borderBottomWidth: 0.5,
     // marginBottom: vh(1),
   },
   Alltags: {
@@ -750,7 +726,7 @@ const styles = StyleSheet.create({
   },
   tagInput: {
     height: vh(4.8),
-    width: vw(78),
+    width: "73%",
     borderColor: "lightgray",
     borderWidth: 1,
     // borderRadius: 5,
@@ -758,19 +734,22 @@ const styles = StyleSheet.create({
     // marginBottom: 10,
     marginLeft: vh(-0.7),
     borderRadius: 5,
+    paddingLeft: 10,
   },
   modalView: {
     flexDirection: "row",
     justifyContent: "space-between",
-    // justifyContent: "center",
     alignItems: "center",
-    padding: 10,
+    paddingBottom: 10,
+    paddingRight: 10,
+    paddingLeft: 10,
   },
   modalBtn: {
     height: vh(4.8),
-    width: vw(18),
+    width: "30%",
     borderRadius: 5,
-    marginRight: vw(-1),
+    marginRight: 10,
+    marginLeft: 10,
     // backgroundColor: "lightgray",
     // borderColor: "lightgray",
   },

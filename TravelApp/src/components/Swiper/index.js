@@ -12,8 +12,7 @@ import Swiper from 'react-native-swiper';
 //   };
 
 export default function SwiperComponent ({item}) {
-   
-
+  
   const pic = item.picture
   // console.log(item.article[0].picture[0])
   return(

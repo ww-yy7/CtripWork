@@ -80,7 +80,7 @@ export default function Setting() {
           意见反馈
         </Item>
         <Item style={styles.item} arrow="horizontal" onPress={() => {}}>
-          关于携程旅行
+          关于乐游记
         </Item>
       </List>
       <Button  style={styles.outBtn} type='primary' onPress={logOut}>退出登录</Button>

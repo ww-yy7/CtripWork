@@ -2,37 +2,22 @@ const React = require("react");
 const { createBottomTabNavigator } = require("@react-navigation/bottom-tabs");
 import Home from "../pages/Home";
 import Mine from "../pages/Mine";
-import MyTravels from "../pages/MyTravels";
 import AddTravel from "../pages/AddTravel";
-import TravelsDetails from "../pages/TravelsDetails";
 import LikeTravels from "../pages/LikeTravels";
-import Message from "../pages/Message"
-
+import Message from "../pages/Message";
 import {
-  // HomeIcon,
-  // HeartIcon,
-  // UserIcon,
-  // ChatBubbleBottomCenterTextIcon
-} from "react-native-heroicons/outline";
-import {
-    PlusCircleIcon,
-  } from "react-native-heroicons/solid";
-
-import {
-  HomeIcon as OutlineHomeIcon,  // 从outline版本中引入HomeIcon并重命名为OutlineHomeIcon
+  HomeIcon as OutlineHomeIcon, // 从outline版本中引入HomeIcon并重命名为OutlineHomeIcon
   HeartIcon as OutlineHeartIcon,
   UserIcon as OutlineUserIcon,
-  ChatBubbleBottomCenterTextIcon
+  ChatBubbleBottomCenterTextIcon,
 } from "react-native-heroicons/outline";
-
 import {
-    HomeIcon as SolidHomeIcon,  // 从solid版本中引入HomeIcon并重命名为SolidHomeIcon
-    HeartIcon as SolidHeartIcon,
-    UserIcon as SolidUserIcon,
-    ChatBubbleBottomCenterTextIcon as SolidChatBubbleBottomCenterTextIcon,
-    // PlusCircleIcon,
-  } from "react-native-heroicons/solid";
-
+  PlusCircleIcon,
+  HomeIcon as SolidHomeIcon, // 从solid版本中引入HomeIcon并重命名为SolidHomeIcon
+  HeartIcon as SolidHeartIcon,
+  UserIcon as SolidUserIcon,
+  ChatBubbleBottomCenterTextIcon as SolidChatBubbleBottomCenterTextIcon,
+} from "react-native-heroicons/solid";
 
 const BottomTabs = () => {
   return (
@@ -42,17 +27,16 @@ const BottomTabs = () => {
         component={Home}
         options={{
           headerShown: false,
+          headerBackTitleVisible: false,
           tabBarLabel: "首页",
           tabBarActiveTintColor: "#2677e2",
           // tabBarActiveTintColor: "black",
           tabBarInactiveTintColor: "grey",
           tabBarIcon: ({ focused }) => {
             if (focused) {
-              // return <HomeIcon color="#2677e2"></HomeIcon>;
-              return <SolidHomeIcon color="#2677e2"></SolidHomeIcon>
+              return <SolidHomeIcon color="#2677e2"></SolidHomeIcon>;
             } else {
-              // return <HomeIcon color="grey"></HomeIcon>;
-              return <OutlineHomeIcon color="gray"></OutlineHomeIcon>
+              return <OutlineHomeIcon color="gray"></OutlineHomeIcon>;
             }
           },
         }}
@@ -62,17 +46,16 @@ const BottomTabs = () => {
         name="likeTravels"
         component={LikeTravels}
         options={{
-          headerShown: false, 
+          headerBackTitleVisible: false,
+          title: "看看大家都去哪儿玩~",
           tabBarLabel: "推荐",
           tabBarActiveTintColor: "#2677e2",
           tabBarInactiveTintColor: "grey",
           tabBarIcon: ({ focused }) => {
             if (focused) {
-              // return <HeartIcon color="#2677e2" ></HeartIcon>;
-              return <SolidHeartIcon color="#2677e2"></SolidHeartIcon>
+              return <SolidHeartIcon color="#2677e2"></SolidHeartIcon>;
             } else {
-              // return <HeartIcon color="grey"></HeartIcon>;
-              return <OutlineHeartIcon color="grey"></OutlineHeartIcon>
+              return <OutlineHeartIcon color="grey"></OutlineHeartIcon>;
             }
           },
         }}
@@ -81,16 +64,20 @@ const BottomTabs = () => {
         name="AddTravel"
         component={AddTravel}
         options={{
-          // headerShown: false,
+          headerBackTitleVisible: false,
           title: "记录life",
           tabBarLabel: "",
           tabBarActiveTintColor: "#2677e2",
           tabBarInactiveTintColor: "grey",
           tabBarIcon: ({ focused }) => {
             if (focused) {
-              return <PlusCircleIcon color="#2677e2" size={40}></PlusCircleIcon>;
+              return (
+                <PlusCircleIcon color="#2677e2" size={40}></PlusCircleIcon>
+              );
             } else {
-              return <PlusCircleIcon color="#2677e2" size={40}></PlusCircleIcon>;
+              return (
+                <PlusCircleIcon color="#2677e2" size={40}></PlusCircleIcon>
+              );
             }
           },
         }}
@@ -100,16 +87,20 @@ const BottomTabs = () => {
         component={Message}
         options={{
           headerShown: false,
+          headerBackTitleVisible: false,
           tabBarLabel: "消息",
           tabBarActiveTintColor: "#2677e2",
           // tabBarActiveTintColor: "grey",
           tabBarInactiveTintColor: "grey",
           tabBarIcon: ({ focused }) => {
             if (focused) {
-              // return <ChatBubbleBottomCenterTextIcon color="#2677e2"></ChatBubbleBottomCenterTextIcon>;
-              return <SolidChatBubbleBottomCenterTextIcon color="#2677e2"></SolidChatBubbleBottomCenterTextIcon>
+              return (
+                <SolidChatBubbleBottomCenterTextIcon color="#2677e2"></SolidChatBubbleBottomCenterTextIcon>
+              );
             } else {
-              return <ChatBubbleBottomCenterTextIcon color="grey"></ChatBubbleBottomCenterTextIcon>;
+              return (
+                <ChatBubbleBottomCenterTextIcon color="grey"></ChatBubbleBottomCenterTextIcon>
+              );
             }
           },
         }}
@@ -119,16 +110,15 @@ const BottomTabs = () => {
         component={Mine}
         options={{
           headerShown: false,
+          headerBackTitleVisible: false,
           tabBarLabel: "我的",
           tabBarActiveTintColor: "#2677e2",
           tabBarInactiveTintColor: "grey",
           tabBarIcon: ({ focused }) => {
             if (focused) {
-              // return <UserIcon  color="#2677e2"></UserIcon>;
-              return <SolidUserIcon color="#2677e2"></SolidUserIcon>
+              return <SolidUserIcon color="#2677e2"></SolidUserIcon>;
             } else {
-              // return <UserIcon color="grey"></UserIcon>;
-              return <OutlineUserIcon color="grey"></OutlineUserIcon>
+              return <OutlineUserIcon color="grey"></OutlineUserIcon>;
             }
           },
         }}

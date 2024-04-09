@@ -21,7 +21,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "serve": "serve -s build -p 5000"
+    "serve": "serve -s build -p 5010"
   },
   "eslintConfig": {
     "extends": [

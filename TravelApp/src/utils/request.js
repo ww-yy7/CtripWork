@@ -5,7 +5,7 @@ import axios from "axios"
 const request = axios.create({
   // baseURL: 'http://localhost:3000/api',
   baseURL: 'http://10.100.197.143:3000/api',
-  timeout: 5000
+  timeout: 20000
 })
 
 

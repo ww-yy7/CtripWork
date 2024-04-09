@@ -1,5 +1,12 @@
-import React,{ useState } from "react";
-import { Image, ScrollView, View, StyleSheet, TextInput,  TouchableOpacity } from "react-native";
+import React, { useState } from "react";
+import {
+  Image,
+  ScrollView,
+  View,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 import {
   List,
   Text,
@@ -86,7 +93,7 @@ export default function EditProfile() {
     console.log(result.data, "result");
     if (result.data.code === 200) {
       await saveUserInfoToStorage(userInfo);
-      incrementChangeAvatarCount()
+      incrementChangeAvatarCount();
       Toast.info("修改成功");
       navigation.navigate("Mine");
     } else {
@@ -95,72 +102,73 @@ export default function EditProfile() {
   };
 
   return (
-    <ScrollView
-      style={{ flex: 1, backgroundColor: "#f5f5f9" }}
-      automaticallyAdjustContentInsets={false}
-      showsHorizontalScrollIndicator={false}
-      showsVerticalScrollIndicator={false}>
-      <List>
-        <Item
-          arrow="horizontal"
-          onPress={pickImage}
-          extra={
-            <Image
-              source={{ uri: `data:image/jpeg;base64,${newAvatar}` }} // base64
-              style={{ width: 29, height: 29, borderRadius: 50 }}
-            />
-          }>
-          <Text style={{ fontSize: 20 }}>头像</Text>
-        </Item>
+    <Provider>
+      <ScrollView
+        style={{ flex: 1, backgroundColor: "#f5f5f9" }}
+        automaticallyAdjustContentInsets={false}
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}>
+        <List>
+          <Item
+            arrow="horizontal"
+            onPress={pickImage}
+            extra={
+              <Image
+                source={{ uri: `data:image/jpeg;base64,${newAvatar}` }} // base64
+                style={{ width: 29, height: 29, borderRadius: 50 }}
+              />
+            }>
+            头像
+          </Item>
 
-        <Item
-          arrow="horizontal"
-          extra={
-            <TextInput
-              value={newNickName}
-              style={{ width: 290, textAlign: "right" }}
-              onChangeText={(text) => {
-                setNewNickName(text);
-              }}
-            />
-          }>
-          昵称
-        </Item>
-        <Item
-          arrow="horizontal"
-          extra={
-            <List>
-              <View style={{flexDirection:'row',borderWidth:0}}>
-                <TouchableOpacity onPress={() => handleImagePress("男")}>
-                  <Image
-                    source={
-                      selectedImage === "男"
-                        ? require("../../../assets/images/male2.png")
-                        : require("../../../assets/images/male1.png")
-                    }
-                    style={{ width: 40, height: 40 }}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => handleImagePress("女")}>
-                <Image
-                  source={
-                    selectedImage === "女"
-                      ? require("../../../assets/images/female2.png")
-                      : require("../../../assets/images/female1.png")
-                  }
-                  style={{ width: 40, height: 40 }}
-                />
-              </TouchableOpacity>
+          <Item
+            arrow="horizontal"
+            extra={
+              <TextInput
+                value={newNickName}
+                style={{ width: 290, textAlign: "right" }}
+                onChangeText={(text) => {
+                  setNewNickName(text);
+                }}
+              />
+            }>
+            昵称
+          </Item>
+          <Item
+            arrow="horizontal"
+            extra={
+              <View>
+                <View style={{ flexDirection: "row", borderWidth: 0 }}>
+                  <TouchableOpacity onPress={() => handleImagePress("男")}>
+                    <Image
+                      source={
+                        selectedImage === "男"
+                          ? require("../../../assets/images/male2.png")
+                          : require("../../../assets/images/male1.png")
+                      }
+                      style={{ width: 40, height: 40 }}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => handleImagePress("女")}>
+                    <Image
+                      source={
+                        selectedImage === "女"
+                          ? require("../../../assets/images/female2.png")
+                          : require("../../../assets/images/female1.png")
+                      }
+                      style={{ width: 40, height: 40 }}
+                    />
+                  </TouchableOpacity>
+                </View>
               </View>
-            </List>
-          }>
-          性别
-        </Item>
-        <Provider>
-          <List>
+            }>
+            性别
+          </Item>
+
+          <View>
             <DatePicker
               value={newAge}
-              minDate={new Date(1900, 1, 1)}
+              minDate={new Date(1924, 1, 1)}
               maxDate={new Date()}
               onChange={(date) => {
                 setNewAge(formatDate(date));
@@ -169,79 +177,79 @@ export default function EditProfile() {
               style={{ height: 142 }}>
               <List.Item arrow="horizontal">出生日期</List.Item>
             </DatePicker>
-          </List>
-        </Provider>
-      </List>
-      <WhiteSpace size="lg" />
+          </View>
+        </List>
+        <WhiteSpace size="lg" />
 
-      <List>
-        <Item
-          arrow="horizontal"
-          extra={
-            <TextInput
-              value={newEmail}
-              style={{ width: 290, textAlign: "right" }}
-              onChangeText={(email) => {
-                setNewEmail(email);
-              }}
-            />
-          }>
-          邮件
-        </Item>
-        <Item
-          arrow="horizontal"
-          extra={
-            <TextInput
-              value={newPhone}
-              style={{ width: 290, textAlign: "right" }}
-              onChangeText={(phone) => {
-                setNewPhone(phone);
-              }}
-            />
-          }>
-          电话
-        </Item>
-        <Item
-          arrow="horizontal"
-          extra={
-            <TextInput
-              value={newAddress}
-              style={{ width: 290, textAlign: "right" }}
-              onChangeText={(address) => {
-                setNewAddress(address);
-              }}
-            />
-          }>
-          地址
-        </Item>
-      </List>
-      <WhiteSpace size="lg" />
+        <List>
+          <Item
+            arrow="horizontal"
+            extra={
+              <TextInput
+                value={newEmail}
+                style={{ width: 290, textAlign: "right" }}
+                onChangeText={(email) => {
+                  setNewEmail(email);
+                }}
+              />
+            }>
+            邮件
+          </Item>
+          <Item
+            arrow="horizontal"
+            extra={
+              <TextInput
+                value={newPhone}
+                style={{ width: 290, textAlign: "right" }}
+                onChangeText={(phone) => {
+                  setNewPhone(phone);
+                }}
+              />
+            }>
+            电话
+          </Item>
+          <Item
+            arrow="horizontal"
+            extra={
+              <TextInput
+                value={newAddress}
+                style={{ width: 290, textAlign: "right" }}
+                onChangeText={(address) => {
+                  setNewAddress(address);
+                }}
+              />
+            }>
+            地址
+          </Item>
+        </List>
+        <WhiteSpace size="lg" />
 
-      <List>
-        <Item
-          arrow="horizontal"
-          extra={
-            <Text
-              style={{
-                width: 250,
-                height: 40,
-                lineHeight: 40,
-                fontSize: 16,
-                textAlign: "right",
-              }}
-              onPress={() => {
-                navigation.navigate("ModifyProfile", { introduction });
-              }}>
-              {introduction}
-            </Text>
-          }>
-          自我介绍
-        </Item>
-      </List>
-      <Button onPress={submitNewProfile} style={styles.submitBtn}>
-        <Text style={styles.text}>保存</Text>
-      </Button>
-    </ScrollView>
+        <List>
+          <Item
+            arrow="horizontal"
+            extra={
+              <Text
+                style={{
+                  width: 250,
+                  height: 40,
+                  lineHeight: 40,
+                  fontSize: 16,
+                  textAlign: "right",
+                }}
+                onPress={() => {
+                  navigation.navigate("ModifyProfile", { introduction });
+                }}>
+                {introduction}
+              </Text>
+            }>
+            自我介绍
+          </Item>
+        </List>
+        <Button onPress={submitNewProfile} style={styles.submitBtn}>
+          <Text style={styles.text}>保存</Text>
+        </Button>
+      </ScrollView>
+    </Provider>
   );
 }
 

@@ -21,7 +21,6 @@ import {
 } from "react-native-heroicons/outline";
 import { useNavigation } from "@react-navigation/native";
 import { Login as fetchLogin, checkUsername } from "../../apis/user";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { UserContext } from "../../contexts/UserContext";
 export default function Login() {
   const navigation = useNavigation();
@@ -95,7 +94,6 @@ export default function Login() {
       Toast.info("密码不符合要求", 1);
       return; // 如果密码不符合要求，不执行后续注册逻辑
     } else {
-     
       const data = {
         username: usernameValue,
         password: passwordValue,
@@ -117,10 +115,6 @@ export default function Login() {
           phone,
           introduction,
         } = res.data.userInfo;
-        // console.log(
-        //   { Avatar, nickName, sex, age, email, address, phone, introduction },
-        //   "userInfo"
-        // );
         await saveUserInfoToStorage({
           Avatar,
           nickName,
@@ -131,15 +125,16 @@ export default function Login() {
           phone,
           introduction,
         });
-        Toast.info("登录成功", 5);
-        navigation.navigate("Mine");
+        Toast.info("登录成功", 2);
+        setTimeout(() => {
+          navigation.navigate("Mine");
+        }, 1000);
       } else {
         Toast.info("密码错误", 1);
         return;
       }
     }
   };
-
 
   return (
     <Provider>
@@ -212,12 +207,33 @@ export default function Login() {
               style={{ color: "#fff" }}
               onChange={() => setChecked(!checked)}
               checked={checked}></Checkbox>
-            <Text style={{ color: "#fff", marginLeft: -10,fontSize:12 }}>
-              阅读并同意乐游记的 
-              <TouchableOpacity onPress={()=>{navigation.navigate('LoginAgreement')}}>
-          <Text style={{ textDecorationLine: 'underline' ,color: "#fff",fontSize:11 }}>《用户登录协议》</Text>
-        </TouchableOpacity>
-            </Text>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+              }}>
+              <Text
+                style={{
+                  color: "#fff",
+                  marginLeft: -10,
+                  fontSize: 12,
+                }}>
+                阅读并同意
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("LoginAgreement");
+                }}>
+                <Text
+                  style={{
+                    textDecorationLine: "underline",
+                    color: "#fff",
+                    fontSize: 12,
+                  }}>
+                  《乐游记平台使用服务协议》
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </ImageBackground>
@@ -271,8 +287,6 @@ const styles = StyleSheet.create({
   checkBox: {
     flexDirection: "row",
     alignItems: "center",
-    marginLeft: 0,
-    color: "#fff",
     marginTop: 280,
   },
 });

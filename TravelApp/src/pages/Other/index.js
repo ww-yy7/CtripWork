@@ -1,31 +1,23 @@
-import { useContext } from "react";
-import { View, Text, StyleSheet, ScrollView, Image } from "react-native";
-import {
-  Checkbox,
-  Button,
-  WhiteSpace,
-  Toast,
-  Provider,
-  List,
-  Brief,
-} from "@ant-design/react-native";
-import {
-  EyeIcon,
-  EyeSlashIcon,
-  ChevronLeftIcon,
-} from "react-native-heroicons/outline";
-import { useNavigation } from "@react-navigation/native";
-import { Register as fetchRegister, checkUsername } from "../../apis/user";
-import { UserContext } from "../../contexts/UserContext";
+import { View, Text, StyleSheet, Image } from "react-native";
 
 export default function Other() {
+  const images = [
+    require("../../../assets/other/working_1.png"),
+    require("../../../assets/other/working_2.png"),
+    require("../../../assets/other/working_3.png"),
+    require("../../../assets/other/working_4.png"),
+    require("../../../assets/other/working_5.png"),
+    require("../../../assets/other/working_6.png"),
+  ];
+
+  const randomIndex = Math.floor(Math.random() * images.length);
   return (
     <View style={styles.container}>
       <Image
-        source={require("../../../assets/images/working.png")}
-        style={{ width:200, height: 200, marginTop: 100 }}
+        source={images[randomIndex]}
+        style={{ width: 200, height: 200, marginTop: 100 }}
       />
-      <Text style={{fontSize:18,marginTop:10}}>敬请期待!</Text>
+      <Text style={{ fontSize: 18, marginTop: 10 }}>敬请期待!</Text>
     </View>
   );
 }

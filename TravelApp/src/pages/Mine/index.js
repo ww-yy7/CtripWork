@@ -1,25 +1,18 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext } from "react";
 import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   Image,
   ScrollView,
-  TouchableHighlight,
   TouchableOpacity,
   ImageBackground,
   RefreshControl,
 } from "react-native";
 import MyHome from "../../components/MyHome";
-import MyTravelList from "../../components/MyTravelList";
 import {
   Card,
-  WhiteSpace,
-  WingBlank,
   Button,
-  Popover,
-  Item,
 } from "@ant-design/react-native";
 import {
   Cog6ToothIcon,
@@ -27,21 +20,15 @@ import {
   PencilSquareIcon,
 } from "react-native-heroicons/outline";
 import { useNavigation } from "@react-navigation/native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import Register from "../Register";
 import { UserContext } from "../../contexts/UserContext";
 import MyTravels from "../MyTravels";
 import { getAllTravelNote } from "../../apis/user";
-import TopUnLogin from "../../components/TopUnLogin";
 
 export default function Mine() {
   const {
     id,
-    publish,
-    deleteCount,
     token,
     userInfo,
-    mytravelsData,
     setMyTravelsData,
   } = useContext(UserContext);
   const { introduction } = userInfo;
@@ -62,10 +49,6 @@ export default function Mine() {
       setMyTravelsData(sortedArticles);
     });
     setTimeout(() => setRefreshing(false), 2000);
-  };
-
-  const user = {
-    userName: "ww",
   };
   const navigation = useNavigation();
   const [selected, setSelected] = useState("left");
@@ -167,12 +150,7 @@ export default function Mine() {
                 </View>
               </View>
               <TouchableOpacity
-                style={{
-                  flexDirection: "row",
-                  marginLeft: 10,
-                  marginTop: 10,
-                  alignItems: "center",
-                }}
+                style={styles.intro}
                 onPress={() =>
                   navigation.navigate("ModifyProfile", { introduction })
                 }>
@@ -182,15 +160,28 @@ export default function Mine() {
                 </Text>
                 <PencilSquareIcon size={16} strokeWidth={1} color="#9f9fa1" />
               </TouchableOpacity>
+              <View style={{flexDirection:'row',alignItems:'center'}}>
               <Text
-                style={{
-                  fontSize: 12,
-                  color: "grey",
-                  marginLeft: 10,
-                  marginTop: 5,
-                }}>
-                粉丝 2 关注 0 获赞 0 赞过 0
+                style={styles.cardTextS}>
+                粉丝
               </Text>
+              <Text  style={styles.cardTextN}>520</Text>
+              <Text
+                style={styles.cardTextS}>
+                关注
+              </Text>
+              <Text  style={styles.cardTextN}>1</Text>
+              <Text
+                style={styles.cardTextS}>
+               获赞
+              </Text>
+              <Text  style={styles.cardTextN}>999</Text>
+              <Text
+                style={styles.cardTextS}>
+                赞过
+              </Text>
+              <Text  style={styles.cardTextN}>3</Text>
+              </View>            
             </Card>
           </ImageBackground>
           {/* 放个人游记列表处 */}
@@ -231,7 +222,6 @@ export default function Mine() {
                 )}
               </TouchableOpacity>
             </View>
-
             <View>
               {/* 根据状态变量显示对应的组件 */}
               {showComponent === "home" && <MyHome />}
@@ -362,4 +352,21 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     backgroundColor: "rgba(255,255,255,.5)",
   },
+  cardTextS:{
+    fontSize: 12,
+    color: "grey",
+    marginLeft: 10,
+    marginTop: 5,
+  },
+  cardTextN:{
+    fontSize: 14,
+    marginLeft: 5,
+    marginTop: 5,
+  },
+  intro:{
+    flexDirection: "row",
+    marginLeft: 10,
+    marginTop: 10,
+    alignItems: "center",
+  }
 });

@@ -22,6 +22,7 @@ export default function Routes() {
         component={BottomTabs}
         options={{
           headerShown: false,
+          headerBackTitleVisible: false
         }}
       />
       <Stack.Screen
@@ -30,6 +31,7 @@ export default function Routes() {
         options={{
           headerTitle: "游记详情",
           headerShown: false,
+          headerBackTitleVisible: false
         }}
       />
       <Stack.Screen
@@ -38,6 +40,7 @@ export default function Routes() {
         options={{
           headerTitle: "登录页",
           headerShown: false,
+          headerBackTitleVisible: false
         }}
       />
       <Stack.Screen
@@ -46,6 +49,7 @@ export default function Routes() {
         options={{
           headerTitle: "注册页",
           headerShown: false,
+          headerBackTitleVisible: false
         }}
       />
       <Stack.Screen
@@ -54,6 +58,7 @@ export default function Routes() {
         options={{
           headerTitle: "搜索页",
           headerShown: false,
+          headerBackTitleVisible: false
         }}
       />
       <Stack.Screen
@@ -61,6 +66,7 @@ export default function Routes() {
         component={Setting}
         options={{
           headerTitle: "设置",
+          headerBackTitleVisible: false
         }}
       />
       <Stack.Screen
@@ -68,13 +74,15 @@ export default function Routes() {
         component={EditProfile}
         options={{
           headerTitle: "修改简介",
+          headerBackTitleVisible: false
         }}
       />
       <Stack.Screen
         name="LoginAgreement"
         component={LoginAgreement}
         options={{
-          headerTitle: "用户登录协议",
+          headerTitle: "《乐游记平台使用协议》",
+          headerBackTitleVisible: false
         }}
       />
       <Stack.Screen
@@ -82,6 +90,7 @@ export default function Routes() {
         component={Other}
         options={{
           headerTitle: "加班开发中...",
+          headerBackTitleVisible: false
         }}
       />
       <Stack.Screen
@@ -89,6 +98,7 @@ export default function Routes() {
         component={ModifyProfile}
         options={{
           headerTitle: "修改个人简介",
+          headerBackTitleVisible: false
         }}
       />
       <Stack.Screen
@@ -96,6 +106,7 @@ export default function Routes() {
         component={UpdateTravel}
         options={{
           headerTitle: "更新游记",
+          headerBackTitleVisible: false
         }}
       />
     </Stack.Navigator>
