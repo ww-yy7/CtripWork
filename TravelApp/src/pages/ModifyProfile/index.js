@@ -4,17 +4,24 @@ import { StyleSheet, View,Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { UserContext } from "../../contexts/UserContext";
 import { useContext } from "react";
+import {updateSignature} from '../../apis/user';
 
 
 export default function ModifyProfile({ route,navigation: { goBack }}) {
   const navigation = useNavigation();
-  const { introduction: defaultValue } = route.params;
+  const { introduction: defaultValue,isMine } = route.params;
+  console.log(isMine,'isMine');
   const [value, setValue] = useState(defaultValue);
-  const { saveUserInfoToStorage,userInfo }= useContext(UserContext);
+  const { saveUserInfoToStorage,userInfo,id }= useContext(UserContext);
+  console.log(id,'id');
 
   // 提交修改
   const submit = async () => {
     await saveUserInfoToStorage({...userInfo,introduction:value});
+    if (isMine) {
+     await updateSignature({_id:id,introduction:value})
+      
+    }
     goBack();
   };
 

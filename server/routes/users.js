@@ -11,6 +11,7 @@ let {
   searchArticle,
   updateUserInfo,
   commentArticle,
+  updateIntroduction,
   UserInfo,
 } = require("../serve/server");
 const bcrypt = require("bcrypt");
@@ -153,6 +154,28 @@ router.put("/updateUserInfo", function (req, res, next) {
   console.log(req.body, "updateUserInfo");
   const { _id, userInfo } = req.body;
   updateUserInfo(_id, userInfo)
+    .then((result) => {
+      console.log(result, "更新成功");
+      res.json({
+        code: 200,
+        msg: "更新成功",
+        resultList: result,
+      });
+    })
+    .catch((err) => {
+      console.log(err.message, "更新失败");
+      res.json({
+        code: 400,
+        msg: "更新失败",
+        reason: err,
+      });
+    });
+});
+// 更新个性签名
+router.put("/updateIntroduction", function (req, res, next) {
+  console.log(req.body, "updateIntroduction");
+  const { _id, introduction } = req.body;
+  updateIntroduction(_id, introduction)
     .then((result) => {
       console.log(result, "更新成功");
       res.json({

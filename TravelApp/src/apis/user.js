@@ -115,6 +115,15 @@ export function updateUserInfo(data) {
   });
 }
 
+// 更新个人签名
+export function updateSignature(data) {
+  return request({
+    url: `/users/updateIntroduction`,
+    method: "PUT",
+    data,
+  });
+}
+
 // 提交评论
 export function submitComment(data) {
   return request({

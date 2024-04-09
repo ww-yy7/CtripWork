@@ -157,6 +157,22 @@ function updateUserInfo(
     );
   });
 }
+// 更新用户个人签名
+function updateIntroduction(_id, introduction) {
+  return new Promise((resolve, reject) => {
+    UserInfo.updateOne(
+      { _id: ObjectId(_id) }, // 根据用户的 _id 来查找用户
+      { $set: { introduction } }, // 使用 $set 操作符更新匹配的第一个元素
+      function (err, doc) {
+        if (!err) {
+          resolve(doc);
+        } else {
+          reject(err);
+        }
+      }
+    );
+  });
+}
 
 // ----------------------------游记处理----------------------------
 
@@ -460,6 +476,7 @@ module.exports = {
   searchArticle,
   updateUserInfo,
   commentArticle,
+  updateIntroduction,
   UserInfo,
   deleteArticleList,
 };
