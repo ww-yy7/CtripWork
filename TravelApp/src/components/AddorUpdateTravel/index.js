@@ -12,7 +12,6 @@ import {
 } from "react-native";
 import { useState } from "react";
 import {
-  List,
   TextareaItem,
   Tag,
   Provider,
@@ -91,7 +90,7 @@ export default function AddorUpdateTravel({ userInfo }) {
     userInfo && userInfo.playTime ? userInfo.playTime : ""
   ); // 游玩时间
   const [playTimeVisible, setPlayTimeVisible] = useState(false); // 游玩时间弹出框是否显示
-  const [playTimeInputValue, setPlayTimeInputValue] = useState(""); // 游玩时间输入框的值
+  const [playTimeInputValue, setPlayTimeInputValue] = useState(`${new Date()}`); // 游玩时间输入框的值
 
   const [money, setMoney] = useState(
     userInfo && userInfo.playTime ? userInfo.playTime : ""
