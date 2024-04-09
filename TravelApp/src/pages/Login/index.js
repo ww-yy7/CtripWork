@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   ImageBackground,
+  KeyboardAvoidingView,
 } from "react-native";
 import {
   Checkbox,
@@ -202,6 +203,9 @@ export default function Login() {
               <Text style={styles.linkText}>没有账号？立即注册</Text>
             </TouchableOpacity>
           </View>
+          <KeyboardAvoidingView
+          behavior="position"
+          >
           <View style={styles.checkBox}>
             <Checkbox
               style={{ color: "#fff" }}
@@ -229,12 +233,14 @@ export default function Login() {
                     textDecorationLine: "underline",
                     color: "#fff",
                     fontSize: 12,
+
                   }}>
                   《乐游记平台使用服务协议》
                 </Text>
               </TouchableOpacity>
             </View>
           </View>
+          </KeyboardAvoidingView>
         </View>
       </ImageBackground>
     </Provider>
@@ -287,6 +293,6 @@ const styles = StyleSheet.create({
   checkBox: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 280,
+    marginTop: 350,
   },
 });
