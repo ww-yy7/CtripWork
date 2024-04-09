@@ -9,7 +9,7 @@ import {
   Input,
   Image,
   Tag,
-  Toast
+  Toast,
 } from "antd-mobile";
 
 
@@ -17,17 +17,17 @@ function App() {
   // 获取页面url，拿到传入的articleId
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
-  const articleId = urlParams.get("articleId");
+  // const articleId = urlParams.get("articleId");
 
   const [travelsData, setTravelsData] = useState([]);
 
-  // const articleId = "66125ba14473ff8205c32d611712482264940"; // 替换为你的实际 articleId
+  const articleId = "66138dd35abeab9ea97739c71712557934850"; // 替换为你的实际 articleId
 
   useEffect(() => {
     async function fetchTravelNotes() {
       try {
         const response = await axios.get(
-          `http://10.100.197.143:3000/api/users/getAllTravelNote`,
+          `http://192.168.1.6:3000/api/users/getAllTravelNote`,
           {
             params: { articleId },
           }
@@ -271,20 +271,49 @@ function App() {
                 }
               )}
             </div>
+            <div>
+              <div style={{marginTop: 25, marginBottom:15, fontWeight:'bold'}}>评论区</div>
+              {travelsData.article[0]?.comment?.map((comment,index)=> (
+              <div key={index} style={{display:'flex', flexDirection: 'row',marginTop:5}}>
+                <Image
+                src={`data:image/jpeg;base64,${comment.commentAvatar}`}
+                style={{
+                  width: 30,
+                  height: 30,
+                  borderRadius: 20,
+                  marginRight:10,
+                  marginBottom:10,
+                  
+                }}
+                ></Image>
+                <div>
+                  <div style={{fontWeight:'bold'}}>
+                  {comment.nickName}
+
+                  </div>
+                  <div >
+                  {comment.content}
+                  </div>
+                </div>
+
+              </div>))}
+            </div>
           </div>
         </div>
         {/* 互动区 */}
-        <footer className="footer" onClick={()=>{Toast.show({
+        <footer  className="footer">
+          <div style={{width: '80%',height:'80%',borderRadius:30, backgroundColor:'rgba(71, 69, 69, 0.1)'}} onClick={()=>{Toast.show({
               content: '请打开app进行评论',
               duration: 2000
-            })}}>
-          <Input style={{ color: "gray" }} placeholder="说点什么..."          
-          />
+            })}}> 
+          <Input style={{ color: "gray",paddingLeft:6,paddingTop:3 }} placeholder="说点什么..."          
+          /></div>   
           <span>❤️</span>
           <span>⭐</span>
-          <span>✏️</span>
+          <span>💬</span>
         </footer>
       </div>
+      
     );
   }
 }

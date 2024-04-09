@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect,} from "react";
 import {
   View,
   Text,
@@ -26,7 +26,7 @@ import {
   ViewfinderCircleIcon,
   PencilSquareIcon,
 } from "react-native-heroicons/outline";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Register from "../Register";
 import { UserContext } from "../../contexts/UserContext";
@@ -46,6 +46,7 @@ export default function Mine() {
   } = useContext(UserContext);
   const { introduction } = userInfo;
   const [refreshing, setRefreshing] = useState(false);
+  const route = useRoute(); 
 
   // 下拉更新
   const onRefresh = () => {
@@ -84,6 +85,18 @@ export default function Mine() {
     console.log("点击头像");
     navigation.navigate("EditProfile");
   };
+  
+  // 跳转至我的游记
+  useEffect(() => {
+    // 获取参数
+    const showComponentParam = route.params?.showComponent;
+    // 如果有指定的参数，则设置状态
+    if (showComponentParam) {
+      setShowComponent(showComponentParam);
+      setSelected("left");
+    }
+  }, [route.params]);
+  
 
   if (!token) {
     return (
@@ -121,6 +134,7 @@ export default function Mine() {
       </View>
     );
   } else {
+    
     return (
       <View>
         <ScrollView

@@ -35,6 +35,14 @@ export default function Home() {
         // 在跳转后取消焦点
         inputRef.current?.blur();
     };
+
+    const handleAvatarlink = () =>{
+        if(token){
+            navigation.navigate("EditProfile")
+        }else{
+            navigation.navigate("Mine")
+        }
+    }
         
        
     return (
@@ -43,7 +51,7 @@ export default function Home() {
             {/* <View> */}
             <View style={stlyes.top}>
                 <Text style={stlyes.title}>让我们一起探索！</Text>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={handleAvatarlink}>
                     <Image 
                     // source={require('../../../assets/images/avatar.png')}
                     source={token && userInfo && userInfo.Avatar ? { uri: `data:image/jpeg;base64,${userInfo.Avatar}` } : require('../../../assets/images/avatar.png')}

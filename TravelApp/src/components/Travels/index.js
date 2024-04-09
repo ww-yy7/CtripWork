@@ -1,4 +1,4 @@
-import { View, TouchableOpacity, Image, Text, StyleSheet, SafeAreaView } from "react-native";
+import { View, TouchableOpacity, Image, Text, StyleSheet,  ActivityIndicator, SafeAreaView } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
@@ -14,12 +14,12 @@ export default function Travels() {
   const [refreshing, setRefreshing] = useState(false);
   const [displayedData, setDisplayedData] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-
+  const [isLoading, setIsLoading] = useState(true); // 数据加载状态
   
 
   useEffect(() => {
     getAllTravelNote().then((users) => {
-      
+      setIsLoading(true);
       // 使用 flatMap 提取每个用户的所有游记，合并成一个数组
       const allArticles = users.flatMap((user) => user.article);
       // console.log(allArticles)
@@ -33,7 +33,7 @@ export default function Travels() {
       // console.log(b.time)
       // 更新状态以存储排序后的游记数据
       setTravelsData(filteredData);
-
+      setIsLoading(false);
     });
   }, []);
 
@@ -82,7 +82,7 @@ export default function Travels() {
     <View style={styles.container}>
       {/* <SafeAreaView > */}
       
-      <WaterfallFlow
+      {/* <WaterfallFlow
         onRefresh={onRefresh}
         refreshing={refreshing}
         // data={travelsData}
@@ -96,13 +96,30 @@ export default function Travels() {
                 item={item}
                 key={index}
                 columnIndex={columnIndex}
-                // style={{
-                //   height: columnIndex === 0 ? 230 :250,
-                // }}
               />
           );
         }}
-      />
+      /> */}
+
+      {isLoading ? (
+              <ActivityIndicator size="small" color="black" /> // 加载中的提示
+            ) : (
+              <WaterfallFlow
+                onRefresh={onRefresh}
+                refreshing={isLoading} // 刷新状态
+                data={displayedData}
+                onEndReached={loadMore}
+                onEndReachedThreshold={0.01}
+                numColumns={2}
+                renderItem={({ item, index, columnIndex }) => (
+                  <TravelsCard
+                    item={item}
+                    key={index}
+                    columnIndex={columnIndex}
+                  />
+                )}
+              />
+            )}
       
       {/* </SafeAreaView> */}
     </View>
@@ -188,7 +205,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     top: 7,
-    right: 2,
+    right: 3,
   },
   title: {
     fontSize: 11,

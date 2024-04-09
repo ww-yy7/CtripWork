@@ -212,7 +212,8 @@ export default function AddorUpdateTravel({ userInfo }) {
           Toast.info("发布成功", 1);
 
           setTimeout(() => {
-            navigation.navigate("Mine");
+            // navigation.navigate("Mine");
+            navigation.navigate("Mine", { showComponent: 'travelList' });
             // 清除所有内容
             setTitleValue("");
             setProfileValue("");
@@ -350,9 +351,9 @@ export default function AddorUpdateTravel({ userInfo }) {
               <View style={[{ flexDirection: "row" }, styles.addLocation]}>
                 <MapPinIcon
                   style={styles.locationIcon}
-                  size={16}
+                  size={18}
                   strokeWidth={3}
-                  color="gray"
+                  color="black"
                 />
                 <Text
                   style={styles.location}
@@ -380,9 +381,9 @@ export default function AddorUpdateTravel({ userInfo }) {
               <View style={[{ flexDirection: "row" }, styles.addLocation]}>
                 <ClockIcon
                   style={styles.locationIcon}
-                  size={16}
+                  size={18}
                   strokeWidth={3}
-                  color="gray"
+                  color="black"
                 />
                 <Text
                   style={styles.location}
@@ -412,7 +413,7 @@ export default function AddorUpdateTravel({ userInfo }) {
                   style={styles.locationIcon}
                   size={18}
                   strokeWidth={3}
-                  color="gray"
+                  color="black"
                 />
                 <Text
                   style={styles.location}

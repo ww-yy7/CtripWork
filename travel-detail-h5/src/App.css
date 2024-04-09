@@ -83,13 +83,13 @@
   
 }
 .footer {
-  position: fixed;
+  /* position: fixed; */
   display: flex;
   flex-direction: row;
   align-items: center;
   left: 0;
   bottom: 0;
-  background-color: rgba(71, 69, 69, 0.1);
+  /* background-color: rgba(71, 69, 69, 0.1); */
   border-radius: 30px;
   color: white;
   justify-content: space-between;
@@ -121,9 +121,9 @@
 
 }
 .description {
-  width: 100%;
+  width: 92%;
   height: auto;
-  font-size: 1.2em;
+  font-size: 1.1em;
   margin-top: 15px;
 }
 .tags{

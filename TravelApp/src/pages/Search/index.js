@@ -95,7 +95,7 @@ const SearchScreen = () => {
           flexDirection:'row'
         }}>
         {/* 搜索组件 */}
-        <View style={styles.serchandinput}>
+        <TouchableOpacity style={styles.serchandinput}>
         <MagnifyingGlassIcon size={20} strokeWidth={3} color="gray" />
         
         <TextInput
@@ -106,7 +106,7 @@ const SearchScreen = () => {
           onChangeText={onChangeText}
           onSubmitEditing={handleSearch}
         />
-        </View>
+        </TouchableOpacity>
         <TouchableOpacity>
           <Text 
             onPress={() => navigation.goBack()}
@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
     width:'80%'
 },
   input: {
-
+    width:240,
   },
   historyText: {
     marginVertical: 10,
