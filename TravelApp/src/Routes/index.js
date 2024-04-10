@@ -6,7 +6,7 @@ import Register from "../pages/Register";
 import SearchScreen from "../pages/Search";
 import Setting from "../pages/Setting";
 import EditProfile from "../pages/EditProfile";
-import LoginAgreement from "../pages/Agreement/LoginAgreement";
+import LoginAgreement from "../pages/Agreement";
 import Other from "../pages/Other";
 import ModifyProfile from "../pages/ModifyProfile";
 import UpdateTravel from "../pages/UpdateTravel";

@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, StyleSheet, ScrollView } from "react-native";
 
-export default function LoginAgreement() {
+export default function Agreement() {
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>《乐游记平台使用协议》</Text>
@@ -130,6 +130,6 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     marginLeft: 10,
     marginBottom: 10,
-    paddingsBottom: 10,
+    paddingBottom: 10,
   },
 });

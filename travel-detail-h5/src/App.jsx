@@ -17,11 +17,11 @@ function App() {
   // 获取页面url，拿到传入的articleId
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
-  // const articleId = urlParams.get("articleId");
+  const articleId = urlParams.get("articleId");
 
   const [travelsData, setTravelsData] = useState([]);
 
-  const articleId = "66138dd35abeab9ea97739c71712557934850"; // 替换为你的实际 articleId
+  // const articleId = "66138dd35abeab9ea97739c71712557934850"; // 替换为你的实际 articleId
 
   useEffect(() => {
     async function fetchTravelNotes() {

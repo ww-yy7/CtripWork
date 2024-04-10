@@ -1,4 +1,4 @@
-import { useState, useContext,useEffect} from "react";
+import { useState, useContext, useEffect } from "react";
 import {
   View,
   Text,
@@ -10,10 +10,7 @@ import {
   RefreshControl,
 } from "react-native";
 import MyHome from "../../components/MyHome";
-import {
-  Card,
-  Button,
-} from "@ant-design/react-native";
+import { Card, Button } from "@ant-design/react-native";
 import {
   Cog6ToothIcon,
   ViewfinderCircleIcon,
@@ -27,15 +24,10 @@ import MyTravels from "../MyTravels";
 import { getAllTravelNote } from "../../apis/user";
 
 export default function Mine() {
-  const {
-    id,
-    token,
-    userInfo,
-    setMyTravelsData,
-  } = useContext(UserContext);
+  const { id, token, userInfo, setMyTravelsData } = useContext(UserContext);
   const { introduction } = userInfo;
   const [refreshing, setRefreshing] = useState(false);
-  const route = useRoute(); 
+  const route = useRoute();
 
   // 下拉更新
   const onRefresh = () => {
@@ -70,7 +62,7 @@ export default function Mine() {
     console.log("点击头像");
     navigation.navigate("EditProfile");
   };
-  
+
   // 跳转至我的游记
   useEffect(() => {
     // 获取参数
@@ -81,7 +73,6 @@ export default function Mine() {
       setSelected("left");
     }
   }, [route.params]);
-  
 
   if (!token) {
     return (
@@ -119,7 +110,6 @@ export default function Mine() {
       </View>
     );
   } else {
-    
     return (
       <View>
         <ScrollView
@@ -168,36 +158,29 @@ export default function Mine() {
               <TouchableOpacity
                 style={styles.intro}
                 onPress={() =>
-                  navigation.navigate("ModifyProfile", { introduction })
+                  navigation.navigate("ModifyProfile", {
+                    introduction,
+                    isMine: true,
+                  })
                 }>
                 <Text
                   style={{ fontSize: 12, color: "#9f9fa1", marginRight: 4 }}>
-                  {userInfo.introduction ? userInfo.introduction : "这个人很懒，什么都没写~~~"}
+                  {userInfo.introduction
+                    ? userInfo.introduction
+                    : "这个人很懒，什么都没写~~~"}
                 </Text>
                 <PencilSquareIcon size={16} strokeWidth={1} color="#9f9fa1" />
               </TouchableOpacity>
-              <View style={{flexDirection:'row',alignItems:'center'}}>
-              <Text
-                style={styles.cardTextS}>
-                粉丝
-              </Text>
-              <Text  style={styles.cardTextN}>520</Text>
-              <Text
-                style={styles.cardTextS}>
-                关注
-              </Text>
-              <Text  style={styles.cardTextN}>1</Text>
-              <Text
-                style={styles.cardTextS}>
-               获赞
-              </Text>
-              <Text  style={styles.cardTextN}>999</Text>
-              <Text
-                style={styles.cardTextS}>
-                赞过
-              </Text>
-              <Text  style={styles.cardTextN}>3</Text>
-              </View>            
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Text style={styles.cardTextS}>粉丝</Text>
+                <Text style={styles.cardTextN}>520</Text>
+                <Text style={styles.cardTextS}>关注</Text>
+                <Text style={styles.cardTextN}>1</Text>
+                <Text style={styles.cardTextS}>获赞</Text>
+                <Text style={styles.cardTextN}>999</Text>
+                <Text style={styles.cardTextS}>赞过</Text>
+                <Text style={styles.cardTextN}>3</Text>
+              </View>
             </Card>
           </ImageBackground>
           {/* 放个人游记列表处 */}
@@ -368,21 +351,21 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     backgroundColor: "rgba(255,255,255,.5)",
   },
-  cardTextS:{
+  cardTextS: {
     fontSize: 12,
     color: "grey",
     marginLeft: 10,
     marginTop: 5,
   },
-  cardTextN:{
+  cardTextN: {
     fontSize: 14,
     marginLeft: 5,
     marginTop: 5,
   },
-  intro:{
+  intro: {
     flexDirection: "row",
     marginLeft: 10,
     marginTop: 10,
     alignItems: "center",
-  }
+  },
 });
