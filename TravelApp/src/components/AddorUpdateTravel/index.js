@@ -93,7 +93,7 @@ export default function AddorUpdateTravel({ userInfo }) {
   const [playTimeInputValue, setPlayTimeInputValue] = useState(`${new Date()}`); // 游玩时间输入框的值
 
   const [money, setMoney] = useState(
-    userInfo && userInfo.playTime ? userInfo.playTime : ""
+    userInfo && userInfo.money ? userInfo.money : ""
   ); // 花费
   const [moneyVisible, setMoneyVisible] = useState(false); // 花费弹出框是否显示
   const [moneyInputValue, setMoneyInputValue] = useState(""); // 花费输入框的值
@@ -340,7 +340,7 @@ export default function AddorUpdateTravel({ userInfo }) {
                 </Tag>
               ))}
               <Pressable style={styles.btn} onPress={() => setTagVisible(true)}>
-                <Text style={styles.btn_p}>选择标签</Text>
+                <Text style={styles.btn_p}>填写标签</Text>
               </Pressable>
             </View>
           </View>
@@ -553,6 +553,7 @@ export default function AddorUpdateTravel({ userInfo }) {
               
               <DatePickerView
                 value={playTimeInputValue}
+                maxDate={new Date()}
                 onChange={(val) => {
                   setPlayTimeInputValue(val);
                   setPlayTime(dayjs(val).format("YYYY-MM-DD")); // 转换成年月日形式

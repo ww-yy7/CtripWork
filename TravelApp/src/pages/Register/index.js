@@ -104,7 +104,7 @@ export default function Register() {
     }
     // 判断是否同意发布规则
     else if (!checked) {
-      Toast.info("请同意发布规则", 1);
+      Toast.info("请同意服务协议", 1);
       return;
     } else {
       // 执行注册逻辑

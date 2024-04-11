@@ -73,7 +73,7 @@ export default function Routes() {
         name="EditProfile"
         component={EditProfile}
         options={{
-          headerTitle: "修改简介",
+          headerTitle: "修改个人信息",
           headerBackTitleVisible: false
         }}
       />

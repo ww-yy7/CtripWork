@@ -27,7 +27,7 @@ function App() {
     async function fetchTravelNotes() {
       try {
         const response = await axios.get(
-          `http://192.168.1.6:3000/api/users/getAllTravelNote`,
+          `http://localhost:3000/api/users/getAllTravelNote`,
           {
             params: { articleId },
           }

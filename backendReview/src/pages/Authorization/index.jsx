@@ -23,20 +23,28 @@ import {
 import dayjs from "dayjs";
 import { unescapeHtml } from "../../apis/HtmlHandler";
 import PropTypes from "prop-types";
-import './index.scss'
+import "./index.scss";
 
 const PreviewModel = ({ article }) => {
   // 预览框子组件
-  const { title, profile, content, picture, position,tags } = article;
+  const { title, profile, content, picture, position, tags } = article;
   return (
     <div>
-      {picture.length > 0 && (picture.map((item) => <img className="img" src={`data:image/jpeg;base64,${item}`} key={item} alt="Base64 Image" />))}
-       
+      {picture.length > 0 &&
+        picture.map((item) => (
+          <img
+            className="img"
+            src={`data:image/jpeg;base64,${item}`}
+            key={item}
+            alt="Base64 Image"
+          />
+        ))}
+
       <p>文章标题: {title}</p>
       <p>文章简介: {profile}</p>
       <p>文章内容: {content}</p>
       <p>地址:{position}</p>
-      <p>标签：{tags.length>0 && tags.map((item)=>item)}</p>
+      <p>标签：{tags.length > 0 && tags.map((item) => item)}</p>
       <p>
         文章创建时间:{" "}
         {dayjs.unix(article.time / 1000).format("YYYY-MM-DD HH:mm:ss")}
@@ -69,9 +77,9 @@ const Task = () => {
   async function getTravelNote() {
     let { resultList } = await getAllTravelNote();
     let list = resultList.map((item) => item.article);
-    list = list.flat(); // 展平数组，里面存放的是每一篇游记
+    // list = list.flat(); // 展平数组，里面存放的是每一篇游记
     // console.log(list, "list");
-
+    list = list.flat().sort((a, b) => b.time - a.time); // 展平数组，里面存放的是每一篇游记
     // 对数据进行反转义
     list.forEach((item) => {
       item.title = unescapeHtml(item.title);
@@ -107,25 +115,24 @@ const Task = () => {
     showPreviewModal();
   };
   // 通过回调
-  const passHandler = async ({ key: articleId },isPreview) => {
+  const passHandler = async ({ key: articleId }, isPreview) => {
     console.log(articleId);
     const state = "已通过";
     await changeArticleState({ articleId, state });
     getTravelNote(); // 重新获取游记列表，刷新页面
-    isPreview && handlePreviewOk()
+    isPreview && handlePreviewOk();
   };
   // 拒绝回调
-  const rejectHandler = async (articleId, rejectReason,isPreview) => {
+  const rejectHandler = async (articleId, rejectReason, isPreview) => {
     // console.log(articleId);
     const state = "未通过";
     await changeArticleState({ articleId, state, rejectReason });
     getTravelNote(); // 重新获取游记列表，刷新页面
-    if(isPreview){
-      console.log('isPreview');
-      handlePreviewOk()
-      handleRejectOk()
+    if (isPreview) {
+      console.log("isPreview");
+      handlePreviewOk();
+      handleRejectOk();
     }
-
   };
   // 删除
   const deleteHandler = async ({ key: articleId }) => {
@@ -143,7 +150,7 @@ const Task = () => {
   // 拒绝弹出框确认回调(填写完拒绝理由后点击确认)
   const handleRejectOk = () => {
     setIsRejectModalOpen(false);
-    handlePreviewOk()
+    handlePreviewOk();
     // setInputInfo('') // 清除选择框
     rejectHandler(articleId, inputInfo);
   };
@@ -277,20 +284,25 @@ const Task = () => {
           onOk={handlePreviewOk}
           onCancel={handlePreviewCancel}
           width={800}
-          okText='确认'
-          cancelText='取消'
+          okText="确认"
+          cancelText="取消"
           footer={[
-            <Button key="reject"  style={{background:'red',color:'white'}} onClick={() => showRejectModal({key:article.articleId},true)}>
+            <Button
+              key="reject"
+              style={{ background: "red", color: "white" }}
+              onClick={() => showRejectModal({ key: article.articleId }, true)}>
               拒绝
             </Button>,
-            <Button key="pass" type="primary" onClick={() => passHandler({key:article.articleId},true)}>
+            <Button
+              key="pass"
+              type="primary"
+              onClick={() => passHandler({ key: article.articleId }, true)}>
               通过
             </Button>,
             <Button key="back" onClick={handlePreviewCancel}>
               关闭
-            </Button>
-          ]}
-          >
+            </Button>,
+          ]}>
           <PreviewModel article={article}></PreviewModel>
         </Modal>
       </Card>
