@@ -10,7 +10,7 @@
 
 ## 技术栈
 
-npde.js+Express+Mongodb
+node.js+Express+Mongodb
 
 ## 功能说明
 
