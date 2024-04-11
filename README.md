@@ -13,3 +13,5 @@
 - 在TravelApp/src/utils/request.js 里，把baseURL里的地址换成自己电脑的IPV4地址！比如baseURL: 'http://你的IPV4地址:3000/api'
 
 - 详情见每个demo中的README.md
+
+## 常见问题

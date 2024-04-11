@@ -12,7 +12,6 @@ import {
 } from "react-native";
 import { MagnifyingGlassIcon } from "react-native-heroicons/outline";
 import { useNavigation } from "@react-navigation/native";
-import Categories from "../../components/Categories";
 import Travels from "../../components/Travels";
 import HomeSwiper from "../../components/HomeSwiper";
 import { UserContext } from "../../contexts/UserContext";
@@ -82,9 +81,6 @@ export default function Home() {
           />
         </View>
       </View>
-      {/* <View>
-        <Categories />
-      </View> */}
       <View>
         <HomeSwiper />
       </View>

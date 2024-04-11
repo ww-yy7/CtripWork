@@ -7,8 +7,25 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var manageRouter = require('./routes/manage')
 const bodyParser = require('body-parser');
+const rateLimit = require('express-rate-limit');
+
 
 var app = express();
+
+
+// 创建一个每分钟最多允许100个请求的限制器
+const limiter = rateLimit({
+  windowMs: 60 * 1000, // 1分钟
+  max: 100, // 最大请求数
+  message: '请求过于频繁，请稍后再试！',
+  skip: (req, res) => {
+    // 可选的条件，用于跳过某些请求，比如管理员或者某些特定的IP
+    return false;
+  }
+});
+
+// 应用限制器到所有路由
+app.use(limiter);
 
 // 设置请求体大小限制为10MB
 app.use(bodyParser.json({limit: '100mb'}));

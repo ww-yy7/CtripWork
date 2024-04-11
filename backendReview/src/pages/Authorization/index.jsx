@@ -64,6 +64,7 @@ const Task = () => {
   const [articleId, setArticleId] = useState(null); // 用来存储当前操作的游记id
   const [article, setArticle] = useState({}); // 用来存储当前操作的游记
   const [inputInfo, setInputInfo] = useState(""); // 用来存储拒绝理由
+  const [selectState, setSelectState] = useState("全部"); // 用来存储筛选状态
   const name = localStorage.getItem("name");
   const { Option } = Select;
   const stateList = [
@@ -76,10 +77,12 @@ const Task = () => {
   // 获取游记列表
   async function getTravelNote() {
     let { resultList } = await getAllTravelNote();
+    // 根据时间来排序
+    // tempList.sort()
     let list = resultList.map((item) => item.article);
-    // list = list.flat(); // 展平数组，里面存放的是每一篇游记
-    // console.log(list, "list");
     list = list.flat().sort((a, b) => b.time - a.time); // 展平数组，里面存放的是每一篇游记
+    // console.log(list, "list");
+
     // 对数据进行反转义
     list.forEach((item) => {
       item.title = unescapeHtml(item.title);
@@ -98,10 +101,10 @@ const Task = () => {
   }, []);
   // 筛选确认回调
   const filterHandler = async (state) => {
-    // console.log(state);
+    console.log(state,'state'); 
     let list = await getArticleByState(state);
-    // console.log(list.data, "list");
-    setNoteList(list.data);
+    console.log(list, "list");
+    setNoteList(list.data.sort((a, b) => b.time - a.time));
   };
   // 预览
   const seeHandler = async ({ key: articleId }) => {
@@ -116,18 +119,25 @@ const Task = () => {
   };
   // 通过回调
   const passHandler = async ({ key: articleId }, isPreview) => {
-    console.log(articleId);
-    const state = "已通过";
-    await changeArticleState({ articleId, state });
-    getTravelNote(); // 重新获取游记列表，刷新页面
-    isPreview && handlePreviewOk();
+    console.log(articleId,'articleId');
+    // const state = "已通过";
+      await changeArticleState({ articleId, state: "已通过" });
+      // getTravelNote(); // 重新获取游记列表，刷新页面
+      console.log(selectState, "selectState");
+      filterHandler({state:selectState});
+      isPreview && handlePreviewOk();
   };
   // 拒绝回调
   const rejectHandler = async (articleId, rejectReason, isPreview) => {
     // console.log(articleId);
-    const state = "未通过";
-    await changeArticleState({ articleId, state, rejectReason });
-    getTravelNote(); // 重新获取游记列表，刷新页面
+    // const state = "未通过";
+    await changeArticleState({ articleId, state: "未通过", rejectReason });
+    // 清空拒绝理由
+    setInputInfo("");
+    // getTravelNote(); // 重新获取游记列表，刷新页面
+    // console.log(state, "state");
+
+    filterHandler({state:selectState});
     if (isPreview) {
       console.log("isPreview");
       handlePreviewOk();
@@ -138,7 +148,8 @@ const Task = () => {
   const deleteHandler = async ({ key: articleId }) => {
     // console.log("deleteHandler");
     await deleteTravelNote({ articleId });
-    getTravelNote(); // 重新获取游记列表，刷新页面
+    // getTravelNote(); // 重新获取游记列表，刷新页面
+    filterHandler({state:selectState});
   };
   // 拒绝弹出框（填写拒绝理由）
   const showRejectModal = ({ key: articleId }) => {
@@ -245,7 +256,10 @@ const Task = () => {
         {/* 筛选区域 */}
         <Form onFinish={filterHandler}>
           <Form.Item label="状态" name="state" initialValue={"全部"}>
-            <Select placeholder="请选择状态" style={{ width: 120 }}>
+            <Select
+              placeholder="请选择状态"
+              style={{ width: 120 }}
+              onChange={(value) => setSelectState(value)}>
               {stateList.map((item) => (
                 <Option key={item.id} value={item.value}>
                   {item.value}
@@ -270,7 +284,9 @@ const Task = () => {
           onOk={handleRejectOk}
           onCancel={handleRejectCancel}
           cancelText={"取消"}
-          okText={"更新"}>
+          okText={"更新"}
+          // 设置最上层的z-index
+          style={{ zIndex: 1000 }}>
           <Input
             placeholder="拒绝理由"
             value={inputInfo}
@@ -286,11 +302,12 @@ const Task = () => {
           width={800}
           okText="确认"
           cancelText="取消"
+          style={{ zIndex: 0 }}
           footer={[
             <Button
               key="reject"
               style={{ background: "red", color: "white" }}
-              onClick={() => showRejectModal({ key: article.articleId }, true)}>
+              onClick={() => showRejectModal({ key: article.articleId })}>
               拒绝
             </Button>,
             <Button
