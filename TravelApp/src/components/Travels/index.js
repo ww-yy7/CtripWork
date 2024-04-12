@@ -10,11 +10,12 @@ import { unescapeHtml } from "../../apis/HtmlHandler";
 // import MasonryList from 'react-native-masonry-list';
 
 export default function Travels() {
-  const { travelsData, setTravelsData} = useContext(UserContext);
+  const { travelsData, setTravelsData, deleteCount} = useContext(UserContext);
   const [refreshing, setRefreshing] = useState(false);
   const [displayedData, setDisplayedData] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true); // 数据加载状态
+  
   
 
   useEffect(() => {
@@ -35,7 +36,7 @@ export default function Travels() {
       setTravelsData(filteredData);
       setIsLoading(false);
     });
-  }, []);
+  }, [deleteCount]);
 
   // 瀑布流下拉更新
   const onRefresh = () => {

@@ -35,21 +35,21 @@ export default function Home() {
   // 防止从搜索页返回后自动聚焦到搜索Input导致二次跳转
   const inputRef = useRef(null);
 
-    const ToSearch = () => {
-        navigation.navigate("Search")
-        // 在跳转后取消焦点
-        inputRef.current?.blur();
-    };
+  const ToSearch = () => {
+      navigation.navigate("Search")
+      // 在跳转后取消焦点
+      inputRef.current?.blur();
+  };
 
-    const handleAvatarlink = () =>{
-        if(token){
-            navigation.navigate("EditProfile")
-        }else{
-            navigation.navigate("Mine")
-        }
-    }
-        
-       
+  // 右上角头像跳转区分
+  const handleAvatarlink = () =>{
+      if(token){
+          navigation.navigate("EditProfile")
+      }else{
+          navigation.navigate("Mine")
+      }
+  }
+           
     return (
 
         <SafeAreaView style={stlyes.container}>
@@ -81,6 +81,9 @@ export default function Home() {
           />
         </View>
       </View>
+      {/* <View>
+        <Categories />
+      </View> */}
       <View>
         <HomeSwiper />
       </View>
@@ -95,7 +98,7 @@ export default function Home() {
 const stlyes = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FAFAFA",
+    backgroundColor: "white",
     paddingEnd: 14,
     paddingStart: 14,
   },
