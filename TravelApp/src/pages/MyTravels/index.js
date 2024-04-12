@@ -103,7 +103,6 @@ export default function MyTravels() {
 const TravelsCard = ({ item, onDelete }) => {
   // 这里的item是我点击的那个游记的数据
   const navigation = useNavigation();
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const [rejectReason, setRejectReason] = useState("");
 
   // const toggleModal = () => setIsModalVisible(!isModalVisible);
