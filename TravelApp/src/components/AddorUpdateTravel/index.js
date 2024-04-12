@@ -75,7 +75,7 @@ export default function AddorUpdateTravel({ userInfo }) {
   const [imgPreview, setImgPreview] = useState(false); // 图片预览
 
   const [tags, setTags] = useState(
-    userInfo && userInfo.tags ? userInfo.tags : []
+    userInfo && userInfo.tags ? userInfo.tags : []                                                                                                                                                     
   ); // 存放标签
   const [tagVisible, setTagVisible] = useState(false); // 标签弹出框是否显示
   const [tagInputValue, setTagInputValue] = useState(""); // 标签输入框的值
@@ -235,6 +235,7 @@ export default function AddorUpdateTravel({ userInfo }) {
 
   if (token) {
     return (
+      <Provider>
       <ScrollView
         automaticallyAdjustContentInsets={false}
         showsHorizontalScrollIndicator={false}
@@ -251,7 +252,6 @@ export default function AddorUpdateTravel({ userInfo }) {
             发布游记tips:旅行、探店、风景、美食......
           </Text>
         </View>
-
         <View
           style={[styles.innerBox, { flexDirection: "row", flexWrap: "wrap" }]}>
           {imageList.length > 0 &&
@@ -283,8 +283,7 @@ export default function AddorUpdateTravel({ userInfo }) {
             </TouchableOpacity>
           )}
         </View>
-        {/* 图片预览 */}
-        <Provider>
+        {/* 图片预览 */}       
           <Modal
             visible={imgPreview}
             animationType="slide-up"
@@ -297,8 +296,6 @@ export default function AddorUpdateTravel({ userInfo }) {
               selectedImageIndex={selectedImageIndex}
             />
           </Modal>
-        </Provider>
-
         <View style={[styles.container, { height: vh(68) }]}>
           <View style={[styles.innerBox, { height: vh(44.8) }]}> 
             <TextInput
@@ -454,7 +451,6 @@ export default function AddorUpdateTravel({ userInfo }) {
           </View>
         </View>
         {/* 添加标签的弹出框 */}
-        <Provider>
           <Modal
            transparent
             visible={tagVisible}
@@ -495,10 +491,8 @@ export default function AddorUpdateTravel({ userInfo }) {
               style={styles.modalCloseBtn}>
               关闭
             </Button>
-          </Modal>
-        </Provider>
-        {/* 添加地点的弹出框 */}
-        <Provider>
+          </Modal>     
+        {/* 添加地点的弹出框 */}     
           <Modal
            transparent
             visible={locationVisible}
@@ -541,10 +535,8 @@ export default function AddorUpdateTravel({ userInfo }) {
               style={styles.modalCloseBtn}>
               关闭
             </Button>
-          </Modal>
-        </Provider>
-        {/* 添加游玩时间的弹出框 */}
-        <Provider>
+          </Modal>  
+        {/* 添加游玩时间的弹出框 */}     
             <Modal
               transparent
               visible={playTimeVisible}
@@ -565,10 +557,8 @@ export default function AddorUpdateTravel({ userInfo }) {
                 style={styles.modalCloseBtn}>
                 关闭
               </Button>
-            </Modal>
-          </Provider>
+            </Modal>    
         {/* 添加花费的弹出框 */}
-        <Provider>
           <Modal
            transparent
             visible={moneyVisible}
@@ -613,8 +603,8 @@ export default function AddorUpdateTravel({ userInfo }) {
               关闭
             </Button>
           </Modal>
-        </Provider>
       </ScrollView>
+      </Provider>
     );
   } else {
     return (

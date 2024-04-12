@@ -10,7 +10,7 @@
 
 ## 技术栈
 
-React18 + Vite + React Router 6
+React18 + Vite + React Router 6 + Ant Design
 
 ## 功能说明
 

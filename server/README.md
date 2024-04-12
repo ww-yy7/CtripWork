@@ -14,6 +14,12 @@ node.js+Express+Mongodb
 
 ## 功能说明
 
+### 数据结构
+- Schema创建了「定义用户信息」和 「储存逻辑删除」的数据模型，其中「定义用户信息」的模型嵌套了「游记」子schema，具体数据结构如下：  
+    <img src="./UserInfo.jpg" alt="UserInfo" height="200">  
+    <img src="./article.jpg" alt="article" height="200">  
+    <img src="./DeletePartition.jpg" alt="DeletePartition" height="200">
+
 ### 用户管理接口
 
 - 实现了用户注册功能，通过 /register 路由接收用户注册信息，并将信息存储到数据库中（密码会进行哈希加密）。
