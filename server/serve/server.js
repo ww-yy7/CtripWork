@@ -60,7 +60,8 @@ const userInfoSchema = new Schema(
     introduction: String,
   },
   { collection: "userInfo" }
-); // 设置集合名称为 'userInfo'
+); 
+// 设置集合名称为 'userInfo'
 const deleteArticleSchema = new Schema({
   articleId: String,
   comment: [
