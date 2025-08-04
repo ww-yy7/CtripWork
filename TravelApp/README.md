@@ -12,7 +12,7 @@
 - 手机下载 expo App，扫描二维码
 - `!important`用 Expo Go 进行调试,需进行以下操作
   - 在 TravelApp/src/utils/request.js 里，把 baseURL 里的地址换成自己电脑的 IPV4 地址！比如 baseURL: 'http://你的IPV4地址:3000/api'
-  - 分享页面功能的实现：在 TravelApp/src/TravelsDetails/index.js 中，把如下图片地方的 url 换成自己换成自己电脑的 IPV4 地址！比如 baseURL: 'http://你的IPV4地址:5010?articleId=${item.articleId}'  
+  - 分享页面功能的实现：在 TravelApp/src/pages/TravelsDetails/index.js 中，把如下图片地方的 url 换成自己换成自己电脑的 IPV4 地址！比如 baseURL: 'http://你的IPV4地址:5010?articleId=${item.articleId}'  
     <img src="./VImages/image.png" alt="描述" height="200">
 
 ## 技术栈

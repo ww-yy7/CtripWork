@@ -1,3 +1,9 @@
+import { BackHandler } from 'react-native';
+
+// console.log('BackHandler object:', BackHandler);
+if (!BackHandler.removeEventListener) {
+  BackHandler.removeEventListener = () => {};  // 忽略掉旧用法
+}
 import { StatusBar } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 

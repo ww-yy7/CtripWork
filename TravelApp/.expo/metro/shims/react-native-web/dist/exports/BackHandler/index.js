@@ -1,7 +1,6 @@
-function emptyFunction() {}
-var BackHandler = {
-  exitApp: emptyFunction,
-  addEventListener: () => ({ remove: emptyFunction }),
-  removeEventListener: emptyFunction,
-};
-export default BackHandler;
+jest.mock('react-native/Libraries/Utilities/BackHandler', () => ({
+  exitApp: jest.fn(),
+  addEventListener: jest.fn(() => ({
+    remove: jest.fn(),
+  })),
+}));

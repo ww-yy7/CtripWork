@@ -92,6 +92,7 @@ export default function Register() {
 
   // 注册按钮的点击事件
   const registerBtn = async () => {
+
     // 校验用户名是否符合要求
     const isUsernameValid = validateUsername();
     if (!isUsernameValid) {
@@ -124,6 +125,7 @@ export default function Register() {
         phone: "",
         introduction: "",
       };
+          // console.log("注册按钮被点击");
       let res = await fetchRegister(data);
       console.log(res.data.code, "code注册");
       if (res.data.code === 200) {
